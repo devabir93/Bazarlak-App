@@ -6,75 +6,71 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.ui.category.CategoryAdapter;
 
 /**
  * Created by Dev_Abir on 03/11/2018.
  */
 
-    public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRecyclerViewAdapter.ViewHolder> {
+public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRecyclerViewAdapter.GridCategoryViewHolder> {
 
-        private List<Category> mCategories;
-        private LayoutInflater mInflater;
-        private ItemClickListener mClickListener;
+    private List<Category> mCategories;
 
-        // data is passed into the constructor
-        @Inject
-        GridViewRecyclerViewAdapter(Context context, List<Category> categories) {
-            this.mInflater = LayoutInflater.from(context);
-            this.mCategories = categories;
-        }
+    // data is passed into the constructor
+    @Inject
+    GridViewRecyclerViewAdapter() {
+        mCategories = new ArrayList<>();
+    }
 
-        // inflates the cell layout from xml when needed
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = mInflater.inflate(R.layout.gridview_sub_categories_item, parent, false);
-            return new ViewHolder(view);
-        }
+    public void setData(List<Category> categories) {
+        mCategories=categories;
+    }
 
-        // binds the data to the textview in each cell
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            Category category = mCategories.get(position);
-            holder.imageView.setImageResource(category.getImg());
-        }
+    // inflates the cell layout from xml when needed
+    @Override
+    public GridCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.gridview_sub_categories_item, parent, false);
+        return new GridCategoryViewHolder(itemView);
+    }
 
-        // total number of cells
-        @Override
-        public int getItemCount() {
-            return mCategories.size();
-        }
+    // binds the data to the textview in each cell
+    @Override
+    public void onBindViewHolder(GridCategoryViewHolder holder, int position) {
+        Category category = mCategories.get(position);
+        holder.imageView.setImageResource(category.getImg());
+        holder.productInfotextView.setText(category.getName());
+    }
+
+    // total number of cells
+    @Override
+    public int getItemCount() {
+        return mCategories.size();
+    }
 
 
-        // stores and recycles views as they are scrolled off screen
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            @BindView(R.id.roundedImageView) ImageView imageView;
+    // stores and recycles views as they are scrolled off screen
+    class GridCategoryViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.roundedImageView)
+        ImageView imageView;
+        @BindView(R.id.textView)
+        TextView productInfotextView;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                itemView.setOnClickListener(this);
-            }
-
-            @Override
-            public void onClick(View view) {
-                if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-            }
-        }
-
-        // allows clicks events to be caught
-        void setClickListener(ItemClickListener itemClickListener) {
-            this.mClickListener = itemClickListener;
-        }
-
-        // parent activity will implement this method to respond to click events
-        public interface ItemClickListener {
-            void onItemClick(View view, int position);
+        GridCategoryViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
+
+}

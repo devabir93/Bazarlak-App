@@ -13,22 +13,16 @@
         >
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/sub_category_listView"
+            android:id="@+id/sub_category_menu_RecyclerView"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/sub_cateory_details_layout"
+            android:id="@+id/sub_cateory_details_RecyclerView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"/>
-
-        <!--<FrameLayout-->
-            <!--android:id="@+id/sub_cateory_details_layout"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--&gt;</FrameLayout>-->
     </LinearLayout>
 
 </FrameLayout>
