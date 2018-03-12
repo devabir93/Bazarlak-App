@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_lable">Login</string>
+    <string name="email_label">Email</string>
+    <string name="confirm_label">Confirm</string>
+    <string name="forgot_password_label">Forgot Password?</string>
+    <string name="register_label">Register</string>
+    <string name="fname_label">First Name</string>
+    <string name="lname_label">Last Name</string>
+    <string name="accept_label">You agree on the Terms and Privacy Policy</string>
+    <string name="empty_bag_3_label">Click on the category section below for more options</string>
+    <string name="empty_bag_1_label">Your bag is empty :(</string>
+    <string name="go_shopping_label">Go Shopping</string>
+    <string name="search_hint">Search for your item</string>
+</resources>

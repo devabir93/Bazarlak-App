@@ -4,4 +4,20 @@
     <color name="primary_dark">#000000</color>
     <color name="accent">#FFFFFF</color>
     <color name="gray">#ffdfdfdf</color>
+    <color name="app_dark_red">#a91b0d</color>
+    <color name="app_menu_grey">#ebebeb</color>
+
+    <color name="app_menu_txt_color">#5c5c5c</color>
+    <color name="colorPrimary">#a91b0d</color>
+    <color name="colorPrimaryDark">#a91b0d</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#c8e8ff</color>
+    <color name="textColor">#808080</color>
+    <color name="buttonColor">#FFFFFF</color>
+    <color name="text_light_grey">#999999</color>
+    <color name="search_background">#d7d7d7</color>
+    <color name="place_background">#dbdbdb</color>
+
 </resources>

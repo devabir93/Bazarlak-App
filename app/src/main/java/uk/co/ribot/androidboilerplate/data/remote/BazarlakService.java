@@ -13,7 +13,7 @@ import retrofit2.http.GET;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 
-public interface RibotsService {
+public interface BazarlakService {
 
     String ENDPOINT = "https://api.ribot.io/";
 
@@ -23,17 +23,17 @@ public interface RibotsService {
     /******** Helper class that sets up a new services *******/
     class Creator {
 
-        public static RibotsService newRibotsService() {
+        public static BazarlakService newRibotsService() {
             Gson gson = new GsonBuilder()
                     .registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create())
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                     .create();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(RibotsService.ENDPOINT)
+                    .baseUrl(BazarlakService.ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
-            return retrofit.create(RibotsService.class);
+            return retrofit.create(BazarlakService.class);
         }
     }
 }

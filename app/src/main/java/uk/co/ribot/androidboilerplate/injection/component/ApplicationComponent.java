@@ -10,9 +10,10 @@ import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.SyncService;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
-import uk.co.ribot.androidboilerplate.data.remote.RibotsService;
+import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 import uk.co.ribot.androidboilerplate.injection.ApplicationContext;
 import uk.co.ribot.androidboilerplate.injection.module.ApplicationModule;
+import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.util.RxEventBus;
 
 @Singleton
@@ -20,10 +21,12 @@ import uk.co.ribot.androidboilerplate.util.RxEventBus;
 public interface ApplicationComponent {
 
     void inject(SyncService syncService);
+    void inject(BaseFragment baseFragment);
 
-    @ApplicationContext Context context();
+    @ApplicationContext
+    Context context();
     Application application();
-    RibotsService ribotsService();
+    BazarlakService ribotsService();
     PreferencesHelper preferencesHelper();
     DatabaseHelper databaseHelper();
     DataManager dataManager();

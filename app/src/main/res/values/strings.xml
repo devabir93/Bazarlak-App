@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidBoilerPlate</string>
+    <string name="app_name">BAZARLAK</string>
 
     <string name="action_settings">Settings</string>
 
@@ -9,4 +9,40 @@
 
     <string name="empty_ribots">There aren\'t any ribots</string>
     <string name="error_loading_ribots">There was a problem loading the ribots</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="home_tab">Home</string>
+    <string name="category_tab">Category</string>
+    <string name="search_tab">Search</string>
+    <string name="bag_tab">Bag</string>
+    <string name="me_tab">Me</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_label">Login</string>
+    <string name="signup_label">Sign up</string>
+    <string name="wlc_label">Welecome To BAZARLAK</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="confirm_label">Confirm</string>
+    <string name="forgot_password_label">Forgot Password?</string>
+    <string name="register_label">Register</string>
+    <string name="fname_label">First Name</string>
+    <string name="lname_label">Last Name</string>
+    <string name="accept_label">You agree on the Terms and Privacy Policy</string>
+    <string name="empty_bag_3_label">for more options</string>
+    <string name="empty_bag_2_label">Click on the category section below</string>
+    <string name="empty_bag_1_label">Your bag is empty :(</string>
+    <string name="go_shopping_label">Go Shopping</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="search_hint">Search for your item</string>
+    <string name="your_orders">Your Orders</string>
+    <string name="your_profile">Your Profile</string>
+    <string name="payment_details">Payment Details</string>
+    <string name="track_orders">Track Orders</string>
+    <string name="change_lang">Change Language</string>
+    <string name="contact_us">Contact us</string>
+    <string name="invite">Invite your friends</string>
 </resources>

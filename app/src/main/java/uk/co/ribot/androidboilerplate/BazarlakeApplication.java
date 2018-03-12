@@ -11,7 +11,7 @@ import uk.co.ribot.androidboilerplate.injection.component.ApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ApplicationModule;
 
-public class BoilerplateApplication extends Application  {
+public class BazarlakeApplication extends Application  {
 
     ApplicationComponent mApplicationComponent;
 
@@ -25,8 +25,8 @@ public class BoilerplateApplication extends Application  {
         }
     }
 
-    public static BoilerplateApplication get(Context context) {
-        return (BoilerplateApplication) context.getApplicationContext();
+    public static BazarlakeApplication get(Context context) {
+        return (BazarlakeApplication) context.getApplicationContext();
     }
 
     public ApplicationComponent getComponent() {

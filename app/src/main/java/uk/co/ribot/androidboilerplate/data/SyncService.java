@@ -14,7 +14,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import uk.co.ribot.androidboilerplate.BoilerplateApplication;
+import uk.co.ribot.androidboilerplate.BazarlakeApplication;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.util.AndroidComponentUtil;
 import uk.co.ribot.androidboilerplate.util.NetworkUtil;
@@ -36,7 +36,7 @@ public class SyncService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        BoilerplateApplication.get(this).getComponent().inject(this);
+        BazarlakeApplication.get(this).getComponent().inject(this);
     }
 
     @Override

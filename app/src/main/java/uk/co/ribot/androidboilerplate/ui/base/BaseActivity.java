@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.concurrent.atomic.AtomicLong;
 
 import timber.log.Timber;
-import uk.co.ribot.androidboilerplate.BoilerplateApplication;
+import uk.co.ribot.androidboilerplate.BazarlakeApplication;
 import uk.co.ribot.androidboilerplate.injection.component.ActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
@@ -42,7 +42,7 @@ public class BaseActivity extends AppCompatActivity {
         if (configPersistentComponent == null) {
             Timber.i("Creating new ConfigPersistentComponent id=%d", mActivityId);
             configPersistentComponent = DaggerConfigPersistentComponent.builder()
-                    .applicationComponent(BoilerplateApplication.get(this).getComponent())
+                    .applicationComponent(BazarlakeApplication.get(this).getComponent())
                     .build();
             sComponentsMap.put(mActivityId, configPersistentComponent);
         }
