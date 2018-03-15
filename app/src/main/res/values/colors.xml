@@ -12,12 +12,12 @@
     <color name="colorPrimaryDark">#a91b0d</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
+    <color name="black">#000000</color>
     <color name="colorAccent">#c8e8ff</color>
     <color name="textColor">#808080</color>
     <color name="buttonColor">#FFFFFF</color>
     <color name="text_light_grey">#999999</color>
     <color name="search_background">#d7d7d7</color>
-    <color name="place_background">#dbdbdb</color>
+    <color name="placeholder_background">#dbdbdb</color>
 
 </resources>

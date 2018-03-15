@@ -45,4 +45,10 @@
     <string name="change_lang">Change Language</string>
     <string name="contact_us">Contact us</string>
     <string name="invite">Invite your friends</string>
+    <string name="filter_label">Filter</string>
+    <string name="apply_label">Apply</string>
+    <string name="sort_label">Sort</string>
+    <string name="price1_label">PRICE: High to Low</string>
+    <string name="price2_label">PRICE: Low to High</string>
+    <string name="refine_label">REFINE</string>
 </resources>

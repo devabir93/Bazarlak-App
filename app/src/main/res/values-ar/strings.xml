@@ -12,4 +12,7 @@
     <string name="empty_bag_1_label">Your bag is empty :(</string>
     <string name="go_shopping_label">Go Shopping</string>
     <string name="search_hint">Search for your item</string>
+    <string name="filter_label">Filter</string>
+    <string name="apply_label">Apply</string>
+    <string name="sort_label">Sort</string>
 </resources>

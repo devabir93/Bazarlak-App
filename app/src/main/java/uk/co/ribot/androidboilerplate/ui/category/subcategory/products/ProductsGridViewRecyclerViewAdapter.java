@@ -1,6 +1,5 @@
-package uk.co.ribot.androidboilerplate.ui.category.subcategory;
+package uk.co.ribot.androidboilerplate.ui.category.subcategory.products;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +16,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
-import uk.co.ribot.androidboilerplate.ui.category.CategoryAdapter;
 
 /**
  * Created by Dev_Abir on 03/11/2018.
  */
 
-public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRecyclerViewAdapter.GridCategoryViewHolder> {
+public class ProductsGridViewRecyclerViewAdapter extends RecyclerView.Adapter<ProductsGridViewRecyclerViewAdapter.GridCategoryViewHolder> {
 
     private List<Category> mCategories;
 
     // data is passed into the constructor
     @Inject
-    GridViewRecyclerViewAdapter() {
+    ProductsGridViewRecyclerViewAdapter() {
         mCategories = new ArrayList<>();
     }
 
@@ -41,7 +39,7 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
     @Override
     public GridCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.gridview_sub_categories_item, parent, false);
+                .inflate(R.layout.products_item, parent, false);
         return new GridCategoryViewHolder(itemView);
     }
 
@@ -49,7 +47,6 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
     @Override
     public void onBindViewHolder(GridCategoryViewHolder holder, int position) {
         Category category = mCategories.get(position);
-        holder.productInfotextView.setText(category.getName());
 //        int width = (holder.productInfotextView.getContext().getResources().getDisplayMetrics().widthPixels) / 2;
 //        int height = (holder.productInfotextView.getContext().getResources().getDisplayMetrics().heightPixels) / 4;
 //        holder.imageView.setMinimumWidth(width);
@@ -57,9 +54,10 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
 //        holder.imageView.setMaxWidth(width);
 //        holder.imageView.setMaxHeight(height);
         if (category.getImg() == 0)
-            holder.imageView.setImageResource(R.color.placeholder_background);
+            holder.productImageView.setImageResource(R.color.placeholder_background);
         else
-            holder.imageView.setImageResource(category.getImg());
+            holder.productImageView.setImageResource(category.getImg());
+
 
 
 
@@ -74,10 +72,12 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
 
     // stores and recycles views as they are scrolled off screen
     class GridCategoryViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.roundedImageView)
-        ImageView imageView;
-        @BindView(R.id.textView)
-        TextView productInfotextView;
+        @BindView(R.id.product_imageView)
+        ImageView productImageView;
+        @BindView(R.id.price_textView)
+        TextView priceTextView;
+        @BindView(R.id.product_info_textView)
+        TextView prodcutInfoTextView;
 
         GridCategoryViewHolder(View itemView) {
             super(itemView);

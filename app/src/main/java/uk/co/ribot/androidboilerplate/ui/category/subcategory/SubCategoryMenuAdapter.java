@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.ui.category;
+package uk.co.ribot.androidboilerplate.ui.category.subcategory;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,31 +17,29 @@ import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+public class SubCategoryMenuAdapter extends RecyclerView.Adapter<SubCategoryMenuAdapter.CategoryViewHolder> {
 
-    private List<Category> mCategories;
+    private List<String> mCategories;
 
     @Inject
-    public CategoryAdapter() {
+    public SubCategoryMenuAdapter() {
         mCategories = new ArrayList<>();
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<String> categories) {
         mCategories = categories;
     }
 
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_category, parent, false);
+                .inflate(R.layout.item_sub_category, parent, false);
         return new CategoryViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final CategoryViewHolder holder, int position) {
-        Category category = mCategories.get(position);
-        holder.textView.setText(category.getName());
-        holder.imageView.setImageResource(category.getImg());
+        holder.textView.setText(mCategories.get(position));
     }
 
     @Override
@@ -53,8 +51,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         @BindView(R.id.category_name)
         TextView textView;
-        @BindView(R.id.icon_category)
-        ImageView imageView;
 
         public CategoryViewHolder(View itemView) {
             super(itemView);

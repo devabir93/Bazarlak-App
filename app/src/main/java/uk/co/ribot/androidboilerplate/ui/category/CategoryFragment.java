@@ -86,7 +86,7 @@ public class CategoryFragment extends BaseFragment implements CategoryMvpView {
 //        startActivity(i);
         Fragment nextFrag= new SubCategoryFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, nextFrag,"findThisFragment")
+                .replace(R.id.container_category, nextFrag,"findThisFragment")
                 .commit();
     }
 
