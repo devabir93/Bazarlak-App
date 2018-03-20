@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_button_no_stroke_shap"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_title_label"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#474747"
+        />
+    <Button
+        android:id="@+id/size_guide_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="#127cee"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="@string/continue_shopping_label" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary"
+        />
+    <Button
+        android:id="@+id/shipping_worldwide_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:textAllCaps="false"
+        android:textColor="#127cee"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="@string/view_bag_label" />
+</LinearLayout>
