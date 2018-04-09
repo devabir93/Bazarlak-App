@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
  * using Mockito.verify()
  */
 @RunWith(MockitoJUnitRunner.class)
-public class DataManagerTest {
+public class UserDataManagerTest {
 
     @Mock DatabaseHelper mMockDatabaseHelper;
     @Mock PreferencesHelper mMockPreferencesHelper;

@@ -1,11 +1,14 @@
 package uk.co.ribot.androidboilerplate.ui.category.subcategory.products;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 
 /**
  * Created by Dev_Abir on 03/11/2018.
@@ -23,16 +28,18 @@ import uk.co.ribot.androidboilerplate.data.model.Category;
 
 public class ProductsGridViewRecyclerViewAdapter extends RecyclerView.Adapter<ProductsGridViewRecyclerViewAdapter.GridCategoryViewHolder> {
 
-    private List<Category> mCategories;
+    private List<Product> mProducts;
+    private Context mContext;
 
     // data is passed into the constructor
     @Inject
     ProductsGridViewRecyclerViewAdapter() {
-        mCategories = new ArrayList<>();
+        mProducts = new ArrayList<>();
     }
 
-    public void setData(List<Category> categories) {
-        mCategories = categories;
+    public void setProductData(Context context, List<Product> productList) {
+        mProducts = productList;
+        mContext = context;
     }
 
     // inflates the cell layout from xml when needed
@@ -46,19 +53,23 @@ public class ProductsGridViewRecyclerViewAdapter extends RecyclerView.Adapter<Pr
     // binds the data to the textview in each cell
     @Override
     public void onBindViewHolder(GridCategoryViewHolder holder, int position) {
-        Category category = mCategories.get(position);
+        Product product = mProducts.get(position);
+        holder.priceTextView.setText(product.getPrice());
+        holder.prodcutInfoTextView.setText(product.getName());
+        if (product.getImage() != null && !product.getImage().isEmpty())
+            Picasso.with(mContext).load(product.getImage()).into(holder.productImageView);
 //        int width = (holder.productInfotextView.getContext().getResources().getDisplayMetrics().widthPixels) / 2;
 //        int height = (holder.productInfotextView.getContext().getResources().getDisplayMetrics().heightPixels) / 4;
 //        holder.imageView.setMinimumWidth(width);
 //        holder.imageView.setMinimumHeight(height);
 //        holder.imageView.setMaxWidth(width);
 //        holder.imageView.setMaxHeight(height);
-        if (category.getImg() == 0)
-            holder.productImageView.setImageResource(R.color.placeholder_background);
-        else
-            holder.productImageView.setImageResource(category.getImg());
-
-
+//        if (category.getImg() == 0)
+//            holder.productImageView.setImageResource(R.color.placeholder_background);
+//        else
+//            holder.productImageView.setImageResource(category.getImg());
+//
+//
 
 
     }
@@ -66,7 +77,7 @@ public class ProductsGridViewRecyclerViewAdapter extends RecyclerView.Adapter<Pr
     // total number of cells
     @Override
     public int getItemCount() {
-        return mCategories.size();
+        return mProducts.size();
     }
 
 

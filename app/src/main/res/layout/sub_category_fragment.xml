@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include android:id="@+id/toolbar"
-        layout="@layout/toolbar_layout"/>
+    <include android:id="@+id/second_toolbar"
+        layout="@layout/secendary_toolbar_layout"/>
 
     <LinearLayout
         android:layout_marginTop="?actionBarSize"

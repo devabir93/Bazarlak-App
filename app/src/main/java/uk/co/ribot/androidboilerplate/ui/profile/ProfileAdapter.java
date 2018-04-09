@@ -40,10 +40,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     @Override
     public void onBindViewHolder(final ProfileAdapter.ProfileViewHolder holder, int position) {
         Category category = mCategories.get(position);
-        if (category.getImg() == -1) {
-            holder.imageView.setVisibility(View.GONE);
-        } else
-        holder.imageView.setImageResource(category.getImg());
+//        if (category.getImg() == -1) {
+//            holder.imageView.setVisibility(View.GONE);
+//        } else
+//        holder.imageView.setImageResource(category.getImg());
         holder.textView.setText(category.getName());
     }
 

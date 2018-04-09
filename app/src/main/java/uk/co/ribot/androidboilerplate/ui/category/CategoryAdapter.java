@@ -1,11 +1,15 @@
 package uk.co.ribot.androidboilerplate.ui.category;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,18 +20,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private List<Category> mCategories;
+    private Context mcontext;
 
     @Inject
     public CategoryAdapter() {
         mCategories = new ArrayList<>();
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Context context, List<Category> categories) {
         mCategories = categories;
+        mcontext = context;
     }
 
     @Override
@@ -41,7 +48,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(final CategoryViewHolder holder, int position) {
         Category category = mCategories.get(position);
         holder.textView.setText(category.getName());
-        holder.imageView.setImageResource(category.getImg());
+        if (category.getImage() != null && !category.getImage().isEmpty())
+            Picasso.with(mcontext).load(BazarlakService.IMAGE_URL+category.getImage()).into(holder.imageView);
+
+        // holder.imageView.setImageResource(category.getImg());
     }
 
     @Override

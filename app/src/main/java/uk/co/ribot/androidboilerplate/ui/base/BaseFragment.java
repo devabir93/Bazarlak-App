@@ -10,6 +10,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BazarlakeApplication;
+import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 public class BaseFragment extends Fragment implements MvpView {
     @Override
@@ -18,4 +20,25 @@ public class BaseFragment extends Fragment implements MvpView {
         BazarlakeApplication.get(getActivity()).getComponent().inject(this);
     }
 
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+//        if (!b) {
+//            ViewUtil.createSnackbar(getView(), getResources().getString(R.string.no_connection));
+//        }
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
+    @Override
+    public void onNetworkError() {
+
+    }
+
+    @Override
+    public void onUnknownError(String message) {
+
+    }
 }

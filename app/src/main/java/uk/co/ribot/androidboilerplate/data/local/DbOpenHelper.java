@@ -12,7 +12,7 @@ import uk.co.ribot.androidboilerplate.injection.ApplicationContext;
 @Singleton
 public class DbOpenHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "ribots.db";
+    public static final String DATABASE_NAME = "bazarlak.db";
     public static final int DATABASE_VERSION = 2;
 
     @Inject

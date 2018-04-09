@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="uk.co.ribot.androidboilerplate">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,7 +11,8 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup,android:icon">
         <service android:name=".data.SyncService" />
 
         <receiver
@@ -20,6 +22,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".ui.main_activity.MainActivity2"
             android:label="@string/title_activity_main2">
@@ -29,6 +32,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="DATABASE"
+            android:value="bazarlak.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="4" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="uk.co.ribot.androidboilerplate.data.model" />
+
+        <activity android:name=".ui.category.subcategory.filter.FilterActivity"></activity>
     </application>
 
 </manifest>

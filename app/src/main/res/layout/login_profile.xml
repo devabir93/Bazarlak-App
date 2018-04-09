@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/accent"
+    android:background="@color/white"
     android:layout_margin="@dimen/activity_vertical_margin">
     
     <Button
@@ -19,6 +19,7 @@
 
     <EditText
         android:id="@+id/email_Login_editText"
+        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -26,6 +27,7 @@
 
     <EditText
         android:id="@+id/password_Login_editText"
+        android:inputType="textPassword"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +41,7 @@
         android:layout_height="38dp"
         android:background="@drawable/red_button_shap"
         android:text="@string/confirm_label"
-        android:textColor="@color/accent"
+        android:textColor="@color/white"
         />
 
     <Button

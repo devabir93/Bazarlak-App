@@ -4,7 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
-
+import com.facebook.stetho.Stetho;
+import com.orm.SugarContext;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.injection.component.ApplicationComponent;
@@ -23,6 +24,16 @@ public class BazarlakeApplication extends Application  {
             Timber.plant(new Timber.DebugTree());
             Fabric.with(this, new Crashlytics());
         }
+        SugarContext.init(this);
+        // Install Calligraphy library
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+//                .setDefaultFontPath("fonts/din_regular.ttf")
+//                .setFontAttrId(R.attr.fontPath)
+//                .build()
+//        );
+//        SqlScoutServer.create(this, getPackageName());
+
+        Stetho.initializeWithDefaults(this);
     }
 
     public static BazarlakeApplication get(Context context) {

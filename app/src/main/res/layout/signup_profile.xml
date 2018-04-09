@@ -1,86 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/accent"
-    android:layout_margin="@dimen/activity_vertical_margin">
-    
-    <Button
-        android:clickable="false"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/white_button_shap"
-        android:text="@string/signup_label"
-        android:textColor="@color/colorPrimary"
-        />
-    <EditText
-        android:id="@+id/fname_signup_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="@string/fname_label"/>
-
-    <EditText
-        android:id="@+id/lname_signup_editText"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="@string/lname_label"/>
-
-    <EditText
-        android:id="@+id/gender_signup_editText"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="@string/email_label"/>
-
-    <EditText
-        android:id="@+id/email_Login_editText"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="@string/email_label"/>
-
-    <EditText
-        android:id="@+id/password_Login_editText"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="@string/password_label"/>
-
+    android:layout_height="match_parent">
+    <!--<include-->
+    <!--andridd:idcategoryextraSubCategoryproductId@+id/toolbar"-->
+    <!--layout="@layout/toolbar_layout" />-->
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/checkbox_register"
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/white_button_shap"
+            android:clickable="false"
+            android:text="@string/signup_label"
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/fname_signup_editText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             />
-        <TextView
-            android:layout_width="wrap_content"
+            android:hint="@string/fname_label"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/lname_signup_editText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:text="@string/accept_label"
-            />
+            android:layout_marginTop="8dp"
+            android:hint="@string/lname_label"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/gender_signup_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/gender_label"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/mobile_signup_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/mobile_label"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/email_Login_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/email_label"
+            android:inputType="textEmailAddress"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/password_Login_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/password_label"
+            android:inputType="textPassword"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkbox_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accept_label"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/register_button"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/red_button_shap"
+            android:text="@string/register_label"
+            android:textColor="@color/white" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/login_button"
-        android:layout_marginTop="32dp"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/red_button_shap"
-        android:text="@string/register_label"
-        android:textColor="@color/accent"
-        />
-</LinearLayout>
+</RelativeLayout>

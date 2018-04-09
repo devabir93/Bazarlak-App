@@ -18,8 +18,8 @@
         >
         <ImageView
             android:id="@+id/product_imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/hejabipic"
             android:background="@color/textColor"
             android:scaleType="fitCenter"

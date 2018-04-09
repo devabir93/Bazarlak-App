@@ -53,9 +53,9 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mMainPresenter.attachView(this);
         mMainPresenter.loadRibots();
 
-        if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
-            startService(SyncService.getStartIntent(this));
-        }
+//        if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
+//            startService(SyncService.getStartIntent(this));
+//        }
     }
 
     @Override
@@ -86,4 +86,23 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         Toast.makeText(this, R.string.empty_ribots, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
+    @Override
+    public void onNetworkError() {
+
+    }
+
+    @Override
+    public void onUnknownError(String message) {
+
+    }
 }

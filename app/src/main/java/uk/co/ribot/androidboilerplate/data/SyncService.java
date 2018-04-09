@@ -15,6 +15,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BazarlakeApplication;
+import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.util.AndroidComponentUtil;
 import uk.co.ribot.androidboilerplate.util.NetworkUtil;
@@ -51,16 +52,16 @@ public class SyncService extends Service {
         }
 
         RxUtil.dispose(mDisposable);
-        mDataManager.syncRibots()
+        mDataManager.syncCategories()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<Ribot>() {
+                .subscribe(new Observer<CategoryResponse>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                         mDisposable = d;
                     }
 
                     @Override
-                    public void onNext(@NonNull Ribot ribot) {
+                    public void onNext(@NonNull CategoryResponse ribot) {
                     }
 
                     @Override

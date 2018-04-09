@@ -13,7 +13,7 @@ public class Db {
     public Db() { }
 
     public abstract static class RibotProfileTable {
-        public static final String TABLE_NAME = "ribot_profile";
+        public static final String TABLE_NAME = "bazarlak_profile";
 
         public static final String COLUMN_EMAIL = "email";
         public static final String COLUMN_FIRST_NAME = "first_name";

@@ -8,6 +8,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.SyncService;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
@@ -26,6 +31,8 @@ import uk.co.ribot.androidboilerplate.ui.search.SearchFragment;
 
 public class MainActivity2 extends BaseActivity implements MainMvpView {
 
+    private static final String EXTRA_TRIGGER_SYNC_FLAG =
+            "uk.co.ribot.androidboilerplate.ui.main.MainActivity.EXTRA_TRIGGER_SYNC_FLAG";
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -43,8 +50,15 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
         activityComponent().inject(this);
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar1);
+//        toolbar.setNavigationIcon(R.drawable.ic_back);
+
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+        }
 
         viewPager = (ViewPager) findViewById(R.id.viewPagerHome);
         setupViewPager(viewPager);
@@ -52,8 +66,43 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+        if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
+            startService(SyncService.getStartIntent(this));
+        }
     }
 
+    //    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_main, menu);
+//        return super.onCreateOptionsMenu(menu);
+//
+//    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem backAction = menu.findItem(android.R.id.home);
+        if (backAction != null)
+            backAction.setVisible(false); // Display clear filters
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    //    @Override
+//    public boolean onOptionsItemSelected( MenuItem item) {
+//        switch (item.getItemId()) {
+////            case R.id.action_search:
+////                search();
+//                return true;
+//        }
+//    }
     private void setupTabIcons() {
 
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -104,6 +153,26 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
 
     @Override
     public void showError() {
+
+    }
+
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
+    @Override
+    public void onNetworkError() {
+
+    }
+
+    @Override
+    public void onUnknownError(String message) {
 
     }
 

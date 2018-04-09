@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/container"
     android:weightSum="3">
 
     <LinearLayout
@@ -20,13 +21,13 @@
             android:layout_height="100dp"
             android:src="@drawable/accounticon"
             app:civ_border_width="4dp"
-            app:civ_border_color="@color/accent"/>
+            app:civ_border_color="@color/white"/>
         <TextView
             android:id="@+id/profile_wlc_textView"
             android:layout_marginTop="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/accent"
+            android:textColor="@color/white"
             android:text="@string/wlc_label"
             />
 

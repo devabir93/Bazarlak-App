@@ -8,4 +8,11 @@ package uk.co.ribot.androidboilerplate.ui.base;
  */
 public interface MvpView {
 
+    void hasActiveInternetConnection(boolean b);
+
+    void onTimeout();
+
+    void onNetworkError();
+
+    void onUnknownError(String message);
 }

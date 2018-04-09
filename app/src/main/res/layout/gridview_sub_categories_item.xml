@@ -17,16 +17,16 @@
         android:padding="8dp"
         >
         <ImageView
-            android:id="@+id/roundedImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/extraSubCategory_imageView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/hejabipic"
             android:background="@color/textColor"
             android:scaleType="fitCenter"
             />
         <TextView
             android:layout_marginTop="8dp"
-            android:id="@+id/textView"
+            android:id="@+id/extraSubCategory_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"

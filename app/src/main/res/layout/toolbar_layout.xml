@@ -1,51 +1,34 @@
-<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar"
+    android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="@color/accent"
-    app:popupTheme="@style/AppTheme.PopupOverlay">
+    android:layout_height="wrap_content"
+    app:elevation="0dp"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar1"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-            <ImageButton
-                android:id="@+id/ic_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:adjustViewBounds="true"
-                android:background="@null"
-                android:cropToPadding="true"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_back" />
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/activity_name_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Activity"
-                android:textColor="@android:color/background_dark"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
                 android:textSize="25sp"
-                android:textStyle="bold"
-
-                />
-
-            <ImageButton
-                android:id="@+id/ic_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:background="@null"
-                android:cropToPadding="true"
-                android:backgroundTint="@android:color/background_dark"
-                app:srcCompat="@drawable/ic_filter" />
-
+                android:textStyle="bold" />
         </RelativeLayout>
-</android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
+
+</android.support.design.widget.AppBarLayout>

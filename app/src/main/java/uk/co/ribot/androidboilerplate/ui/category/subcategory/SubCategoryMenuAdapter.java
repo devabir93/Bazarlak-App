@@ -16,17 +16,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 
 public class SubCategoryMenuAdapter extends RecyclerView.Adapter<SubCategoryMenuAdapter.CategoryViewHolder> {
 
-    private List<String> mCategories;
+    private List<Subcategory> mCategories;
 
     @Inject
     public SubCategoryMenuAdapter() {
         mCategories = new ArrayList<>();
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(List<Subcategory> categories) {
         mCategories = categories;
     }
 
@@ -39,7 +40,7 @@ public class SubCategoryMenuAdapter extends RecyclerView.Adapter<SubCategoryMenu
 
     @Override
     public void onBindViewHolder(final CategoryViewHolder holder, int position) {
-        holder.textView.setText(mCategories.get(position));
+        holder.textView.setText(mCategories.get(position).getName());
     }
 
     @Override
