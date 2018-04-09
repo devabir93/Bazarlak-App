@@ -109,7 +109,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(Product.class.getName());
+                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(ProductsFragment.class.getName());
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.remove(fragment).commit();
             }
