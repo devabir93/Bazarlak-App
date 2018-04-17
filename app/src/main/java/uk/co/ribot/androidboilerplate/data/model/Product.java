@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
+import java.util.Objects;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
@@ -88,6 +90,8 @@ public class Product extends SugarRecord implements Parcelable {
     @Expose
     private String description;
 
+    private String savedQuantity;
+
     public Product() {
     }
 
@@ -119,6 +123,7 @@ public class Product extends SugarRecord implements Parcelable {
             isRate = in.readInt();
         }
         userName = in.readString();
+        colorFeatures = in.createTypedArrayList(ColorFeature.CREATOR);
         nameEn = in.readString();
         nameAr = in.readString();
         descriptionEn = in.readString();
@@ -130,6 +135,7 @@ public class Product extends SugarRecord implements Parcelable {
         }
         name = in.readString();
         description = in.readString();
+        savedQuantity = in.readString();
     }
 
     @Override
@@ -164,6 +170,7 @@ public class Product extends SugarRecord implements Parcelable {
             dest.writeInt(isRate);
         }
         dest.writeString(userName);
+        dest.writeTypedList(colorFeatures);
         dest.writeString(nameEn);
         dest.writeString(nameAr);
         dest.writeString(descriptionEn);
@@ -176,6 +183,7 @@ public class Product extends SugarRecord implements Parcelable {
         }
         dest.writeString(name);
         dest.writeString(description);
+        dest.writeString(savedQuantity);
     }
 
     @Override
@@ -387,26 +395,122 @@ public class Product extends SugarRecord implements Parcelable {
         this.description = description;
     }
 
+
+    public String getSavedQuantity() {
+        return savedQuantity;
+    }
+
+    public void setSavedQuantity(String savedQuantity) {
+        this.savedQuantity = savedQuantity;
+    }
+
     @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("productId", productId).append("userId", userId).append("catId", catId).append("subcatId", subcatId).append("extrasubcatId", extrasubcatId).append("brandnameId", brandnameId).append("price", price).append("priceOver", priceOver).append("numberPeces", numberPeces).append("available", available).append("image", image).append("status", status).append("isFavourite", isFavourite).append("isRate", isRate).append("userName", userName).append("colorFeatures", colorFeatures).append("nameEn", nameEn).append("nameAr", nameAr).append("descriptionEn", descriptionEn).append("descriptionAr", descriptionAr).append("priceMin", priceMin).append("offerPrice", offerPrice).append("name", name).append("description", description).toString();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (productId != null ? !productId.equals(product.productId) : product.productId != null)
+            return false;
+        if (userId != null ? !userId.equals(product.userId) : product.userId != null) return false;
+        if (catId != null ? !catId.equals(product.catId) : product.catId != null) return false;
+        if (subcatId != null ? !subcatId.equals(product.subcatId) : product.subcatId != null)
+            return false;
+        if (extrasubcatId != null ? !extrasubcatId.equals(product.extrasubcatId) : product.extrasubcatId != null)
+            return false;
+        if (brandnameId != null ? !brandnameId.equals(product.brandnameId) : product.brandnameId != null)
+            return false;
+        if (price != null ? !price.equals(product.price) : product.price != null) return false;
+        if (priceOver != null ? !priceOver.equals(product.priceOver) : product.priceOver != null)
+            return false;
+        if (numberPeces != null ? !numberPeces.equals(product.numberPeces) : product.numberPeces != null)
+            return false;
+        if (available != null ? !available.equals(product.available) : product.available != null)
+            return false;
+        if (image != null ? !image.equals(product.image) : product.image != null) return false;
+        if (status != null ? !status.equals(product.status) : product.status != null) return false;
+        if (isFavourite != null ? !isFavourite.equals(product.isFavourite) : product.isFavourite != null)
+            return false;
+        if (isRate != null ? !isRate.equals(product.isRate) : product.isRate != null) return false;
+        if (userName != null ? !userName.equals(product.userName) : product.userName != null)
+            return false;
+        if (colorFeatures != null ? !colorFeatures.equals(product.colorFeatures) : product.colorFeatures != null)
+            return false;
+        if (nameEn != null ? !nameEn.equals(product.nameEn) : product.nameEn != null) return false;
+        if (nameAr != null ? !nameAr.equals(product.nameAr) : product.nameAr != null) return false;
+        if (descriptionEn != null ? !descriptionEn.equals(product.descriptionEn) : product.descriptionEn != null)
+            return false;
+        if (descriptionAr != null ? !descriptionAr.equals(product.descriptionAr) : product.descriptionAr != null)
+            return false;
+        if (priceMin != null ? !priceMin.equals(product.priceMin) : product.priceMin != null)
+            return false;
+        if (offerPrice != null ? !offerPrice.equals(product.offerPrice) : product.offerPrice != null)
+            return false;
+        if (name != null ? !name.equals(product.name) : product.name != null) return false;
+        if (description != null ? !description.equals(product.description) : product.description != null)
+            return false;
+        return savedQuantity != null ? savedQuantity.equals(product.savedQuantity) : product.savedQuantity == null;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(isRate).append(subcatId).append(descriptionEn).append(descriptionAr).append(productId).append(priceMin).append(description).append(name).append(userId).append(isFavourite).append(userName).append(colorFeatures).append(status).append(nameEn).append(nameAr).append(image).append(brandnameId).append(available).append(extrasubcatId).append(priceOver).append(price).append(offerPrice).append(catId).append(numberPeces).toHashCode();
+        int result = productId != null ? productId.hashCode() : 0;
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (catId != null ? catId.hashCode() : 0);
+        result = 31 * result + (subcatId != null ? subcatId.hashCode() : 0);
+        result = 31 * result + (extrasubcatId != null ? extrasubcatId.hashCode() : 0);
+        result = 31 * result + (brandnameId != null ? brandnameId.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (priceOver != null ? priceOver.hashCode() : 0);
+        result = 31 * result + (numberPeces != null ? numberPeces.hashCode() : 0);
+        result = 31 * result + (available != null ? available.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (isFavourite != null ? isFavourite.hashCode() : 0);
+        result = 31 * result + (isRate != null ? isRate.hashCode() : 0);
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (colorFeatures != null ? colorFeatures.hashCode() : 0);
+        result = 31 * result + (nameEn != null ? nameEn.hashCode() : 0);
+        result = 31 * result + (nameAr != null ? nameAr.hashCode() : 0);
+        result = 31 * result + (descriptionEn != null ? descriptionEn.hashCode() : 0);
+        result = 31 * result + (descriptionAr != null ? descriptionAr.hashCode() : 0);
+        result = 31 * result + (priceMin != null ? priceMin.hashCode() : 0);
+        result = 31 * result + (offerPrice != null ? offerPrice.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (savedQuantity != null ? savedQuantity.hashCode() : 0);
+        return result;
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Product)) {
-            return false;
-        }
-        Product rhs = ((Product) other);
-        return new EqualsBuilder().append(isRate, rhs.isRate).append(subcatId, rhs.subcatId).append(descriptionEn, rhs.descriptionEn).append(descriptionAr, rhs.descriptionAr).append(productId, rhs.productId).append(priceMin, rhs.priceMin).append(description, rhs.description).append(name, rhs.name).append(userId, rhs.userId).append(isFavourite, rhs.isFavourite).append(userName, rhs.userName).append(colorFeatures, rhs.colorFeatures).append(status, rhs.status).append(nameEn, rhs.nameEn).append(nameAr, rhs.nameAr).append(image, rhs.image).append(brandnameId, rhs.brandnameId).append(available, rhs.available).append(extrasubcatId, rhs.extrasubcatId).append(priceOver, rhs.priceOver).append(price, rhs.price).append(offerPrice, rhs.offerPrice).append(catId, rhs.catId).append(numberPeces, rhs.numberPeces).isEquals();
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", userId='" + userId + '\'' +
+                ", catId='" + catId + '\'' +
+                ", subcatId='" + subcatId + '\'' +
+                ", extrasubcatId='" + extrasubcatId + '\'' +
+                ", brandnameId='" + brandnameId + '\'' +
+                ", price='" + price + '\'' +
+                ", priceOver='" + priceOver + '\'' +
+                ", numberPeces='" + numberPeces + '\'' +
+                ", available='" + available + '\'' +
+                ", image='" + image + '\'' +
+                ", status='" + status + '\'' +
+                ", isFavourite=" + isFavourite +
+                ", isRate=" + isRate +
+                ", userName='" + userName + '\'' +
+                ", colorFeatures=" + colorFeatures +
+                ", nameEn='" + nameEn + '\'' +
+                ", nameAr='" + nameAr + '\'' +
+                ", descriptionEn='" + descriptionEn + '\'' +
+                ", descriptionAr='" + descriptionAr + '\'' +
+                ", priceMin=" + priceMin +
+                ", offerPrice=" + offerPrice +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", savedQuantity='" + savedQuantity + '\'' +
+                '}';
     }
-
 }

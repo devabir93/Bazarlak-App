@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import uk.co.ribot.androidboilerplate.data.model.BrandResponse;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
@@ -21,9 +22,9 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 
 public interface BazarlakService {
 
-//    String ENDPOINT = "https://api.ribot.io/";
+    //    String ENDPOINT = "https://api.ribot.io/";
     String ENDPOINT = "http://bazarlak.com/api/v1/";
-    String IMAGE_URL="http://bazarlak.com/";
+    String IMAGE_URL = "http://bazarlak.com/";
 
     @POST("login")
     Observable<LoginResponse> login(@Body UserData userData);
@@ -35,17 +36,21 @@ public interface BazarlakService {
     @GET("category")
     Observable<CategoryResponse> getAllCategories();
 
+    @GET("brand")
+    Observable<BrandResponse> getBrands();
+
 //    @GET("subcategory")
 //    Observable<SubCategoryResponse> getAllSubCateories();
 
     @GET("ribots")
     Observable<List<Ribot>> getRibots();
+
     /******** Helper class that sets up a new services *******/
     class Creator {
 
         public static BazarlakService newRibotsService() {
             GsonBuilder gsonBuilder = new GsonBuilder();
-             gsonBuilder.excludeFieldsWithoutExposeAnnotation();
+            gsonBuilder.excludeFieldsWithoutExposeAnnotation();
             gsonBuilder.setDateFormat("M/d/yy hh:mm a");
             gsonBuilder.setLenient();
             gsonBuilder.registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create());

@@ -20,10 +20,14 @@ import io.reactivex.functions.Function;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.data.model.Brand;
+import uk.co.ribot.androidboilerplate.data.model.BrandResponse;
 import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
+import uk.co.ribot.androidboilerplate.data.model.ColorFeature;
 import uk.co.ribot.androidboilerplate.data.model.Extrasubcategory;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.Size;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
@@ -106,7 +110,6 @@ public class DataManager {
 
     public Observable<RegisterResponse> makeRegister(UserData userData) {
 
-//        return mBazarlakService.register(userData.getEmail(), userData.getName(),userData.getMobile(),userData.getPassword(),userData.getGender())
         return mBazarlakService.register(userData)
                 .concatMap(new Function<RegisterResponse, ObservableSource<? extends RegisterResponse>>() {
                     @Override
@@ -159,7 +162,7 @@ public class DataManager {
 
                                             for (Subcategory subcategory :
                                                     category.getSubcategory()) {
-                                                subcategory.setId(subcategory.getId());
+                                                subcategory.setId(Long.valueOf(subcategory.getSubCategoryId()));
                                                 subcategory.save();
                                             }
                                             for (Extrasubcategory extrasubcategory :
@@ -171,6 +174,15 @@ public class DataManager {
                                                     category.getProducts()) {
                                                 product.setId(Long.valueOf(product.getProductId()));
                                                 product.save();
+                                                for (ColorFeature colorFeature :
+                                                        product.getColorFeatures()) {
+                                                    colorFeature.save();
+                                                    for (Size size :
+                                                            colorFeature.getSizes()) {
+                                                        size.setId(Long.valueOf(size.getSizesId()));
+                                                        size.save();
+                                                    }
+                                                }
                                             }
 
                                             category.save();
@@ -265,12 +277,43 @@ public class DataManager {
         });
     }
 
+    public Observable<BrandResponse> getBrands() {
+        return mBazarlakService.getBrands()
+                .concatMap(new Function<BrandResponse, ObservableSource<? extends BrandResponse>>() {
+                    @Override
+                    public ObservableSource<? extends BrandResponse> apply(@NonNull final BrandResponse brandResponse)
+                            throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<BrandResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<BrandResponse> e) throws Exception {
+                                try {
+                                    openDatabase();
+                                    List<Brand> brands = brandResponse.getData().getBrands();
+                                    if (brands.size() > 0) {
+                                        for (Brand brand :
+                                                brands) {
+                                            brand.setId(Long.valueOf(brand.getBrandId()));
+                                            brand.save();
+                                        }
+                                        e.onNext(brandResponse);
+                                    } else
+                                        e.onNext(null);
+                                    closeDatabase();
+                                    e.onComplete();
+                                } catch (Exception ex) {
+                                    e.onError(ex);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
 
-    protected void closeDatabase() {
+    private void closeDatabase() {
         sugarDb.close();
     }
 
-    protected void openDatabase() {
+    private void openDatabase() {
         sugarDb = new SugarDb(mContext);
         if (!sugarDb.getDB().isOpen())
             sugarDb.getReadableDatabase();

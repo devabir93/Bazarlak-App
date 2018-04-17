@@ -83,5 +83,22 @@
     <string name="filter_brand">Brand</string>
     <string name="filter_category">Category</string>
     <string name="select_hint">Select a</string>
+    <string name="empty_view">This list is empty!</string>
+    <string name="save_label">Save</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_mobile">MOBILE</string>
+    <string name="hint_country">COUNTRY</string>
+    <string name="hint_city">CITY</string>
+    <string name="hint_state">STATE</string>
+    <string name="hint_address1">ADDRESS 1</string>
+    <string name="hint_address2">ADDRESS 2</string>
+    <string name="hint_post_code">POSTCODE</string>
+    <string name="address_details_label">ADDRESS DETAILS</string>
+    <string name="checkout_label">Checkout (%1$d)</string>
+    <string name="item_size">Size:</string>
+    <string name="item_price">item_price</string>
+    <string name="subTotal_price_label">Subtotal:</string>
+    <string name="total_price_label">Total:</string>
+    <string name="shipping_label">Shipping:</string>
 
 </resources>

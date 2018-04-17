@@ -17,12 +17,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.Product;
@@ -123,6 +125,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
                     @Override
                     public void onItemClick(View view, int position) {
                         // do whatever
+                        showProductDetails(mproductList.get(position));
                     }
 
                     @Override
@@ -134,21 +137,20 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         return view;
     }
 
+    private void showProductDetails(Product product) {
+        Timber.d("product %s",product);
+        Fragment nextFrag = ProductsDetailsFragment.newInstance(product);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_fragment, nextFrag, ProductsDetailsFragment.class.getName())
+                .commit();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         productsPresenter.detachView();
     }
-
-    private List<Category> getCategories() {
-        List<Category> categories = new ArrayList<>();
-//        categories.add(new Category(R.drawable.hejabipic,"Hejab"));
-//        categories.add(new Category(R.drawable.headbandspic,"Headbands"));
-//        categories.add(new Category(R.drawable.hejabipic,"Hejab"));
-//        categories.add(new Category(R.drawable.headbandspic,"Headbands"));
-        return categories;
-    }
-
 
     @Override
     public void showProducts(List<Product> productList) {
@@ -159,6 +161,11 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
 
     @Override
     public void showEmpty() {
+
+    }
+
+    @Override
+    public void addedToBag(boolean b) {
 
     }
 }

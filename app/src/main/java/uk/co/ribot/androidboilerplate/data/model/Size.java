@@ -14,9 +14,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Size extends SugarRecord implements Parcelable {
 
-//    @SerializedName("id")
-//    @Expose
-//    private Integer id;
+    @SerializedName("id")
+    @Expose
+    private Integer sizesId;
     @SerializedName("product_id")
     @Expose
     private String productId;
@@ -48,7 +48,15 @@ public class Size extends SugarRecord implements Parcelable {
     @Expose
     private String size;
 
+    public Size() {
+    }
+
     protected Size(Parcel in) {
+        if (in.readByte() == 0) {
+            sizesId = null;
+        } else {
+            sizesId = in.readInt();
+        }
         productId = in.readString();
         color = in.readString();
         sizeId = in.readString();
@@ -59,6 +67,12 @@ public class Size extends SugarRecord implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        if (sizesId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(sizesId);
+        }
         dest.writeString(productId);
         dest.writeString(color);
         dest.writeString(sizeId);
@@ -166,12 +180,12 @@ public class Size extends SugarRecord implements Parcelable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("productId", productId).append("color", color).append("sizeId", sizeId).append("dimensions", dimensions).append("quentity", quentity).append("price", price).append("offerPrice", offerPrice).append("dayDeliverd", dayDeliverd).append("status", status).append("size", size).toString();
+        return new ToStringBuilder(this).append("sizesId", sizesId).append("productId", productId).append("color", color).append("sizeId", sizeId).append("dimensions", dimensions).append("quentity", quentity).append("price", price).append("offerPrice", offerPrice).append("dayDeliverd", dayDeliverd).append("status", status).append("size", size).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(price).append(status).append(color).append(offerPrice).append(quentity).append(dimensions).append(dayDeliverd).append(sizeId).append(size).append(productId).toHashCode();
+        return new HashCodeBuilder().append(price).append(status).append(color).append(offerPrice).append(quentity).append(dimensions).append(dayDeliverd).append(sizeId).append(size).append(productId).append(sizesId).toHashCode();
     }
 
     @Override
@@ -183,7 +197,14 @@ public class Size extends SugarRecord implements Parcelable {
             return false;
         }
         Size rhs = ((Size) other);
-        return new EqualsBuilder().append(price, rhs.price).append(status, rhs.status).append(color, rhs.color).append(offerPrice, rhs.offerPrice).append(quentity, rhs.quentity).append(dimensions, rhs.dimensions).append(dayDeliverd, rhs.dayDeliverd).append(sizeId, rhs.sizeId).append(size, rhs.size).append(productId, rhs.productId).isEquals();
+        return new EqualsBuilder().append(price, rhs.price).append(status, rhs.status).append(color, rhs.color).append(offerPrice, rhs.offerPrice).append(quentity, rhs.quentity).append(dimensions, rhs.dimensions).append(dayDeliverd, rhs.dayDeliverd).append(sizeId, rhs.sizeId).append(size, rhs.size).append(productId, rhs.productId).append(sizesId, rhs.sizesId).isEquals();
     }
 
+    public Integer getSizesId() {
+        return sizesId;
+    }
+
+    public void setSizesId(Integer sizesId) {
+        this.sizesId = sizesId;
+    }
 }

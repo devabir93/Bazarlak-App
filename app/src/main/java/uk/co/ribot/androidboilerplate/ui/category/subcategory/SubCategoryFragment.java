@@ -42,7 +42,7 @@ import uk.co.ribot.androidboilerplate.ui.category.subcategory.filter.FilterActiv
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.products.ProductsFragment;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
-public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpView {
+public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpView, SubCategoryMenuAdapter.UpdateDataClickListener {
     @Inject
     SubCategoryPresenter subCategoryPresenter;
     @Inject
@@ -56,10 +56,13 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
     @Nullable
     @BindView(R.id.second_toolbar)
     Toolbar secondToolbar;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
     Unbinder unbinder;
 
     Integer mParentCategoryId;
-    String mCategoryName;
+    String mCategoryName, mExtraSubCategoryName;
+    String subCategoryID, extraSubCategoryId;
 
     private List<Subcategory> mSubMenuCategories;
     private List<Extrasubcategory> mExtrasubcategories;
@@ -101,6 +104,7 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView);
         textView.setText(mCategoryName);
+        subCategoryMenuAdapter.setOnItemClickListener(this);
         secondToolbar.setNavigationIcon(R.drawable.ic_back);
         secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,28 +119,31 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         detailsRecyclerView.setAdapter(gridViewRecyclerViewAdapter);
         detailsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        menuRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), menuRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        // do whatever
-                        subCategoryPresenter.getExtraSubCategories(getContext(), String.valueOf(mSubMenuCategories.get(position).getSubCategoryId()));
-
-                    }
-
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
+//        menuRecyclerView.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getActivity(), menuRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        // do whatever
+//                        subCategoryID = String.valueOf(mSubMenuCategories.get(position).getSubCategoryId());
+//                        subCategoryPresenter.getExtraSubCategories(getContext(), subCategoryID);
+//
+//                    }
+//
+//                    @Override
+//                    public void onLongItemClick(View view, int position) {
+//                        // do whatever
+//                    }
+//                })
+//        );
 
         detailsRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), detailsRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         // do whatever
-                        showProduct();
+                        extraSubCategoryId = String.valueOf(mExtrasubcategories.get(position).getExtraSubCategoryId());
+                        mExtraSubCategoryName = mExtrasubcategories.get(position).getName();
+                        showProduct(extraSubCategoryId, mExtraSubCategoryName);
                     }
 
                     @Override
@@ -169,28 +176,9 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         subCategoryPresenter.detachView();
     }
 
-    private List<Category> getCategories() {
-        List<Category> categories = new ArrayList<>();
-//        categories.add(new Category(R.drawable.hejabipic, "Hejab"));
-//        categories.add(new Category(R.drawable.headbandspic, "Headbands"));
-//        categories.add(new Category(R.drawable.hejabipic, "Hejab"));
-//        categories.add(new Category(R.drawable.headbandspic, "Headbands"));
-        return categories;
-    }
+    private void showProduct(String extraSubCategoryId, String mExtraSubCategoryName) {
 
-    private List<String> getSubCategories() {
-        List<String> strings = new ArrayList<>();
-        strings.add("Clothes");
-        strings.add("Dresses");
-        strings.add("shoes");
-        strings.add("Accessories");
-        strings.add("Bags");
-        return strings;
-    }
-
-    private void showProduct() {
-
-        Fragment nextFrag = ProductsFragment.newInstance("10", "Women", "25", "Tops", "1");
+        Fragment nextFrag = ProductsFragment.newInstance(String.valueOf(mParentCategoryId), mCategoryName, subCategoryID, mExtraSubCategoryName, extraSubCategoryId);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container_sub_category, nextFrag, ProductsFragment.class.getName())
                 .commit();
@@ -204,20 +192,24 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
 
     @Override
     public void showEmpty() {
-
+        emptyView.setVisibility(View.VISIBLE);
+        detailsRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void showAllCategories(List<Subcategory> subMenuCategories) {
         Timber.d("submenu %s", subMenuCategories);
         mSubMenuCategories = subMenuCategories;
-        subCategoryMenuAdapter.setCategories(subMenuCategories);
+        subCategoryMenuAdapter.setCategories(getContext(), subMenuCategories);
         subCategoryMenuAdapter.notifyDataSetChanged();
+        onItemClick(0);
     }
 
     @Override
     public void showExtraSubCategories(List<Extrasubcategory> extrasubcategories) {
         Timber.d("extrasubcategories %s", extrasubcategories);
+        emptyView.setVisibility(View.GONE);
+        detailsRecyclerView.setVisibility(View.VISIBLE);
         mExtrasubcategories = extrasubcategories;
         gridViewRecyclerViewAdapter.setData(extrasubcategories);
         gridViewRecyclerViewAdapter.notifyDataSetChanged();
@@ -261,4 +253,10 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         alertDialogObject.show();
     }
 
+    @Override
+    public void onItemClick(int position) {
+        subCategoryID = String.valueOf(mSubMenuCategories.get(position).getSubCategoryId());
+        subCategoryPresenter.getExtraSubCategories(getContext(), subCategoryID);
+        subCategoryMenuAdapter.selected(position);
+    }
 }

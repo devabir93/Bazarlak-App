@@ -1,52 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_bag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/empty_bag_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:gravity="center"
-        android:orientation="vertical">
+    <include
+        android:id="@+id/empty_bag"
+        layout="@layout/empty_bag_fragment"
+        android:visibility="gone" />
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginBottom="32dp"
-            android:src="@drawable/bazarlakbag" />
+    <RelativeLayout
+        android:id="@+id/bag_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:textColor="@color/text_light_grey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/empty_bag_1_label" />
-
-        <TextView
-            android:layout_marginTop="8dp"
-            android:textColor="@color/text_light_grey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/empty_bag_2_label" />
-
-        <TextView
-            android:textColor="@color/text_light_grey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/empty_bag_3_label" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/bag_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/checkout_bt" />
 
         <Button
-            android:id="@+id/go_shopping_button"
-            android:layout_width="180dp"
+            android:id="@+id/checkout_bt"
+            style="@style/redButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/red_button_shap"
-            android:text="@string/go_shopping_label"
-            android:textColor="@color/buttonColor" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:text="@string/checkout_label" />
+    </RelativeLayout>
 
-</RelativeLayout>
+
+</LinearLayout>

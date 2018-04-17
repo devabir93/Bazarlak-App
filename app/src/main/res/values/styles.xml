@@ -53,8 +53,26 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="noramSubText">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
     <style name="checkboxStyle">
         <item name="android:colorAccent">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/colorPrimary</item>
+    </style>
+
+    <style name="CardViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/card_view_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/card_view_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/card_view_vertical_margin</item>
+        <item name="android:paddingBottom">@dimen/content_padding_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/card_view_vertical_margin</item>
+        <item name="android:paddingTop">@dimen/content_padding_vertical</item>
+        <item name="android:paddingLeft">@dimen/content_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/content_padding_horizontal</item>
+
     </style>
 </resources>

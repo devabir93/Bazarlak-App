@@ -4,9 +4,12 @@ import dagger.Subcomponent;
 import uk.co.ribot.androidboilerplate.injection.PerActivity;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
+import uk.co.ribot.androidboilerplate.ui.bag.address.AddressFragment;
+import uk.co.ribot.androidboilerplate.ui.bag.checkout.CheckoutFragment;
 import uk.co.ribot.androidboilerplate.ui.category.CategoryFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.filter.FilterActivity;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryFragment;
+import uk.co.ribot.androidboilerplate.ui.category.subcategory.products.ProductsDetailsFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.products.ProductsFragment;
 import uk.co.ribot.androidboilerplate.ui.home.HomeFragment;
 import uk.co.ribot.androidboilerplate.ui.main.MainActivity;
@@ -24,15 +27,32 @@ import uk.co.ribot.androidboilerplate.ui.search.SearchFragment;
 public interface ActivityComponent {
 
     void inject(MainActivity mainActivity);
+
     void inject(MainActivity2 mainActivity);
+
     void inject(HomeFragment homeFragment);
+
     void inject(CategoryFragment categoryFragment);
+
     void inject(SearchFragment searchFragment);
+
     void inject(ProfileFragment profileFragment);
+
     void inject(BagFragment bagFragment);
+
     void inject(SubCategoryFragment subCategoryFragment);
+
     void inject(ProductsFragment productsFragment);
+
     void inject(LoginFragment loginFragment);
+
     void inject(RegisterFragment registerFragment);
+
     void inject(FilterActivity filterActivity);
+
+    void inject(AddressFragment addressFragment);
+
+    void inject(CheckoutFragment checkoutFragment);
+
+    void inject(ProductsDetailsFragment productsDetailsFragment);
 }

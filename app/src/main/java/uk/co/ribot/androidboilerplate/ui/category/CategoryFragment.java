@@ -2,6 +2,8 @@ package uk.co.ribot.androidboilerplate.ui.category;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,10 +79,13 @@ public class CategoryFragment extends BaseFragment implements CategoryMvpView {
     }
 
     private void showSubCategory(Integer categoryId, String categoryName) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment nextFrag = SubCategoryFragment.newInstance(categoryId, categoryName);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_category, nextFrag, SubCategoryFragment.class.getName())
-                .commit();
+//        getActivity().getSupportFragmentManager().beginTransaction()
+        transaction.replace(R.id.container_category, nextFrag, SubCategoryFragment.class.getName());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override

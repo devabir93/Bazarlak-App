@@ -38,8 +38,9 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
         super.detachView();
         if (mDisposable != null) mDisposable.dispose();
     }
-    void getProducts(Context context, String parentCategoryId,String subCategoryId,String extraSubCategoryId) {
-        mDataManager.getProducts(parentCategoryId,subCategoryId,extraSubCategoryId)
+
+    void getProducts(Context context, String parentCategoryId, String subCategoryId, String extraSubCategoryId) {
+        mDataManager.getProducts(parentCategoryId, subCategoryId, extraSubCategoryId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<Product>>() {
@@ -82,4 +83,9 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
                 });
     }
 
+    void addToBag(String ProductId) {
+
+        getMvpView().addedToBag(true);
+
+    }
 }
