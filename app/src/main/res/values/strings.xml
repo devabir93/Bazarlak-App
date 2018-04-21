@@ -94,7 +94,7 @@
     <string name="hint_address2">ADDRESS 2</string>
     <string name="hint_post_code">POSTCODE</string>
     <string name="address_details_label">ADDRESS DETAILS</string>
-    <string name="checkout_label">Checkout (%1$d)</string>
+    <string name="checkout_label">Checkout</string>
     <string name="item_size">Size:</string>
     <string name="item_price">item_price</string>
     <string name="subTotal_price_label">Subtotal:</string>

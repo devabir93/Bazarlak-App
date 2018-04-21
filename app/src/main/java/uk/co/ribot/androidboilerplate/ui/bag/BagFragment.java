@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,13 +20,15 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.Order;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.ui.bag.checkout.CheckoutFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
-public class BagFragment extends BaseFragment implements BagMvpView , BagAdapter.UpdateDataClickListener {
+public class BagFragment extends BaseFragment implements BagMvpView, BagAdapter.UpdateDataClickListener {
 
     @Inject
     BagPresenter bagPresenter;
@@ -42,6 +45,7 @@ public class BagFragment extends BaseFragment implements BagMvpView , BagAdapter
     @BindView(R.id.bag_layout)
     RelativeLayout bagLayout;
     boolean isEmptyBag = false;
+    private List<Order> mSavedOrders;
 
     public BagFragment() {
         // Required empty public constructor
@@ -68,8 +72,20 @@ public class BagFragment extends BaseFragment implements BagMvpView , BagAdapter
             emptyBagLayout.setVisibility(View.GONE);
         }
 
+        List<Order> orders = new ArrayList<>();
+        Product product = new Product();
+        product.setName("Chanele");
+        product.setPrice("30$");
+        product.setImage("http://bazarlak.com/uploads/products/5ad2358391597.png");
+        product.setDescription("Nice bag");
+        Order order = new Order();
+        order.setProduct(product);
+        //order.setColor("#");
+        order.setSize("small");
+        order.setQuantity("2");
+        orders.add(order);
         bagRecyclerView.setAdapter(bagAdapter);
-        //bagAdapter.setProducts(getContext(), this,null);
+        bagAdapter.setProducts(getContext(), this, orders);
         bagRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
     }
@@ -97,14 +113,20 @@ public class BagFragment extends BaseFragment implements BagMvpView , BagAdapter
     }
 
     private void showCheckoutFragment() {
-        Fragment nextFrag = new CheckoutFragment();
+        Fragment nextFrag = CheckoutFragment.newInstance(mSavedOrders);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container_bag, nextFrag, CheckoutFragment.class.getName())
                 .commit();
     }
 
     @Override
-    public void oncheckOrder(List<Product> products) {
+    public void oncheckOrder(List<Order> saveOrders) {
+        Timber.d("saveOrders %s", saveOrders);
+        mSavedOrders = saveOrders;
+        if (saveOrders != null && saveOrders.size() > 0)
+            checkoutBt.setText(getContext().getResources().getString(R.string.checkout_label) + "(" + saveOrders.size() + ")");
+        else
+            checkoutBt.setText(R.string.checkout_label);
 
     }
 

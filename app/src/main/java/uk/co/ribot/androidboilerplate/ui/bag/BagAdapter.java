@@ -24,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.refactor.library.SmoothCheckBox;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.Order;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryMenuAdapter;
@@ -31,8 +32,8 @@ import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryMenuAda
 public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHolder> {
 
 
-    private List<Product> mProducts;
-    private List<Product> savedOrders;
+    private List<Order> mProducts;
+    private List<Order> savedOrders;
     private Context mcontext;
     UpdateDataClickListener updateDataClickListener;
 
@@ -42,7 +43,7 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
         savedOrders = new ArrayList<>();
     }
 
-    public void setProducts(Context context, UpdateDataClickListener updateDataClickListener, List<Product> products) {
+    public void setProducts(Context context, UpdateDataClickListener updateDataClickListener, List<Order> products) {
         mProducts = products;
         mcontext = context;
         this.updateDataClickListener = updateDataClickListener;
@@ -57,17 +58,20 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
 
     @Override
     public void onBindViewHolder(final CategoryViewHolder holder, int position) {
-        Product product = mProducts.get(position);
+        Product product = mProducts.get(position).getProduct();
         holder.brandName.setText(product.getName());
         holder.priceTextView.setText(String.format("%s", product.getPrice()));
         holder.itemType.setText(product.getDescription());
+        holder.itemSize.setText(mProducts.get(position).getSize());
+        holder.itemQyn.setText(mProducts.get(position).getQuantity());
         holder.itemQyn.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     // do your stuff here
-                    mProducts.get(holder.getAdapterPosition()).setSavedQuantity(holder.itemQyn.getText().toString());
+                    mProducts.get(holder.getAdapterPosition()).setQuantity(holder.itemQyn.getText().toString());
                     Log.d("quantity %s", holder.itemQyn.getText().toString());
+                    holder.itemQyn.setCursorVisible(false);
                 }
                 return false;
             }
@@ -76,14 +80,16 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
             @Override
             public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
                 if (isChecked) {
-                    savedOrders.add(mProducts.get(holder.getAdapterPosition()));
-                }
+                    if (!savedOrders.contains(mProducts.get(holder.getAdapterPosition())))
+                        savedOrders.add(mProducts.get(holder.getAdapterPosition()));
+                } else
+                    savedOrders.remove(mProducts.get(holder.getAdapterPosition()));
+
                 updateDataClickListener.oncheckOrder(savedOrders);
             }
         });
         if (product.getImage() != null && !product.getImage().isEmpty())
-            Picasso.with(mcontext).load(BazarlakService.IMAGE_URL + product.getImage()).into(holder.bagImageView);
-
+            Picasso.with(mcontext).load(product.getImage()).into(holder.bagImageView);
         // holder.imageView.setImageResource(category.getImg());
     }
 
@@ -117,6 +123,6 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
     }
 
     interface UpdateDataClickListener {
-        void oncheckOrder(List<Product> products);
+        void oncheckOrder(List<Order> products);
     }
 }

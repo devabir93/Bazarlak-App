@@ -1,6 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.bag.checkout;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,12 +14,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.Order;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
@@ -27,11 +31,21 @@ public class CheckoutFragment extends BaseFragment implements CheckoutMvpView {
 
     @Inject
     CheckoutPresenter checkoutPresenter;
-
+    List<Order> orders;
     public CheckoutFragment() {
         // Required empty public constructor
     }
 
+    public void setOrder(List<Order> order) {
+        this.orders = order;
+    }
+
+    @NonNull
+    public static CheckoutFragment newInstance(List<Order> order) {
+        CheckoutFragment fragment = new CheckoutFragment();
+        fragment.setOrder(order);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
