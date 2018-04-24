@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.category.CategoryMvpView;
@@ -39,8 +40,8 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
         if (mDisposable != null) mDisposable.dispose();
     }
 
-    void getProducts(Context context, String parentCategoryId, String subCategoryId, String extraSubCategoryId) {
-        mDataManager.getProducts(parentCategoryId, subCategoryId, extraSubCategoryId)
+    void getProducts(Context context, ProductBody productBody) {
+        mDataManager.getProducts(productBody)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<Product>>() {

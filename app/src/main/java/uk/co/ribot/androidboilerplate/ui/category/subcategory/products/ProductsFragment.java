@@ -15,9 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import javax.inject.Inject;
 
@@ -26,15 +24,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
-import uk.co.ribot.androidboilerplate.ui.category.CategoryMvpView;
-import uk.co.ribot.androidboilerplate.ui.category.CategoryPresenter;
-import uk.co.ribot.androidboilerplate.ui.category.subcategory.GridViewRecyclerViewAdapter;
-import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryFragment;
-import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryMenuAdapter;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
 public class ProductsFragment extends BaseFragment implements ProductsMvpView {
@@ -51,8 +44,8 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     Unbinder unbinder;
     String categoryId;
     String subCategoryId;
-    String extraSubCategoryId;
-    String categoryName, extraSubCategoryName;
+    String ExtracategoryId;
+    String categoryName, ExtracategoryName;
     private List<Product> mproductList;
 
     public ProductsFragment() {
@@ -67,26 +60,26 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         this.subCategoryId = subCategoryId;
     }
 
-    public void setExtraSubCategoryId(String extraSubCategoryId) {
-        this.extraSubCategoryId = extraSubCategoryId;
+    public void setExtracategoryId(String ExtracategoryId) {
+        this.ExtracategoryId = ExtracategoryId;
     }
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
-    public void setExtraSubCategoryName(String extraSubCategoryName) {
-        this.extraSubCategoryName = extraSubCategoryName;
+    public void setExtracategoryName(String ExtracategoryName) {
+        this.ExtracategoryName = ExtracategoryName;
     }
 
     @NonNull
-    public static ProductsFragment newInstance(String categoryId, String categoryName, String subCategoryId, String extraSubCategoryName, String extraSubCategoryId) {
+    public static ProductsFragment newInstance(String categoryId, String categoryName, String subCategoryId, String ExtracategoryName, String ExtracategoryId) {
         ProductsFragment fragment = new ProductsFragment();
         fragment.setCategoryId(categoryId);
         fragment.setSubCategoryId(subCategoryId);
-        fragment.setExtraSubCategoryId(extraSubCategoryId);
+        fragment.setExtracategoryId(ExtracategoryId);
         fragment.setCategoryName(categoryName);
-        fragment.setExtraSubCategoryName(extraSubCategoryName);
+        fragment.setExtracategoryName(ExtracategoryName);
         return fragment;
     }
 
@@ -106,7 +99,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         productsPresenter.attachView(this);
         ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView);
-        textView.setText(categoryName + "/" + extraSubCategoryName);
+        textView.setText(categoryName + "/" + ExtracategoryName);
         secondToolbar.setNavigationIcon(R.drawable.ic_back);
         secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +109,11 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
                 transaction.remove(fragment).commit();
             }
         });
-        productsPresenter.getProducts(getContext(), categoryId, subCategoryId, extraSubCategoryId);
+        ProductBody productBody = new ProductBody();
+        productBody.setCategory(categoryId);
+        productBody.setSubcategory(subCategoryId);
+        productBody.setExtracategory(ExtracategoryId);
+        productsPresenter.getProducts(getContext(), productBody);
         productsRecyclerView.setAdapter(gridViewRecyclerViewAdapter);
         productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
@@ -138,7 +135,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     }
 
     private void showProductDetails(Product product) {
-        Timber.d("product %s",product);
+        Timber.d("product %s", product);
         Fragment nextFrag = ProductsDetailsFragment.newInstance(product);
 
         getActivity().getSupportFragmentManager().beginTransaction()

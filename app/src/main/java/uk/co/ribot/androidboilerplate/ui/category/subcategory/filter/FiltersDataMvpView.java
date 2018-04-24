@@ -4,10 +4,11 @@ import java.util.List;
 
 import uk.co.ribot.androidboilerplate.data.model.Brand;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.FilterSize;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 
-public interface BrandsMvpView extends MvpView {
+public interface FiltersDataMvpView extends MvpView {
 
     void showFilteredProducts(List<Product> productList);
 
@@ -19,5 +20,5 @@ public interface BrandsMvpView extends MvpView {
 
     void showColors();
 
-    void showSizes();
+    void showSizes(List<FilterSize> filterSize);
 }

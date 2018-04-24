@@ -2,9 +2,10 @@ package uk.co.ribot.androidboilerplate.ui.bag;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Order;
 import uk.co.ribot.androidboilerplate.data.model.Product;
-import uk.co.ribot.androidboilerplate.ui.bag.checkout.CheckoutFragment;
+import uk.co.ribot.androidboilerplate.ui.bag.billing.BillingAndShippingFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
@@ -113,10 +114,14 @@ public class BagFragment extends BaseFragment implements BagMvpView, BagAdapter.
     }
 
     private void showCheckoutFragment() {
-        Fragment nextFrag = CheckoutFragment.newInstance(mSavedOrders);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_bag, nextFrag, CheckoutFragment.class.getName())
-                .commit();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment nextFrag = BillingAndShippingFragment.newInstance(mSavedOrders);
+//        getActivity().getSupportFragmentManager().beginTransaction()
+        transaction.replace(R.id.container_bag, nextFrag, BillingAndShippingFragment.class.getName());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override

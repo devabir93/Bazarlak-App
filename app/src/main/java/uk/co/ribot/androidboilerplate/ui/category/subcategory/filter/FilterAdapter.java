@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -18,13 +19,17 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.Brand;
+import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.FilterSize;
+import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.CategoryViewHolder> {
 
     private List<List<String>> filterDataList;
     private Context mcontext;
     private String filterType;
-    HashMap<String, List<String>> filterHashMap;
+    HashMap<String, Object> filterHashMap;
     private String[] mKeys;
 
     @Inject
@@ -32,7 +37,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.CategoryVi
         filterHashMap = new HashMap<>();
     }
 
-    protected void setData(Context context, HashMap<String, List<String>> filterHashMap) {
+    protected void setData(Context context, HashMap<String, Object> filterHashMap) {
         this.filterHashMap = filterHashMap;
         this.mcontext = context;
         mKeys = filterHashMap.keySet().toArray(new String[filterHashMap.size()]);
@@ -48,7 +53,25 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.CategoryVi
     @Override
     public void onBindViewHolder(final CategoryViewHolder holder, int position) {
         holder.textView.setText(mKeys[position]);
-        holder.spinner.setItems(filterHashMap.get(mKeys[position]));
+        List<Class> classes = new ArrayList<>();
+        classes.add(Brand.class);
+        classes.add(Category.class);
+        classes.add(Subcategory.class);
+        classes.add(FilterSize.class);
+
+        if (mKeys[position].equals(Brand.class.getName())) {
+            holder.spinner.setItems(((List<Brand>) filterHashMap.get(mKeys[position])).get(0));
+        }
+        else if (mKeys[position].equals(FilterSize.class.getName())) {
+            holder.spinner.setItems((List<FilterSize>) filterHashMap.get(mKeys[position]));
+        }
+        else if (mKeys[position].equals(Category.class.getName())) {
+            holder.spinner.setItems((List<Category>) filterHashMap.get(mKeys[position]));
+        }
+        else if (mKeys[position].equals(Subcategory.class.getName())) {
+            holder.spinner.setItems((List<Subcategory>) filterHashMap.get(mKeys[position]));
+        }
+
         holder.spinner.setHint(R.string.select_hint + "" + mKeys[position]);
     }
 

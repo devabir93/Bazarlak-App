@@ -46,4 +46,9 @@
     <string name="item_size">Size:</string>
     <string name="item_price">item_price</string>
     <string name="subTotal_price_label">Subtotal:</string>
+    <string name="all_label">All %1s</string>
+    <string name="buy_now_label">Buy Now</string>
+    <string name="pay_label"><![CDATA[Billing & Shipping]]></string>
+    <string name="choose_payment_label">Choose a payment method</string>
+    <string name="shipping_and_Billing__label">Shipping and Billing Address</string>
 </resources>

@@ -11,9 +11,14 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
-import uk.co.ribot.androidboilerplate.data.model.BrandResponse;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
+import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
+import uk.co.ribot.androidboilerplate.data.model.ProductBody;
+import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
@@ -29,21 +34,25 @@ public interface BazarlakService {
     @POST("login")
     Observable<LoginResponse> login(@Body UserData userData);
 
-
     @POST("register")
     Observable<RegisterResponse> register(@Body UserData userData);
 
     @GET("category")
     Observable<CategoryResponse> getAllCategories();
 
-    @GET("brand")
-    Observable<BrandResponse> getBrands();
+    @GET("get_filter")
+    Observable<FilterDataResponse> getFiltersData();
 
 //    @GET("subcategory")
 //    Observable<SubCategoryResponse> getAllSubCateories();
 
     @GET("ribots")
     Observable<List<Ribot>> getRibots();
+
+    @POST("get_products")
+   // @HTTP(method = "GET", path = "get_products", hasBody = true)
+
+    Observable<ProductResponse> getProduct(@Body ProductBody productBody);
 
     /******** Helper class that sets up a new services *******/
     class Creator {

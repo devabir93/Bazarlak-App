@@ -33,8 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Category;
-import uk.co.ribot.androidboilerplate.data.model.Extrasubcategory;
+import uk.co.ribot.androidboilerplate.data.model.Extracategory;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
@@ -61,11 +60,12 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
     Unbinder unbinder;
 
     Integer mParentCategoryId;
-    String mCategoryName, mExtraSubCategoryName;
-    String subCategoryID, extraSubCategoryId;
+    String mCategoryName, mExtracategoryName;
+    String subCategoryID, ExtracategoryId;
 
     private List<Subcategory> mSubMenuCategories;
-    private List<Extrasubcategory> mExtrasubcategories;
+    private List<Extracategory> mExtrasubcategories;
+    private String subCategoryName;
 
     public void setCategoryName(String categoryName) {
         this.mCategoryName = categoryName;
@@ -141,9 +141,9 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
                     @Override
                     public void onItemClick(View view, int position) {
                         // do whatever
-                        extraSubCategoryId = String.valueOf(mExtrasubcategories.get(position).getExtraSubCategoryId());
-                        mExtraSubCategoryName = mExtrasubcategories.get(position).getName();
-                        showProduct(extraSubCategoryId, mExtraSubCategoryName);
+                        ExtracategoryId = String.valueOf(mExtrasubcategories.get(position).getExtracategoryId());
+                        mExtracategoryName = mExtrasubcategories.get(position).getName();
+                        showProduct(ExtracategoryId, mExtracategoryName);
                     }
 
                     @Override
@@ -176,9 +176,9 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         subCategoryPresenter.detachView();
     }
 
-    private void showProduct(String extraSubCategoryId, String mExtraSubCategoryName) {
+    private void showProduct(String ExtracategoryId, String mExtracategoryName) {
 
-        Fragment nextFrag = ProductsFragment.newInstance(String.valueOf(mParentCategoryId), mCategoryName, subCategoryID, mExtraSubCategoryName, extraSubCategoryId);
+        Fragment nextFrag = ProductsFragment.newInstance(String.valueOf(mParentCategoryId), mCategoryName, subCategoryID, mExtracategoryName, ExtracategoryId);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container_sub_category, nextFrag, ProductsFragment.class.getName())
                 .commit();
@@ -201,17 +201,22 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         Timber.d("submenu %s", subMenuCategories);
         mSubMenuCategories = subMenuCategories;
         subCategoryMenuAdapter.setCategories(getContext(), subMenuCategories);
+        if (mSubMenuCategories != null && mSubMenuCategories.size() > 0)
+            subCategoryName = mSubMenuCategories.get(1).getName();
         subCategoryMenuAdapter.notifyDataSetChanged();
         onItemClick(0);
     }
 
     @Override
-    public void showExtraSubCategories(List<Extrasubcategory> extrasubcategories) {
+    public void showExtraSubCategories(List<Extracategory> extrasubcategories) {
         Timber.d("extrasubcategories %s", extrasubcategories);
         emptyView.setVisibility(View.GONE);
         detailsRecyclerView.setVisibility(View.VISIBLE);
-        mExtrasubcategories = extrasubcategories;
-        gridViewRecyclerViewAdapter.setData(extrasubcategories);
+        mExtrasubcategories = new ArrayList<>();
+        mExtrasubcategories.add(0,new Extracategory());
+        mExtrasubcategories.addAll(extrasubcategories);
+       // mExtrasubcategories = extrasubcategories;
+        gridViewRecyclerViewAdapter.setData(subCategoryName, mExtrasubcategories);
         gridViewRecyclerViewAdapter.notifyDataSetChanged();
     }
 

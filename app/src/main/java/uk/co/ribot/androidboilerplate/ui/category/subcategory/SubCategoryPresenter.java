@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
-import uk.co.ribot.androidboilerplate.data.model.Extrasubcategory;
+import uk.co.ribot.androidboilerplate.data.model.Extracategory;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -87,14 +87,14 @@ public class SubCategoryPresenter extends BasePresenter<SubCategoryMvpView> {
         mDataManager.getExtraSubCategories(subCategoryId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<Extrasubcategory>>() {
+                .subscribe(new Observer<List<Extracategory>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<Extrasubcategory> extrasubcategories) {
+                    public void onNext(List<Extracategory> extrasubcategories) {
                         Timber.d("extrasubcategories %s", extrasubcategories);
                         if (extrasubcategories.size() > 0) {
                             getMvpView().showExtraSubCategories(extrasubcategories);

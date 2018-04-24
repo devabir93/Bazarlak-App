@@ -18,9 +18,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.Product;
-import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 
 /**
  * Created by Dev_Abir on 03/11/2018.

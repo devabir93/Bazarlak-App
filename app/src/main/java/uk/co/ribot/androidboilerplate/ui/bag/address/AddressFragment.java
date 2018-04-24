@@ -5,7 +5,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.ui.bag.checkout.CheckoutFragment;
+import uk.co.ribot.androidboilerplate.ui.bag.billing.BillingAndShippingFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
@@ -50,6 +49,11 @@ public class AddressFragment extends BaseFragment implements AddressMvpView {
 
     public AddressFragment() {
         // Required empty public constructor
+    }
+
+    public static AddressFragment newInstance() {
+        AddressFragment fragment = new AddressFragment();
+        return fragment;
     }
 
     @Override
@@ -83,7 +87,7 @@ public class AddressFragment extends BaseFragment implements AddressMvpView {
     }
 
     private void onBackPressed() {
-        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(CheckoutFragment.class.getName());
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(BillingAndShippingFragment.class.getName());
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.remove(fragment).commit();
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
@@ -103,4 +107,6 @@ public class AddressFragment extends BaseFragment implements AddressMvpView {
     @OnClick(R.id.btn_save)
     public void onViewClicked() {
     }
+
+
 }

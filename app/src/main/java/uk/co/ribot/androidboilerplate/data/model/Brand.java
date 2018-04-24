@@ -17,9 +17,6 @@ public class Brand extends SugarRecord implements Parcelable {
     @SerializedName("id")
     @Expose
     private Integer brandId;
-    @SerializedName("status")
-    @Expose
-    private String status;
     @SerializedName("name")
     @Expose
     private String name;
@@ -33,7 +30,6 @@ public class Brand extends SugarRecord implements Parcelable {
         } else {
             brandId = in.readInt();
         }
-        status = in.readString();
         name = in.readString();
     }
 
@@ -45,7 +41,6 @@ public class Brand extends SugarRecord implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(brandId);
         }
-        dest.writeString(status);
         dest.writeString(name);
     }
 
@@ -74,14 +69,6 @@ public class Brand extends SugarRecord implements Parcelable {
         this.brandId = brandId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getName() {
         return name;
     }
@@ -92,12 +79,12 @@ public class Brand extends SugarRecord implements Parcelable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", brandId).append("status", status).append("name", name).toString();
+        return new ToStringBuilder(this).append("id", brandId).append("name", name).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(brandId).append(status).append(name).toHashCode();
+        return new HashCodeBuilder().append(brandId).append(name).toHashCode();
     }
 
     @Override
@@ -109,7 +96,7 @@ public class Brand extends SugarRecord implements Parcelable {
             return false;
         }
         Brand rhs = ((Brand) other);
-        return new EqualsBuilder().append(brandId, rhs.brandId).append(status, rhs.status).append(name, rhs.name).isEquals();
+        return new EqualsBuilder().append(brandId, rhs.brandId).append(name, rhs.name).isEquals();
     }
 
 }

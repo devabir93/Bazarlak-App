@@ -1,6 +1,5 @@
 package uk.co.ribot.androidboilerplate.ui.category.subcategory.products;
 
-import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,9 +28,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.ColorFeature;
 import uk.co.ribot.androidboilerplate.data.model.Product;
-import uk.co.ribot.androidboilerplate.data.model.Size;
+import uk.co.ribot.androidboilerplate.data.model.FilterSize;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
@@ -102,7 +99,7 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
             priceTextView.setText(mProduct.getPrice());
             List<String> colorsList = new ArrayList<>();
             List<String> sizesList = new ArrayList<>();
-            HashMap<String, List<Size>> hashMap = new HashMap<>();
+            HashMap<String, List<FilterSize>> hashMap = new HashMap<>();
 //                for (ColorFeature colorFeature :
 //                        mProduct.getColorFeatures()) {
 //                    hashMap.put(colorFeature.getColor(), colorFeature.getSizes());

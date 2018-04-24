@@ -5,7 +5,7 @@ import uk.co.ribot.androidboilerplate.injection.PerActivity;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
 import uk.co.ribot.androidboilerplate.ui.bag.address.AddressFragment;
-import uk.co.ribot.androidboilerplate.ui.bag.checkout.CheckoutFragment;
+import uk.co.ribot.androidboilerplate.ui.bag.billing.BillingAndShippingFragment;
 import uk.co.ribot.androidboilerplate.ui.category.CategoryFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.filter.FilterActivity;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryFragment;
@@ -52,7 +52,7 @@ public interface ActivityComponent {
 
     void inject(AddressFragment addressFragment);
 
-    void inject(CheckoutFragment checkoutFragment);
+    void inject(BillingAndShippingFragment checkoutFragment);
 
     void inject(ProductsDetailsFragment productsDetailsFragment);
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Category category = mCategories.get(position);
         holder.textView.setText(category.getName());
         if (category.getImage() != null && !category.getImage().isEmpty())
-            Picasso.with(mcontext).load(BazarlakService.IMAGE_URL+category.getImage()).into(holder.imageView);
+            Picasso.with(mcontext).load(category.getImage()).into(holder.imageView);
 
         // holder.imageView.setImageResource(category.getImg());
     }

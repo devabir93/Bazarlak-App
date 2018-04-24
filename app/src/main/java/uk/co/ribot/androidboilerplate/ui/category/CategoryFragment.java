@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,7 +24,7 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryFragment;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
-public class CategoryFragment extends BaseFragment implements CategoryMvpView {
+public  class CategoryFragment extends BaseFragment implements CategoryMvpView {
     @Inject
     CategoryPresenter categoryPresenter;
     @Inject

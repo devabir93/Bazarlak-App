@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.ui.category;
+package uk.co.ribot.androidboilerplate.ui.category.subcategory.filter;
 
 import android.content.Context;
 
@@ -13,23 +13,24 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 @ConfigPersistent
-public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
+public class FiltersDataPresenter extends BasePresenter<FiltersDataMvpView> {
 
     private final DataManager mDataManager;
     private Disposable mDisposable;
 
     @Inject
-    public CategoryPresenter(DataManager dataManager) {
+    public FiltersDataPresenter(DataManager dataManager) {
         mDataManager = dataManager;
     }
 
     @Override
-    public void attachView(CategoryMvpView mvpView) {
+    public void attachView(FiltersDataMvpView mvpView) {
         super.attachView(mvpView);
     }
 
@@ -39,7 +40,37 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
         if (mDisposable != null) mDisposable.dispose();
     }
 
-    void getAllCategories(Context context) {
+    void getFiltersData() {
+        mDataManager.getFiltersData()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<FilterDataResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(FilterDataResponse filterDataResponse) {
+                        if (filterDataResponse != null) {
+                            getMvpView().showBrands(filterDataResponse.getItems().getBrand());
+                            getMvpView().showSizes(filterDataResponse.getItems().getFilterSize());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    void getFiltersCategory() {
         checkViewAttached();
         RxUtil.dispose(mDisposable);
         mDataManager.getCategories()
@@ -55,26 +86,13 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
                     public void onNext(List<Category> categoryResponse) {
                         Timber.d("categories %s",categoryResponse);
                         if (categoryResponse.size()>0) {
-                            getMvpView().showAllCategories(categoryResponse);
+                            getMvpView().showCategories(categoryResponse);
                         } else
                             getMvpView().showEmpty();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-//                        getMvpView().showMessage(false, context.getResources().getString(R.string.signup_message), Message.LOGGING);
-//                        if (e instanceof HttpException) {
-//                            ResponseBody responseBody = ((HttpException) e).response().errorBody();
-//                            // view.onUnknownError(getErrorMessage(responseBody));
-//                        } else if (e instanceof SocketTimeoutException) {
-//                            getMvpView().onTimeout();
-//                        } else if (e instanceof IOException) {
-//                            getMvpView().onNetworkError();
-//                        } else {
-//                            //getMvpView().showError();
-//                            getMvpView().onUnknownError(e.getMessage());
-//                        }
-//                        // getMvpView().showError();
                         Timber.e(e, "There was an error while getAllCategories");
                     }
 
@@ -84,4 +102,5 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
                     }
                 });
     }
+
 }

@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.ui.bag.checkout;
+package uk.co.ribot.androidboilerplate.ui.bag.billing;
 
 import javax.inject.Inject;
 
@@ -8,18 +8,18 @@ import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 
 @ConfigPersistent
-public class CheckoutPresenter extends BasePresenter<CheckoutMvpView> {
+public class BillingAndShippingPresenter extends BasePresenter<BillingAndShippingMvpView> {
 
     private final DataManager mDataManager;
     private Disposable mDisposable;
 
     @Inject
-    public CheckoutPresenter(DataManager dataManager) {
+    public BillingAndShippingPresenter(DataManager dataManager) {
         mDataManager = dataManager;
     }
 
     @Override
-    public void attachView(CheckoutMvpView mvpView) {
+    public void attachView(BillingAndShippingMvpView mvpView) {
         super.attachView(mvpView);
     }
 

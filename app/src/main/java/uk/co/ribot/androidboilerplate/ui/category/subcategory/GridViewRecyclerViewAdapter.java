@@ -1,13 +1,13 @@
 package uk.co.ribot.androidboilerplate.ui.category.subcategory;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Category;
-import uk.co.ribot.androidboilerplate.data.model.Extrasubcategory;
-import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
+import uk.co.ribot.androidboilerplate.data.model.Extracategory;
 
 /**
  * Created by Dev_Abir on 03/11/2018.
@@ -27,7 +25,9 @@ import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 
 public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRecyclerViewAdapter.GridCategoryViewHolder> {
 
-    private List<Extrasubcategory> mCategories;
+
+    private List<Extracategory> mCategories;
+    private String mSubCategoryName;
 
     // data is passed into the constructor
     @Inject
@@ -35,8 +35,9 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
         mCategories = new ArrayList<>();
     }
 
-    public void setData(List<Extrasubcategory> categories) {
+    public void setData(String subCategoryName, List<Extracategory> categories) {
         mCategories = categories;
+        mSubCategoryName = subCategoryName;
     }
 
     // inflates the cell layout from xml when needed
@@ -50,8 +51,18 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
     // binds the data to the textview in each cell
     @Override
     public void onBindViewHolder(GridCategoryViewHolder holder, int position) {
-        Extrasubcategory category = mCategories.get(position);
-        holder.productInfotextView.setText(category.getName());
+        if (mCategories.get(position).getCatId() == null) {
+            holder.itemsLayout.setVisibility(View.GONE);
+            holder.allCategory.setVisibility(View.VISIBLE);
+            holder.allCategory.setText(holder.allCategory.getContext().getString(R.string.all_label, mSubCategoryName));
+        } else {
+            holder.itemsLayout.setVisibility(View.VISIBLE);
+            holder.allCategory.setVisibility(View.GONE);
+            Extracategory extracategory = mCategories.get(position);
+            holder.ExtracategoryTextView.setText(extracategory.getName());
+//        if (extracategory.getImage() != null && !extracategory.getImage().isEmpty())
+//            Picasso.with(holder.imageView.getContext()).load(extracategory.getImage()).into(holder.imageView);
+        }
 //        if (category.get() != null && !category.getImage().isEmpty())
 //            Picasso.with(mcontext).load(BazarlakService.IMAGE_URL+category.getImage()).into(holder.imageView);
 //        int width = (holder.productInfotextView.getContext().getResources().getDisplayMetrics().widthPixels) / 2;
@@ -77,10 +88,16 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
 
     // stores and recycles views as they are scrolled off screen
     class GridCategoryViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.extraSubCategory_imageView)
-        ImageView imageView;
-        @BindView(R.id.extraSubCategory_textView)
-        TextView productInfotextView;
+        @BindView(R.id.Extracategory_imageView)
+        ImageView ExtracategoryImageView;
+        @BindView(R.id.Extracategory_textView)
+        TextView ExtracategoryTextView;
+        @BindView(R.id.items_layout)
+        LinearLayout itemsLayout;
+        @BindView(R.id.all_category)
+        TextView allCategory;
+        @BindView(R.id.card_view)
+        CardView cardView;
 
         GridCategoryViewHolder(View itemView) {
             super(itemView);

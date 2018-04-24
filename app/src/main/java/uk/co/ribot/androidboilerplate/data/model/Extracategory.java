@@ -12,11 +12,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Extrasubcategory extends SugarRecord implements Parcelable {
+public class Extracategory extends SugarRecord implements Parcelable {
 
     @SerializedName("id")
     @Expose
-    private Integer extraSubCategoryId;
+    private Integer ExtracategoryId;
     @SerializedName("cat_id")
     @Expose
     private String catId;
@@ -27,14 +27,14 @@ public class Extrasubcategory extends SugarRecord implements Parcelable {
     @Expose
     private String name;
 
-    public Extrasubcategory() {
+    public Extracategory() {
     }
 
-    protected Extrasubcategory(Parcel in) {
+    protected Extracategory(Parcel in) {
         if (in.readByte() == 0) {
-            extraSubCategoryId = null;
+            ExtracategoryId = null;
         } else {
-            extraSubCategoryId = in.readInt();
+            ExtracategoryId = in.readInt();
         }
         catId = in.readString();
         subcategoryId = in.readString();
@@ -43,11 +43,11 @@ public class Extrasubcategory extends SugarRecord implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (extraSubCategoryId == null) {
+        if (ExtracategoryId == null) {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeInt(extraSubCategoryId);
+            dest.writeInt(ExtracategoryId);
         }
         dest.writeString(catId);
         dest.writeString(subcategoryId);
@@ -59,24 +59,24 @@ public class Extrasubcategory extends SugarRecord implements Parcelable {
         return 0;
     }
 
-    public static final Creator<Extrasubcategory> CREATOR = new Creator<Extrasubcategory>() {
+    public static final Creator<Extracategory> CREATOR = new Creator<Extracategory>() {
         @Override
-        public Extrasubcategory createFromParcel(Parcel in) {
-            return new Extrasubcategory(in);
+        public Extracategory createFromParcel(Parcel in) {
+            return new Extracategory(in);
         }
 
         @Override
-        public Extrasubcategory[] newArray(int size) {
-            return new Extrasubcategory[size];
+        public Extracategory[] newArray(int size) {
+            return new Extracategory[size];
         }
     };
 
-    public Integer getExtraSubCategoryId() {
-        return extraSubCategoryId;
+    public Integer getExtracategoryId() {
+        return ExtracategoryId;
     }
 
-    public void setExtraSubCategoryId(Integer extraSubCategoryId) {
-        this.extraSubCategoryId = extraSubCategoryId;
+    public void setExtracategoryId(Integer ExtracategoryId) {
+        this.ExtracategoryId = ExtracategoryId;
     }
 
     public String getCatId() {
@@ -105,12 +105,12 @@ public class Extrasubcategory extends SugarRecord implements Parcelable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("extraSubCategoryId", extraSubCategoryId).append("catId", catId).append("subcategoryId", subcategoryId).append("name", name).toString();
+        return new ToStringBuilder(this).append("ExtracategoryId", ExtracategoryId).append("catId", catId).append("subcategoryId", subcategoryId).append("name", name).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(subcategoryId).append(extraSubCategoryId).append(name).append(catId).toHashCode();
+        return new HashCodeBuilder().append(subcategoryId).append(ExtracategoryId).append(name).append(catId).toHashCode();
     }
 
     @Override
@@ -118,11 +118,11 @@ public class Extrasubcategory extends SugarRecord implements Parcelable {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof Extrasubcategory)) {
+        if (!(other instanceof Extracategory)) {
             return false;
         }
-        Extrasubcategory rhs = ((Extrasubcategory) other);
-        return new EqualsBuilder().append(subcategoryId, rhs.subcategoryId).append(extraSubCategoryId, rhs.extraSubCategoryId).append(name, rhs.name).append(catId, rhs.catId).isEquals();
+        Extracategory rhs = ((Extracategory) other);
+        return new EqualsBuilder().append(subcategoryId, rhs.subcategoryId).append(ExtracategoryId, rhs.ExtracategoryId).append(name, rhs.name).append(catId, rhs.catId).isEquals();
     }
 
 }

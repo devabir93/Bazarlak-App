@@ -21,12 +21,16 @@ import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.Brand;
-import uk.co.ribot.androidboilerplate.data.model.BrandResponse;
 import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.ColorFeature;
-import uk.co.ribot.androidboilerplate.data.model.Extrasubcategory;
+import uk.co.ribot.androidboilerplate.data.model.Extracategory;
+import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
+import uk.co.ribot.androidboilerplate.data.model.FilterSize;
+import uk.co.ribot.androidboilerplate.data.model.Image;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.ProductBody;
+import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.Size;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
@@ -148,13 +152,7 @@ public class DataManager {
                             public void subscribe(ObservableEmitter<CategoryResponse> e) throws Exception {
                                 try {
                                     openDatabase();
-//                                    List<Category> responseCategoryList = categoryResponse.getCategoriesData().getCategories();
-//                                    for (int i = 0; i < responseCategoryList.size(); i++) {
-//                                        List<Category> currentSurvey = Category.find(Category.class, "category_Id = ? ", new String[]{String.valueOf(responseCategoryList.get(i).getCategoryId())});
-//
-//                                    }
-
-                                    List<Category> categoryList = categoryResponse.getCategoriesData().getCategories();
+                                    List<Category> categoryList = categoryResponse.getData().getCategories().getData();
                                     if (categoryList.size() > 0) {
                                         for (Category category :
                                                 categoryList) {
@@ -164,26 +162,26 @@ public class DataManager {
                                                     category.getSubcategory()) {
                                                 subcategory.setId(Long.valueOf(subcategory.getSubCategoryId()));
                                                 subcategory.save();
-                                            }
-                                            for (Extrasubcategory extrasubcategory :
-                                                    category.getExtrasubcategory()) {
-                                                extrasubcategory.setId(Long.valueOf(extrasubcategory.getExtraSubCategoryId()));
-                                                extrasubcategory.save();
-                                            }
-                                            for (Product product :
-                                                    category.getProducts()) {
-                                                product.setId(Long.valueOf(product.getProductId()));
-                                                product.save();
-                                                for (ColorFeature colorFeature :
-                                                        product.getColorFeatures()) {
-                                                    colorFeature.save();
-                                                    for (Size size :
-                                                            colorFeature.getSizes()) {
-                                                        size.setId(Long.valueOf(size.getSizesId()));
-                                                        size.save();
-                                                    }
+                                                for (Extracategory Extracategory :
+                                                        subcategory.getExtracategory()) {
+                                                    Extracategory.setId(Long.valueOf(Extracategory.getExtracategoryId()));
+                                                    Extracategory.save();
                                                 }
                                             }
+//                                            for (Product product :
+//                                                    category.getProducts()) {
+//                                                product.setId(Long.valueOf(product.getProductId()));
+//                                                product.save();
+//                                                for (ColorFeature colorFeature :
+//                                                        product.getColorFeatures()) {
+//                                                    colorFeature.save();
+//                                                    for (FilterSize size :
+//                                                            colorFeature.getSizes()) {
+//                                                        size.setId(Long.valueOf(size.getSizesId()));
+//                                                        size.save();
+//                                                    }
+//                                                }
+//                                            }
 
                                             category.save();
                                         }
@@ -239,13 +237,13 @@ public class DataManager {
         });
     }
 
-    public Observable<List<Extrasubcategory>> getExtraSubCategories(final String subCategoryId) {
+    public Observable<List<Extracategory>> getExtraSubCategories(final String subCategoryId) {
 
-        return Observable.create(new ObservableOnSubscribe<List<Extrasubcategory>>() {
+        return Observable.create(new ObservableOnSubscribe<List<Extracategory>>() {
             @Override
-            public void subscribe(ObservableEmitter<List<Extrasubcategory>> e) throws Exception {
+            public void subscribe(ObservableEmitter<List<Extracategory>> e) throws Exception {
                 openDatabase();
-                List<Extrasubcategory> extraSubcategories = Extrasubcategory.find(Extrasubcategory.class, "subcategory_id = ? ", subCategoryId);
+                List<Extracategory> extraSubcategories = Extracategory.find(Extracategory.class, "subcategory_id = ? ", subCategoryId);
                 closeDatabase();
                 Timber.d("getExtraSubCategories %s", extraSubcategories);
                 try {
@@ -258,47 +256,56 @@ public class DataManager {
         });
     }
 
-    public Observable<List<Product>> getProducts(final String categoryId, final String subCategoryId, final String extraSubCategoryId) {
-
-        return Observable.create(new ObservableOnSubscribe<List<Product>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<Product>> e) throws Exception {
-                openDatabase();
-                List<Product> productList = Product.find(Product.class, "cat_id = ? and subcat_id = ? and extrasubcat_id = ? ", new String[]{categoryId, subCategoryId, extraSubCategoryId});
-                closeDatabase();
-                Timber.d("productList %s", productList);
-                try {
-                    e.onNext(productList);
-                    e.onComplete();
-                } catch (Exception ex) {
-                    e.onError(ex);
-                }
-            }
-        });
+    public Observable<List<Product>> getProducts(final ProductBody productBody) {
+        return mBazarlakService.getProduct(productBody)
+                .concatMap(new Function<ProductResponse, ObservableSource<? extends List<Product>>>() {
+                    @Override
+                    public ObservableSource<? extends List<Product>> apply(final ProductResponse productResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<List<Product>>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<List<Product>> e) throws Exception {
+                                try {
+                                    for (Product product :
+                                            productResponse.getProductData()) {
+                                        product.setId(Long.valueOf(product.getProductId()));
+                                        product.save();
+                                        for (Image image :
+                                                product.getImages()) {
+                                            image.setId(Long.valueOf(image.getImageId()));
+                                            image.save();
+                                        }
+                                        for (ColorFeature colorFeature :
+                                                product.getColorFeatures()) {
+                                            colorFeature.save();
+                                            for (Size size :
+                                                    colorFeature.getSizes()) {
+                                                size.setId(Long.valueOf(size.getSizesId()));
+                                                size.save();
+                                            }
+                                        }
+                                    }
+                                    e.onNext(productResponse.getProductData());
+                                    e.onComplete();
+                                } catch (Exception ex) {
+                                    e.onError(ex);
+                                }
+                            }
+                        });
+                    }
+                });
     }
 
-    public Observable<BrandResponse> getBrands() {
-        return mBazarlakService.getBrands()
-                .concatMap(new Function<BrandResponse, ObservableSource<? extends BrandResponse>>() {
+    public Observable<FilterDataResponse> getFiltersData() {
+        return mBazarlakService.getFiltersData()
+                .concatMap(new Function<FilterDataResponse, ObservableSource<? extends FilterDataResponse>>() {
                     @Override
-                    public ObservableSource<? extends BrandResponse> apply(@NonNull final BrandResponse brandResponse)
+                    public ObservableSource<? extends FilterDataResponse> apply(@NonNull final FilterDataResponse brandResponse)
                             throws Exception {
-                        return Observable.create(new ObservableOnSubscribe<BrandResponse>() {
+                        return Observable.create(new ObservableOnSubscribe<FilterDataResponse>() {
                             @Override
-                            public void subscribe(ObservableEmitter<BrandResponse> e) throws Exception {
+                            public void subscribe(ObservableEmitter<FilterDataResponse> e) throws Exception {
                                 try {
-                                    openDatabase();
-                                    List<Brand> brands = brandResponse.getData().getBrands();
-                                    if (brands.size() > 0) {
-                                        for (Brand brand :
-                                                brands) {
-                                            brand.setId(Long.valueOf(brand.getBrandId()));
-                                            brand.save();
-                                        }
-                                        e.onNext(brandResponse);
-                                    } else
-                                        e.onNext(null);
-                                    closeDatabase();
+                                    e.onNext(brandResponse);
                                     e.onComplete();
                                 } catch (Exception ex) {
                                     e.onError(ex);

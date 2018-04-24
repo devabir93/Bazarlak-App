@@ -6,32 +6,44 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    card_view:elevation="0dp"
+    card_view:cardElevation="0dp"
     card_view:cardCornerRadius="0dp">
 
     <LinearLayout
+        android:id="@+id/items_layout"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="8dp"
         >
         <ImageView
-            android:id="@+id/extraSubCategory_imageView"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:id="@+id/Extracategory_imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/hejabipic"
             android:background="@color/textColor"
             android:scaleType="fitCenter"
             />
         <TextView
-            android:layout_marginTop="8dp"
-            android:id="@+id/extraSubCategory_textView"
+            android:layout_marginTop="4dp"
+            android:id="@+id/Extracategory_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:text="Product Info"/>
     </LinearLayout>
 
+
+    <TextView
+        android:id="@+id/all_category"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/all_label"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="15sp"
+        />
 
 </android.support.v7.widget.CardView>

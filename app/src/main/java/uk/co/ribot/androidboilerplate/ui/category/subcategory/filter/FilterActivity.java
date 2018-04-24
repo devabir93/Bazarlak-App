@@ -15,31 +15,39 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.Brand;
+import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.FilterSize;
+import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 
-public class FilterActivity extends BaseActivity {
+public class FilterActivity extends BaseActivity implements FiltersDataMvpView{
 
     @BindView(R.id.refine_recyclerView)
     RecyclerView refineRecyclerView;
     @BindView(R.id.apply_button)
     Button applyButton;
     @Inject FilterAdapter filterAdapter;
-
+    @Inject FiltersDataPresenter filtersDataPresenter;
+    HashMap<String,Object> stringListHashMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityComponent().inject(this);
         setContentView(R.layout.layout_filter);
         ButterKnife.bind(this);
+        filtersDataPresenter.attachView(this);
+        filtersDataPresenter.getFiltersData();
+        filtersDataPresenter.getFiltersCategory();
+        stringListHashMap = new HashMap<>();
         refineRecyclerView.setAdapter(filterAdapter);
         refineRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        filterAdapter.setData(FilterActivity.this,getFilterData());
+        filterAdapter.setData(FilterActivity.this,stringListHashMap);
         filterAdapter.notifyDataSetChanged();
     }
 
 
-    private HashMap<String,List<String>> getFilterData(){
-        HashMap<String,List<String>> stringListHashMap = new HashMap<>();
+/*    private HashMap<String,List<String>> getFilterData(){
         List<String> category = new ArrayList<>();
         category.add("cat1");
         category.add("cat2");
@@ -49,6 +57,59 @@ public class FilterActivity extends BaseActivity {
         stringListHashMap.put(getString(R.string.filter_size),category);
         stringListHashMap.put(getString(R.string.filter_color),category);
         return stringListHashMap;
+
+    }*/
+
+    @Override
+    public void showFilteredProducts(List<Product> productList) {
+
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void showBrands(List<Brand> brandList) {
+        stringListHashMap.put(getString(R.string.filter_brand),brandList);
+        filterAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showCategories(List<Category> categoryList) {
+        stringListHashMap.put(getString(R.string.filter_category),categoryList);
+        filterAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showColors() {
+
+    }
+
+    @Override
+    public void showSizes(List<FilterSize> filterSize) {
+        stringListHashMap.put(getString(R.string.filter_size),filterSize);
+        filterAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
+    @Override
+    public void onNetworkError() {
+
+    }
+
+    @Override
+    public void onUnknownError(String message) {
 
     }
 }

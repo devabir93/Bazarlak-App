@@ -1,6 +1,7 @@
 
 package uk.co.ribot.androidboilerplate.data.model;
 
+import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
@@ -10,7 +11,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class CategoryResponse implements Parcelable
+public class ProductResponse implements Parcelable
 {
 
     @SerializedName("status")
@@ -24,51 +25,51 @@ public class CategoryResponse implements Parcelable
     private String message;
     @SerializedName("data")
     @Expose
-    private Data data;
-    public final static Creator<CategoryResponse> CREATOR = new Creator<CategoryResponse>() {
+    private List<Product> productData = null;
+    public final static Creator<ProductResponse> CREATOR = new Creator<ProductResponse>() {
 
 
         @SuppressWarnings({
             "unchecked"
         })
-        public CategoryResponse createFromParcel(Parcel in) {
-            return new CategoryResponse(in);
+        public ProductResponse createFromParcel(Parcel in) {
+            return new ProductResponse(in);
         }
 
-        public CategoryResponse[] newArray(int size) {
-            return (new CategoryResponse[size]);
+        public ProductResponse[] newArray(int size) {
+            return (new ProductResponse[size]);
         }
 
     }
     ;
 
-    protected CategoryResponse(Parcel in) {
+    protected ProductResponse(Parcel in) {
         this.status = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.code = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
-        this.data = ((Data) in.readValue((Data.class.getClassLoader())));
+        in.readList(this.productData, (Product.class.getClassLoader()));
     }
 
     /**
      * No args constructor for use in serialization
      * 
      */
-    public CategoryResponse() {
+    public ProductResponse() {
     }
 
     /**
      * 
      * @param message
      * @param status
-     * @param data
+     * @param productData
      * @param code
      */
-    public CategoryResponse(Boolean status, Integer code, String message, Data data) {
+    public ProductResponse(Boolean status, Integer code, String message, List<Product> productData) {
         super();
         this.status = status;
         this.code = code;
         this.message = message;
-        this.data = data;
+        this.productData = productData;
     }
 
     public Boolean getStatus() {
@@ -95,22 +96,22 @@ public class CategoryResponse implements Parcelable
         this.message = message;
     }
 
-    public Data getData() {
-        return data;
+    public List<Product> getProductData() {
+        return productData;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setProductData(List<Product> productData) {
+        this.productData = productData;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("status", status).append("code", code).append("message", message).append("data", data).toString();
+        return new ToStringBuilder(this).append("status", status).append("code", code).append("message", message).append("productData", productData).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(message).append(status).append(data).append(code).toHashCode();
+        return new HashCodeBuilder().append(message).append(status).append(productData).append(code).toHashCode();
     }
 
     @Override
@@ -118,18 +119,18 @@ public class CategoryResponse implements Parcelable
         if (other == this) {
             return true;
         }
-        if ((other instanceof CategoryResponse) == false) {
+        if ((other instanceof ProductResponse) == false) {
             return false;
         }
-        CategoryResponse rhs = ((CategoryResponse) other);
-        return new EqualsBuilder().append(message, rhs.message).append(status, rhs.status).append(data, rhs.data).append(code, rhs.code).isEquals();
+        ProductResponse rhs = ((ProductResponse) other);
+        return new EqualsBuilder().append(message, rhs.message).append(status, rhs.status).append(productData, rhs.productData).append(code, rhs.code).isEquals();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(status);
         dest.writeValue(code);
         dest.writeValue(message);
-        dest.writeValue(data);
+        dest.writeList(productData);
     }
 
     public int describeContents() {

@@ -79,136 +79,158 @@ public class Product extends SugarRecord implements Parcelable {
     private String descriptionAr;
     @SerializedName("price_min")
     @Expose
-    private Object priceMin;
+    private String priceMin;
     @SerializedName("offer_Price")
     @Expose
     private Integer offerPrice;
+    @SerializedName("images")
+    @Expose
+    private List<Image> images = null;
+    @SerializedName("brand_name")
+    @Expose
+    private String brandName;
+    @SerializedName("category")
+    @Expose
+    private String category;
+    @SerializedName("subcategory")
+    @Expose
+    private String subcategory;
+    @SerializedName("extracategory")
+    @Expose
+    private String extracategory;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("description")
     @Expose
     private String description;
+    public final static Creator<Product> CREATOR = new Creator<Product>() {
 
-    private String savedQuantity;
 
-    public Product() {
-    }
-
-    protected Product(Parcel in) {
-        if (in.readByte() == 0) {
-            productId = null;
-        } else {
-            productId = in.readInt();
-        }
-        userId = in.readString();
-        catId = in.readString();
-        subcatId = in.readString();
-        extrasubcatId = in.readString();
-        brandnameId = in.readString();
-        price = in.readString();
-        priceOver = in.readString();
-        numberPeces = in.readString();
-        available = in.readString();
-        image = in.readString();
-        status = in.readString();
-        if (in.readByte() == 0) {
-            isFavourite = null;
-        } else {
-            isFavourite = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            isRate = null;
-        } else {
-            isRate = in.readInt();
-        }
-        userName = in.readString();
-        colorFeatures = in.createTypedArrayList(ColorFeature.CREATOR);
-        nameEn = in.readString();
-        nameAr = in.readString();
-        descriptionEn = in.readString();
-        descriptionAr = in.readString();
-        if (in.readByte() == 0) {
-            offerPrice = null;
-        } else {
-            offerPrice = in.readInt();
-        }
-        name = in.readString();
-        description = in.readString();
-        savedQuantity = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (productId == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(productId);
-        }
-        dest.writeString(userId);
-        dest.writeString(catId);
-        dest.writeString(subcatId);
-        dest.writeString(extrasubcatId);
-        dest.writeString(brandnameId);
-        dest.writeString(price);
-        dest.writeString(priceOver);
-        dest.writeString(numberPeces);
-        dest.writeString(available);
-        dest.writeString(image);
-        dest.writeString(status);
-        if (isFavourite == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isFavourite);
-        }
-        if (isRate == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isRate);
-        }
-        dest.writeString(userName);
-        dest.writeTypedList(colorFeatures);
-        dest.writeString(nameEn);
-        dest.writeString(nameAr);
-        dest.writeString(descriptionEn);
-        dest.writeString(descriptionAr);
-        if (offerPrice == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(offerPrice);
-        }
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(savedQuantity);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Product> CREATOR = new Creator<Product>() {
-        @Override
+        @SuppressWarnings({
+                "unchecked"
+        })
         public Product createFromParcel(Parcel in) {
             return new Product(in);
         }
 
-        @Override
         public Product[] newArray(int size) {
-            return new Product[size];
+            return (new Product[size]);
         }
-    };
+
+    }
+            ;
+
+    protected Product(Parcel in) {
+        this.productId = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.userId = ((String) in.readValue((String.class.getClassLoader())));
+        this.catId = ((String) in.readValue((String.class.getClassLoader())));
+        this.subcatId = ((String) in.readValue((String.class.getClassLoader())));
+        this.extrasubcatId = ((String) in.readValue((String.class.getClassLoader())));
+        this.brandnameId = ((String) in.readValue((String.class.getClassLoader())));
+        this.price = ((String) in.readValue((String.class.getClassLoader())));
+        this.priceOver = ((String) in.readValue((String.class.getClassLoader())));
+        this.numberPeces = ((String) in.readValue((String.class.getClassLoader())));
+        this.available = ((String) in.readValue((String.class.getClassLoader())));
+        this.image = ((String) in.readValue((String.class.getClassLoader())));
+        this.status = ((String) in.readValue((String.class.getClassLoader())));
+        this.isFavourite = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.isRate = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.userName = ((String) in.readValue((String.class.getClassLoader())));
+        in.readList(this.colorFeatures, (ColorFeature.class.getClassLoader()));
+        this.nameEn = ((String) in.readValue((String.class.getClassLoader())));
+        this.nameAr = ((String) in.readValue((String.class.getClassLoader())));
+        this.descriptionEn = ((String) in.readValue((String.class.getClassLoader())));
+        this.descriptionAr = ((String) in.readValue((String.class.getClassLoader())));
+        this.priceMin = ((String) in.readValue((Object.class.getClassLoader())));
+        this.offerPrice = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        in.readList(this.images, (Image.class.getClassLoader()));
+        this.brandName = ((String) in.readValue((String.class.getClassLoader())));
+        this.category = ((String) in.readValue((String.class.getClassLoader())));
+        this.subcategory = ((String) in.readValue((String.class.getClassLoader())));
+        this.extracategory = ((String) in.readValue((String.class.getClassLoader())));
+        this.name = ((String) in.readValue((String.class.getClassLoader())));
+        this.description = ((String) in.readValue((String.class.getClassLoader())));
+    }
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Product() {
+    }
+
+    /**
+     *
+     * @param isRate
+     * @param subcatId
+     * @param descriptionEn
+     * @param descriptionAr
+     * @param brandName
+     * @param id
+     * @param priceMin
+     * @param description
+     * @param name
+     * @param userId
+     * @param isFavourite
+     * @param userName
+     * @param colorFeatures
+     * @param status
+     * @param nameEn
+     * @param nameAr
+     * @param image
+     * @param brandnameId
+     * @param available
+     * @param extrasubcatId
+     * @param priceOver
+     * @param category
+     * @param extracategory
+     * @param price
+     * @param subcategory
+     * @param offerPrice
+     * @param images
+     * @param catId
+     * @param numberPeces
+     */
+    public Product(Integer id, String userId, String catId, String subcatId, String extrasubcatId, String brandnameId, String price, String priceOver, String numberPeces, String available, String image, String status, Integer isFavourite, Integer isRate, String userName, List<ColorFeature> colorFeatures, String nameEn, String nameAr, String descriptionEn, String descriptionAr, String priceMin, Integer offerPrice, List<Image> images, String brandName, String category, String subcategory, String extracategory, String name, String description) {
+        super();
+        this.productId = id;
+        this.userId = userId;
+        this.catId = catId;
+        this.subcatId = subcatId;
+        this.extrasubcatId = extrasubcatId;
+        this.brandnameId = brandnameId;
+        this.price = price;
+        this.priceOver = priceOver;
+        this.numberPeces = numberPeces;
+        this.available = available;
+        this.image = image;
+        this.status = status;
+        this.isFavourite = isFavourite;
+        this.isRate = isRate;
+        this.userName = userName;
+        this.colorFeatures = colorFeatures;
+        this.nameEn = nameEn;
+        this.nameAr = nameAr;
+        this.descriptionEn = descriptionEn;
+        this.descriptionAr = descriptionAr;
+        this.priceMin = priceMin;
+        this.offerPrice = offerPrice;
+        this.images = images;
+        this.brandName = brandName;
+        this.category = category;
+        this.subcategory = subcategory;
+        this.extracategory = extracategory;
+        this.name = name;
+        this.description = description;
+    }
 
     public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setProductId(Integer id) {
+        this.productId = id;
     }
 
     public String getUserId() {
@@ -363,11 +385,11 @@ public class Product extends SugarRecord implements Parcelable {
         this.descriptionAr = descriptionAr;
     }
 
-    public Object getPriceMin() {
+    public String getPriceMin() {
         return priceMin;
     }
 
-    public void setPriceMin(Object priceMin) {
+    public void setPriceMin(String priceMin) {
         this.priceMin = priceMin;
     }
 
@@ -377,6 +399,46 @@ public class Product extends SugarRecord implements Parcelable {
 
     public void setOfferPrice(Integer offerPrice) {
         this.offerPrice = offerPrice;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    public String getExtracategory() {
+        return extracategory;
+    }
+
+    public void setExtracategory(String extracategory) {
+        this.extracategory = extracategory;
     }
 
     public String getName() {
@@ -395,122 +457,61 @@ public class Product extends SugarRecord implements Parcelable {
         this.description = description;
     }
 
-
-    public String getSavedQuantity() {
-        return savedQuantity;
-    }
-
-    public void setSavedQuantity(String savedQuantity) {
-        this.savedQuantity = savedQuantity;
-    }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Product product = (Product) o;
-
-        if (productId != null ? !productId.equals(product.productId) : product.productId != null)
-            return false;
-        if (userId != null ? !userId.equals(product.userId) : product.userId != null) return false;
-        if (catId != null ? !catId.equals(product.catId) : product.catId != null) return false;
-        if (subcatId != null ? !subcatId.equals(product.subcatId) : product.subcatId != null)
-            return false;
-        if (extrasubcatId != null ? !extrasubcatId.equals(product.extrasubcatId) : product.extrasubcatId != null)
-            return false;
-        if (brandnameId != null ? !brandnameId.equals(product.brandnameId) : product.brandnameId != null)
-            return false;
-        if (price != null ? !price.equals(product.price) : product.price != null) return false;
-        if (priceOver != null ? !priceOver.equals(product.priceOver) : product.priceOver != null)
-            return false;
-        if (numberPeces != null ? !numberPeces.equals(product.numberPeces) : product.numberPeces != null)
-            return false;
-        if (available != null ? !available.equals(product.available) : product.available != null)
-            return false;
-        if (image != null ? !image.equals(product.image) : product.image != null) return false;
-        if (status != null ? !status.equals(product.status) : product.status != null) return false;
-        if (isFavourite != null ? !isFavourite.equals(product.isFavourite) : product.isFavourite != null)
-            return false;
-        if (isRate != null ? !isRate.equals(product.isRate) : product.isRate != null) return false;
-        if (userName != null ? !userName.equals(product.userName) : product.userName != null)
-            return false;
-        if (colorFeatures != null ? !colorFeatures.equals(product.colorFeatures) : product.colorFeatures != null)
-            return false;
-        if (nameEn != null ? !nameEn.equals(product.nameEn) : product.nameEn != null) return false;
-        if (nameAr != null ? !nameAr.equals(product.nameAr) : product.nameAr != null) return false;
-        if (descriptionEn != null ? !descriptionEn.equals(product.descriptionEn) : product.descriptionEn != null)
-            return false;
-        if (descriptionAr != null ? !descriptionAr.equals(product.descriptionAr) : product.descriptionAr != null)
-            return false;
-        if (priceMin != null ? !priceMin.equals(product.priceMin) : product.priceMin != null)
-            return false;
-        if (offerPrice != null ? !offerPrice.equals(product.offerPrice) : product.offerPrice != null)
-            return false;
-        if (name != null ? !name.equals(product.name) : product.name != null) return false;
-        if (description != null ? !description.equals(product.description) : product.description != null)
-            return false;
-        return savedQuantity != null ? savedQuantity.equals(product.savedQuantity) : product.savedQuantity == null;
+    public String toString() {
+        return new ToStringBuilder(this).append("productId", productId).append("userId", userId).append("catId", catId).append("subcatId", subcatId).append("extrasubcatId", extrasubcatId).append("brandnameId", brandnameId).append("price", price).append("priceOver", priceOver).append("numberPeces", numberPeces).append("available", available).append("image", image).append("status", status).append("isFavourite", isFavourite).append("isRate", isRate).append("userName", userName).append("colorFeatures", colorFeatures).append("nameEn", nameEn).append("nameAr", nameAr).append("descriptionEn", descriptionEn).append("descriptionAr", descriptionAr).append("priceMin", priceMin).append("offerPrice", offerPrice).append("images", images).append("brandName", brandName).append("category", category).append("subcategory", subcategory).append("extracategory", extracategory).append("name", name).append("description", description).toString();
     }
 
     @Override
     public int hashCode() {
-        int result = productId != null ? productId.hashCode() : 0;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (catId != null ? catId.hashCode() : 0);
-        result = 31 * result + (subcatId != null ? subcatId.hashCode() : 0);
-        result = 31 * result + (extrasubcatId != null ? extrasubcatId.hashCode() : 0);
-        result = 31 * result + (brandnameId != null ? brandnameId.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (priceOver != null ? priceOver.hashCode() : 0);
-        result = 31 * result + (numberPeces != null ? numberPeces.hashCode() : 0);
-        result = 31 * result + (available != null ? available.hashCode() : 0);
-        result = 31 * result + (image != null ? image.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (isFavourite != null ? isFavourite.hashCode() : 0);
-        result = 31 * result + (isRate != null ? isRate.hashCode() : 0);
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (colorFeatures != null ? colorFeatures.hashCode() : 0);
-        result = 31 * result + (nameEn != null ? nameEn.hashCode() : 0);
-        result = 31 * result + (nameAr != null ? nameAr.hashCode() : 0);
-        result = 31 * result + (descriptionEn != null ? descriptionEn.hashCode() : 0);
-        result = 31 * result + (descriptionAr != null ? descriptionAr.hashCode() : 0);
-        result = 31 * result + (priceMin != null ? priceMin.hashCode() : 0);
-        result = 31 * result + (offerPrice != null ? offerPrice.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (savedQuantity != null ? savedQuantity.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder().append(isRate).append(subcatId).append(descriptionEn).append(descriptionAr).append(brandName).append(productId).append(priceMin).append(description).append(name).append(userId).append(isFavourite).append(userName).append(colorFeatures).append(status).append(nameEn).append(nameAr).append(image).append(brandnameId).append(available).append(extrasubcatId).append(priceOver).append(category).append(extracategory).append(price).append(subcategory).append(offerPrice).append(images).append(catId).append(numberPeces).toHashCode();
     }
 
     @Override
-    public String toString() {
-        return "Product{" +
-                "productId=" + productId +
-                ", userId='" + userId + '\'' +
-                ", catId='" + catId + '\'' +
-                ", subcatId='" + subcatId + '\'' +
-                ", extrasubcatId='" + extrasubcatId + '\'' +
-                ", brandnameId='" + brandnameId + '\'' +
-                ", price='" + price + '\'' +
-                ", priceOver='" + priceOver + '\'' +
-                ", numberPeces='" + numberPeces + '\'' +
-                ", available='" + available + '\'' +
-                ", image='" + image + '\'' +
-                ", status='" + status + '\'' +
-                ", isFavourite=" + isFavourite +
-                ", isRate=" + isRate +
-                ", userName='" + userName + '\'' +
-                ", colorFeatures=" + colorFeatures +
-                ", nameEn='" + nameEn + '\'' +
-                ", nameAr='" + nameAr + '\'' +
-                ", descriptionEn='" + descriptionEn + '\'' +
-                ", descriptionAr='" + descriptionAr + '\'' +
-                ", priceMin=" + priceMin +
-                ", offerPrice=" + offerPrice +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", savedQuantity='" + savedQuantity + '\'' +
-                '}';
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof Product) == false) {
+            return false;
+        }
+        Product rhs = ((Product) other);
+        return new EqualsBuilder().append(isRate, rhs.isRate).append(subcatId, rhs.subcatId).append(descriptionEn, rhs.descriptionEn).append(descriptionAr, rhs.descriptionAr).append(brandName, rhs.brandName).append(productId, rhs.productId).append(priceMin, rhs.priceMin).append(description, rhs.description).append(name, rhs.name).append(userId, rhs.userId).append(isFavourite, rhs.isFavourite).append(userName, rhs.userName).append(colorFeatures, rhs.colorFeatures).append(status, rhs.status).append(nameEn, rhs.nameEn).append(nameAr, rhs.nameAr).append(image, rhs.image).append(brandnameId, rhs.brandnameId).append(available, rhs.available).append(extrasubcatId, rhs.extrasubcatId).append(priceOver, rhs.priceOver).append(category, rhs.category).append(extracategory, rhs.extracategory).append(price, rhs.price).append(subcategory, rhs.subcategory).append(offerPrice, rhs.offerPrice).append(images, rhs.images).append(catId, rhs.catId).append(numberPeces, rhs.numberPeces).isEquals();
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(productId);
+        dest.writeValue(userId);
+        dest.writeValue(catId);
+        dest.writeValue(subcatId);
+        dest.writeValue(extrasubcatId);
+        dest.writeValue(brandnameId);
+        dest.writeValue(price);
+        dest.writeValue(priceOver);
+        dest.writeValue(numberPeces);
+        dest.writeValue(available);
+        dest.writeValue(image);
+        dest.writeValue(status);
+        dest.writeValue(isFavourite);
+        dest.writeValue(isRate);
+        dest.writeValue(userName);
+        dest.writeList(colorFeatures);
+        dest.writeValue(nameEn);
+        dest.writeValue(nameAr);
+        dest.writeValue(descriptionEn);
+        dest.writeValue(descriptionAr);
+        dest.writeValue(priceMin);
+        dest.writeValue(offerPrice);
+        dest.writeList(images);
+        dest.writeValue(brandName);
+        dest.writeValue(category);
+        dest.writeValue(subcategory);
+        dest.writeValue(extracategory);
+        dest.writeValue(name);
+        dest.writeValue(description);
+    }
+
+    public int describeContents() {
+        return  0;
     }
 }
