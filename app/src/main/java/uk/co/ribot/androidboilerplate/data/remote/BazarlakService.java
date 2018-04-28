@@ -16,9 +16,13 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
+import uk.co.ribot.androidboilerplate.data.model.FilterBody;
 import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
+import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
+import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
+import uk.co.ribot.androidboilerplate.data.model.RestPasswordResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
@@ -43,16 +47,17 @@ public interface BazarlakService {
     @GET("get_filter")
     Observable<FilterDataResponse> getFiltersData();
 
-//    @GET("subcategory")
-//    Observable<SubCategoryResponse> getAllSubCateories();
-
     @GET("ribots")
     Observable<List<Ribot>> getRibots();
 
     @POST("get_products")
-   // @HTTP(method = "GET", path = "get_products", hasBody = true)
-
     Observable<ProductResponse> getProduct(@Body ProductBody productBody);
+
+    @POST("filter_product")
+    Observable<FilterProductResponse> getfilteredProduct(@Body FilterBody filterBody);
+
+    @POST("reset_password")
+    Observable<RestPasswordResponse> resetPassword(@Body RestPasswordBody restPasswordBody);
 
     /******** Helper class that sets up a new services *******/
     class Creator {

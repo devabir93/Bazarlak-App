@@ -25,12 +25,16 @@ import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.ColorFeature;
 import uk.co.ribot.androidboilerplate.data.model.Extracategory;
+import uk.co.ribot.androidboilerplate.data.model.FilterBody;
 import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
+import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterSize;
 import uk.co.ribot.androidboilerplate.data.model.Image;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
+import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
+import uk.co.ribot.androidboilerplate.data.model.RestPasswordResponse;
 import uk.co.ribot.androidboilerplate.data.model.Size;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
@@ -141,6 +145,15 @@ public class DataManager {
                 });
     }
 
+    public Observable<RestPasswordResponse> resetPassword(RestPasswordBody restPasswordBody){
+        return mBazarlakService.resetPassword(restPasswordBody)
+                .concatMap(new Function<RestPasswordResponse, ObservableSource<? extends RestPasswordResponse>>() {
+                    @Override
+                    public ObservableSource<? extends RestPasswordResponse> apply(RestPasswordResponse restPasswordResponse) throws Exception {
+                        return null;
+                    }
+                });
+    }
     public Observable<CategoryResponse> syncCategories() {
         return mBazarlakService.getAllCategories()
                 .concatMap(new Function<CategoryResponse, ObservableSource<? extends CategoryResponse>>() {
@@ -168,21 +181,6 @@ public class DataManager {
                                                     Extracategory.save();
                                                 }
                                             }
-//                                            for (Product product :
-//                                                    category.getProducts()) {
-//                                                product.setId(Long.valueOf(product.getProductId()));
-//                                                product.save();
-//                                                for (ColorFeature colorFeature :
-//                                                        product.getColorFeatures()) {
-//                                                    colorFeature.save();
-//                                                    for (FilterSize size :
-//                                                            colorFeature.getSizes()) {
-//                                                        size.setId(Long.valueOf(size.getSizesId()));
-//                                                        size.save();
-//                                                    }
-//                                                }
-//                                            }
-
                                             category.save();
                                         }
                                     }
@@ -315,6 +313,30 @@ public class DataManager {
                     }
                 });
     }
+
+    public Observable<List<Product>> getFilteredProducts(final FilterBody filterBody) {
+        return mBazarlakService.getfilteredProduct(filterBody)
+                .concatMap(new Function<FilterProductResponse, ObservableSource<? extends List<Product>>>() {
+                    @Override
+                    public ObservableSource<? extends List<Product>> apply(final FilterProductResponse filterProductResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<List<Product>>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<List<Product>> e) throws Exception {
+                                try {
+                                    if (filterProductResponse.getStatus())
+                                        e.onNext(filterProductResponse.getItems());
+                                    else
+                                        e.onNext(null);
+                                    e.onComplete();
+                                } catch (Exception ex) {
+                                    e.onError(ex);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
 
     private void closeDatabase() {
         sugarDb.close();
