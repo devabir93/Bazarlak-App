@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +62,8 @@ public class GridViewRecyclerViewAdapter extends RecyclerView.Adapter<GridViewRe
             holder.allCategory.setVisibility(View.GONE);
             Extracategory extracategory = mCategories.get(position);
             holder.ExtracategoryTextView.setText(extracategory.getName());
-//        if (extracategory.getImage() != null && !extracategory.getImage().isEmpty())
-//            Picasso.with(holder.imageView.getContext()).load(extracategory.getImage()).into(holder.imageView);
+        if (extracategory.getImage() != null && !extracategory.getImage().isEmpty())
+            Picasso.with(holder.ExtracategoryImageView.getContext()).load(extracategory.getImage()).into(holder.ExtracategoryImageView);
         }
 //        if (category.get() != null && !category.getImage().isEmpty())
 //            Picasso.with(mcontext).load(BazarlakService.IMAGE_URL+category.getImage()).into(holder.imageView);

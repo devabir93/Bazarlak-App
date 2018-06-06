@@ -22,7 +22,7 @@ public class BazarlakeApplication extends Application  {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-            Fabric.with(this, new Crashlytics());
+           // Fabric.with(this, new Crashlytics());
         }
         SugarContext.init(this);
         // Install Calligraphy library

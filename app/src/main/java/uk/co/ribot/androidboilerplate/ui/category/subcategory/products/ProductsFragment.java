@@ -113,7 +113,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         productBody.setCategory(categoryId);
         productBody.setSubcategory(subCategoryId);
         productBody.setExtracategory(ExtracategoryId);
-        productsPresenter.getProducts(getContext(), productBody);
+        productsPresenter.getProducts(getContext(), categoryId,subCategoryId,ExtracategoryId,"");
         productsRecyclerView.setAdapter(gridViewRecyclerViewAdapter);
         productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 

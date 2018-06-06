@@ -26,8 +26,22 @@ public class Extracategory extends SugarRecord implements Parcelable {
     @SerializedName("name")
     @Expose
     private String name;
-
+    @SerializedName("image")
+    @Expose
+    private String image;
+    @SerializedName("for_shoes")
+    @Expose
+    private String forShoes;
     public Extracategory() {
+    }
+
+    public Extracategory(Integer extracategoryId, String catId, String subcategoryId, String name, String image, String forShoes) {
+        ExtracategoryId = extracategoryId;
+        this.catId = catId;
+        this.subcategoryId = subcategoryId;
+        this.name = name;
+        this.image = image;
+        this.forShoes = forShoes;
     }
 
     protected Extracategory(Parcel in) {
@@ -39,6 +53,8 @@ public class Extracategory extends SugarRecord implements Parcelable {
         catId = in.readString();
         subcategoryId = in.readString();
         name = in.readString();
+        image = in.readString();
+        forShoes = in.readString();
     }
 
     @Override
@@ -52,6 +68,8 @@ public class Extracategory extends SugarRecord implements Parcelable {
         dest.writeString(catId);
         dest.writeString(subcategoryId);
         dest.writeString(name);
+        dest.writeString(image);
+        dest.writeString(forShoes);
     }
 
     @Override
@@ -70,6 +88,62 @@ public class Extracategory extends SugarRecord implements Parcelable {
             return new Extracategory[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Extracategory{" +
+                "ExtracategoryId=" + ExtracategoryId +
+                ", catId='" + catId + '\'' +
+                ", subcategoryId='" + subcategoryId + '\'' +
+                ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", forShoes='" + forShoes + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Extracategory that = (Extracategory) o;
+
+        if (ExtracategoryId != null ? !ExtracategoryId.equals(that.ExtracategoryId) : that.ExtracategoryId != null)
+            return false;
+        if (catId != null ? !catId.equals(that.catId) : that.catId != null) return false;
+        if (subcategoryId != null ? !subcategoryId.equals(that.subcategoryId) : that.subcategoryId != null)
+            return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (image != null ? !image.equals(that.image) : that.image != null) return false;
+        return forShoes != null ? forShoes.equals(that.forShoes) : that.forShoes == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = ExtracategoryId != null ? ExtracategoryId.hashCode() : 0;
+        result = 31 * result + (catId != null ? catId.hashCode() : 0);
+        result = 31 * result + (subcategoryId != null ? subcategoryId.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
+        result = 31 * result + (forShoes != null ? forShoes.hashCode() : 0);
+        return result;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getForShoes() {
+        return forShoes;
+    }
+
+    public void setForShoes(String forShoes) {
+        this.forShoes = forShoes;
+    }
 
     public Integer getExtracategoryId() {
         return ExtracategoryId;
@@ -101,28 +175,6 @@ public class Extracategory extends SugarRecord implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("ExtracategoryId", ExtracategoryId).append("catId", catId).append("subcategoryId", subcategoryId).append("name", name).toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(subcategoryId).append(ExtracategoryId).append(name).append(catId).toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Extracategory)) {
-            return false;
-        }
-        Extracategory rhs = ((Extracategory) other);
-        return new EqualsBuilder().append(subcategoryId, rhs.subcategoryId).append(ExtracategoryId, rhs.ExtracategoryId).append(name, rhs.name).append(catId, rhs.catId).isEquals();
     }
 
 }

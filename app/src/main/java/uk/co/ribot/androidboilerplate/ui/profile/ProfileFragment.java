@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.CustomCategory;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.login.LoginFragment;
@@ -110,15 +111,15 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
         profilePresenter.detachView();
     }
 
-    private List<Category> signedUserList() {
-        List<Category> categories = new ArrayList<>();
-//        categories.add(new Category(-1, getString(R.string.your_orders)));
-//        categories.add(new Category(-1, getString(R.string.your_profile)));
-//        categories.add(new Category(-1, getString(R.string.payment_details)));
-//        categories.add(new Category(-1, getString(R.string.track_orders)));
-//        categories.add(new Category(R.drawable.change_lang, getString(R.string.change_lang)));
-//        categories.add(new Category(R.drawable.contactusicon, getString(R.string.contact_us)));
-//        categories.add(new Category(R.drawable.inviteicon, getString(R.string.invite)));
+    private List<CustomCategory> signedUserList() {
+        List<CustomCategory> categories = new ArrayList<>();
+        categories.add(new CustomCategory(-1, getString(R.string.your_orders)));
+        categories.add(new CustomCategory(-1, getString(R.string.your_profile)));
+        categories.add(new CustomCategory(-1, getString(R.string.payment_details)));
+        categories.add(new CustomCategory(-1, getString(R.string.track_orders)));
+        categories.add(new CustomCategory(R.drawable.change_lang, getString(R.string.change_lang)));
+        categories.add(new CustomCategory(R.drawable.contactusicon, getString(R.string.contact_us)));
+        categories.add(new CustomCategory(R.drawable.inviteicon, getString(R.string.invite)));
 
         return categories;
     }

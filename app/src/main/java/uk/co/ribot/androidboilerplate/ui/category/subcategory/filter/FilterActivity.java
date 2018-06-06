@@ -37,28 +37,13 @@ public class FilterActivity extends BaseActivity implements FiltersDataMvpView{
         setContentView(R.layout.layout_filter);
         ButterKnife.bind(this);
         filtersDataPresenter.attachView(this);
-        filtersDataPresenter.getFiltersData();
-        filtersDataPresenter.getFiltersCategory();
+        filtersDataPresenter.getFiltersData("","");
         stringListHashMap = new HashMap<>();
         refineRecyclerView.setAdapter(filterAdapter);
         refineRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         filterAdapter.setData(FilterActivity.this,stringListHashMap);
         filterAdapter.notifyDataSetChanged();
     }
-
-
-/*    private HashMap<String,List<String>> getFilterData(){
-        List<String> category = new ArrayList<>();
-        category.add("cat1");
-        category.add("cat2");
-        category.add("cat3");
-        stringListHashMap.put(getString(R.string.filter_category),category);
-        stringListHashMap.put(getString(R.string.filter_brand),category);
-        stringListHashMap.put(getString(R.string.filter_size),category);
-        stringListHashMap.put(getString(R.string.filter_color),category);
-        return stringListHashMap;
-
-    }*/
 
     @Override
     public void showFilteredProducts(List<Product> productList) {
@@ -73,12 +58,6 @@ public class FilterActivity extends BaseActivity implements FiltersDataMvpView{
     @Override
     public void showBrands(List<Brand> brandList) {
         stringListHashMap.put(getString(R.string.filter_brand),brandList);
-        filterAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showCategories(List<Category> categoryList) {
-        stringListHashMap.put(getString(R.string.filter_category),categoryList);
         filterAdapter.notifyDataSetChanged();
     }
 

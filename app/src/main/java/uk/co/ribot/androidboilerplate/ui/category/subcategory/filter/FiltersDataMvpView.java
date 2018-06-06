@@ -16,8 +16,6 @@ public interface FiltersDataMvpView extends MvpView {
 
     void showBrands(List<Brand> brandList);
 
-    void showCategories(List<Category> categoryList);
-
     void showColors();
 
     void showSizes(List<FilterSize> filterSize);

@@ -20,22 +20,21 @@ import io.reactivex.functions.Function;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
-import uk.co.ribot.androidboilerplate.data.model.Brand;
 import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
-import uk.co.ribot.androidboilerplate.data.model.ColorFeature;
 import uk.co.ribot.androidboilerplate.data.model.Extracategory;
 import uk.co.ribot.androidboilerplate.data.model.FilterBody;
 import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
-import uk.co.ribot.androidboilerplate.data.model.FilterSize;
+import uk.co.ribot.androidboilerplate.data.model.HomePageData;
+import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
 import uk.co.ribot.androidboilerplate.data.model.Image;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordResponse;
-import uk.co.ribot.androidboilerplate.data.model.Size;
+import uk.co.ribot.androidboilerplate.data.model.ProductFeature;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
@@ -145,7 +144,7 @@ public class DataManager {
                 });
     }
 
-    public Observable<RestPasswordResponse> resetPassword(RestPasswordBody restPasswordBody){
+    public Observable<RestPasswordResponse> resetPassword(RestPasswordBody restPasswordBody) {
         return mBazarlakService.resetPassword(restPasswordBody)
                 .concatMap(new Function<RestPasswordResponse, ObservableSource<? extends RestPasswordResponse>>() {
                     @Override
@@ -154,6 +153,7 @@ public class DataManager {
                     }
                 });
     }
+
     public Observable<CategoryResponse> syncCategories() {
         return mBazarlakService.getAllCategories()
                 .concatMap(new Function<CategoryResponse, ObservableSource<? extends CategoryResponse>>() {
@@ -254,8 +254,8 @@ public class DataManager {
         });
     }
 
-    public Observable<List<Product>> getProducts(final ProductBody productBody) {
-        return mBazarlakService.getProduct(productBody)
+    public Observable<List<Product>> getProducts( String categoryId, String subCategoryId, String extracategoryId,String page) {
+        return mBazarlakService.getProduct(categoryId,subCategoryId,extracategoryId,page)
                 .concatMap(new Function<ProductResponse, ObservableSource<? extends List<Product>>>() {
                     @Override
                     public ObservableSource<? extends List<Product>> apply(final ProductResponse productResponse) throws Exception {
@@ -272,14 +272,11 @@ public class DataManager {
                                             image.setId(Long.valueOf(image.getImageId()));
                                             image.save();
                                         }
-                                        for (ColorFeature colorFeature :
+
+                                        for (ProductFeature productFeature :
                                                 product.getColorFeatures()) {
-                                            colorFeature.save();
-                                            for (Size size :
-                                                    colorFeature.getSizes()) {
-                                                size.setId(Long.valueOf(size.getSizesId()));
-                                                size.save();
-                                            }
+                                            productFeature.setId(Long.valueOf(productFeature.getProductFeatureId()));
+                                            productFeature.save();
                                         }
                                     }
                                     e.onNext(productResponse.getProductData());
@@ -293,8 +290,8 @@ public class DataManager {
                 });
     }
 
-    public Observable<FilterDataResponse> getFiltersData() {
-        return mBazarlakService.getFiltersData()
+    public Observable<FilterDataResponse> getFiltersData(String subcategory,String extracategory) {
+        return mBazarlakService.getFiltersData(subcategory,extracategory)
                 .concatMap(new Function<FilterDataResponse, ObservableSource<? extends FilterDataResponse>>() {
                     @Override
                     public ObservableSource<? extends FilterDataResponse> apply(@NonNull final FilterDataResponse brandResponse)
@@ -331,6 +328,26 @@ public class DataManager {
                                 } catch (Exception ex) {
                                     e.onError(ex);
                                 }
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<HomePageData> getHomePage() {
+        return mBazarlakService.getHomePage()
+                .concatMap(new Function<HomePageResponse, ObservableSource<? extends HomePageData>>() {
+                    @Override
+                    public ObservableSource<? extends HomePageData> apply(final HomePageResponse homePageResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<HomePageData>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<HomePageData> e) throws Exception {
+                                Timber.d("homePageResponse %s", homePageResponse.toString());
+                                if (homePageResponse.getStatus()) {
+                                    e.onNext(homePageResponse.getHomePageData());
+                                } else
+                                    e.onNext(null);
+                                e.onComplete();
                             }
                         });
                     }

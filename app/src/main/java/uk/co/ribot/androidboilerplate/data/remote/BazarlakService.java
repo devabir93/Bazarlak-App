@@ -19,6 +19,7 @@ import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterBody;
 import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
+import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
 import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
@@ -45,19 +46,24 @@ public interface BazarlakService {
     Observable<CategoryResponse> getAllCategories();
 
     @GET("get_filter")
-    Observable<FilterDataResponse> getFiltersData();
+    Observable<FilterDataResponse> getFiltersData(@Path("subcategory") String subcategory, @Path("extracategory")String extracategory);
 
     @GET("ribots")
     Observable<List<Ribot>> getRibots();
 
     @POST("get_products")
-    Observable<ProductResponse> getProduct(@Body ProductBody productBody);
+    Observable<ProductResponse> getProduct(@Query("category") String categoryId, @Query("subcategory")String subCategoryId,
+                                           @Query("extracategory") String extracategoryId,@Query("page") String page);
 
     @POST("filter_product")
     Observable<FilterProductResponse> getfilteredProduct(@Body FilterBody filterBody);
 
     @POST("reset_password")
     Observable<RestPasswordResponse> resetPassword(@Body RestPasswordBody restPasswordBody);
+
+    @GET("homepage")
+    Observable<HomePageResponse> getHomePage();
+
 
     /******** Helper class that sets up a new services *******/
     class Creator {

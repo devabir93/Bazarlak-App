@@ -1,11 +1,19 @@
 package uk.co.ribot.androidboilerplate.ui.home;
 
+import android.content.Context;
+
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.HomePageData;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
+import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 @ConfigPersistent
 public class HomePresenter extends BasePresenter<HomeMvpView> {
@@ -27,6 +35,38 @@ public class HomePresenter extends BasePresenter<HomeMvpView> {
     public void detachView() {
         super.detachView();
         if (mDisposable != null) mDisposable.dispose();
+    }
+
+    public void getHomePage(Context context){
+        Timber.d("hom prese");
+        checkViewAttached();
+        RxUtil.dispose(mDisposable);
+        mDataManager.getHomePage()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<HomePageData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(HomePageData homePageData) {
+
+                        getMvpView().showVideo(homePageData.getMainvideo());
+                        getMvpView().showOffers(homePageData.getOfferproducts());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 }

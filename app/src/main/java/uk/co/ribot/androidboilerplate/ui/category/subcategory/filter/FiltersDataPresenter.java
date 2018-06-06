@@ -40,8 +40,8 @@ public class FiltersDataPresenter extends BasePresenter<FiltersDataMvpView> {
         if (mDisposable != null) mDisposable.dispose();
     }
 
-    void getFiltersData() {
-        mDataManager.getFiltersData()
+    void getFiltersData(String subCategory,String extraSubCategory) {
+        mDataManager.getFiltersData(subCategory,extraSubCategory)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<FilterDataResponse>() {
@@ -69,38 +69,4 @@ public class FiltersDataPresenter extends BasePresenter<FiltersDataMvpView> {
                     }
                 });
     }
-
-    void getFiltersCategory() {
-        checkViewAttached();
-        RxUtil.dispose(mDisposable);
-        mDataManager.getCategories()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<Category>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mDisposable = d;
-                    }
-
-                    @Override
-                    public void onNext(List<Category> categoryResponse) {
-                        Timber.d("categories %s",categoryResponse);
-                        if (categoryResponse.size()>0) {
-                            getMvpView().showCategories(categoryResponse);
-                        } else
-                            getMvpView().showEmpty();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e, "There was an error while getAllCategories");
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-
 }

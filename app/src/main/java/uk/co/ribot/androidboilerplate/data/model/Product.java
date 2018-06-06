@@ -62,9 +62,9 @@ public class Product extends SugarRecord implements Parcelable {
     @SerializedName("user_name")
     @Expose
     private String userName;
-    @SerializedName("color_features")
+    @SerializedName("product_features")
     @Expose
-    private List<ColorFeature> colorFeatures = null;
+    private List<ProductFeature> colorFeatures = null;
     @SerializedName("name_en")
     @Expose
     private String nameEn;
@@ -137,7 +137,7 @@ public class Product extends SugarRecord implements Parcelable {
         this.isFavourite = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.isRate = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.userName = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.colorFeatures, (ColorFeature.class.getClassLoader()));
+        in.readList(this.colorFeatures, (ProductFeature.class.getClassLoader()));
         this.nameEn = ((String) in.readValue((String.class.getClassLoader())));
         this.nameAr = ((String) in.readValue((String.class.getClassLoader())));
         this.descriptionEn = ((String) in.readValue((String.class.getClassLoader())));
@@ -192,7 +192,7 @@ public class Product extends SugarRecord implements Parcelable {
      * @param catId
      * @param numberPeces
      */
-    public Product(Integer id, String userId, String catId, String subcatId, String extrasubcatId, String brandnameId, String price, String priceOver, String numberPeces, String available, String image, String status, Integer isFavourite, Integer isRate, String userName, List<ColorFeature> colorFeatures, String nameEn, String nameAr, String descriptionEn, String descriptionAr, String priceMin, Integer offerPrice, List<Image> images, String brandName, String category, String subcategory, String extracategory, String name, String description) {
+    public Product(Integer id, String userId, String catId, String subcatId, String extrasubcatId, String brandnameId, String price, String priceOver, String numberPeces, String available, String image, String status, Integer isFavourite, Integer isRate, String userName, List<ProductFeature> colorFeatures, String nameEn, String nameAr, String descriptionEn, String descriptionAr, String priceMin, Integer offerPrice, List<Image> images, String brandName, String category, String subcategory, String extracategory, String name, String description) {
         super();
         this.productId = id;
         this.userId = userId;
@@ -345,11 +345,11 @@ public class Product extends SugarRecord implements Parcelable {
         this.userName = userName;
     }
 
-    public List<ColorFeature> getColorFeatures() {
+    public List<ProductFeature> getColorFeatures() {
         return colorFeatures;
     }
 
-    public void setColorFeatures(List<ColorFeature> colorFeatures) {
+    public void setColorFeatures(List<ProductFeature> colorFeatures) {
         this.colorFeatures = colorFeatures;
     }
 

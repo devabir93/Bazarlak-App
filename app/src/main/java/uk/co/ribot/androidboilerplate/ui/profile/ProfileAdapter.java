@@ -16,17 +16,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Category;
+import uk.co.ribot.androidboilerplate.data.model.CustomCategory;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
 
-    private List<Category> mCategories;
+    private List<CustomCategory> mCategories;
 
     @Inject
     public ProfileAdapter() {
         mCategories = new ArrayList<>();
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<CustomCategory> categories) {
         mCategories = categories;
     }
 
@@ -39,12 +40,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
     @Override
     public void onBindViewHolder(final ProfileAdapter.ProfileViewHolder holder, int position) {
-        Category category = mCategories.get(position);
-//        if (category.getImg() == -1) {
-//            holder.imageView.setVisibility(View.GONE);
-//        } else
-//        holder.imageView.setImageResource(category.getImg());
-        holder.textView.setText(category.getName());
+        CustomCategory category = mCategories.get(position);
+        if (category.getIcon() == -1) {
+            holder.imageView.setVisibility(View.GONE);
+        } else
+        holder.imageView.setImageResource(category.getIcon());
+        holder.textView.setText(category.getTitle());
     }
 
     @Override

@@ -102,7 +102,7 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
             HashMap<String, List<FilterSize>> hashMap = new HashMap<>();
 //                for (ColorFeature colorFeature :
 //                        mProduct.getColorFeatures()) {
-//                    hashMap.put(colorFeature.getColor(), colorFeature.getSizes());
+//                    hashMap.put(colorFeature.getColor(), colorFeature.getProductFeatures());
 //                    // colorsList.add(colorFeature.getColor());
 //                }
 //                colorSpinner.setItems(hashMap.keySet());

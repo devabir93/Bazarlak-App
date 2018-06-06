@@ -5,6 +5,8 @@ import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
@@ -13,7 +15,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Subcategory extends SugarRecord implements Parcelable
+public class  Subcategory extends SugarRecord implements Parcelable
 {
 
     @SerializedName("id")
@@ -28,6 +30,7 @@ public class Subcategory extends SugarRecord implements Parcelable
     @SerializedName("name")
     @Expose
     private String name;
+
     public final static Creator<Subcategory> CREATOR = new Creator<Subcategory>() {
 
 
@@ -121,7 +124,7 @@ public class Subcategory extends SugarRecord implements Parcelable
         if (other == this) {
             return true;
         }
-        if ((other instanceof Subcategory) == false) {
+        if (!(other instanceof Subcategory)) {
             return false;
         }
         Subcategory rhs = ((Subcategory) other);
@@ -138,5 +141,4 @@ public class Subcategory extends SugarRecord implements Parcelable
     public int describeContents() {
         return  0;
     }
-
 }

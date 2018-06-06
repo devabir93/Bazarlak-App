@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -104,6 +105,8 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView);
         textView.setText(mCategoryName);
+        ImageView filter = (ImageView) secondToolbar.findViewById(R.id.ic_filter);
+        filter.setVisibility(View.GONE);
         subCategoryMenuAdapter.setOnItemClickListener(this);
         secondToolbar.setNavigationIcon(R.drawable.ic_back);
         secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -155,20 +158,20 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        getActivity().getMenuInflater().inflate(R.menu.menu_second_toolbar, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.ic_filter_action:
-                getActivity().startActivity(new Intent(getActivity(), FilterActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        getActivity().getMenuInflater().inflate(R.menu.menu_second_toolbar, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.ic_filter_action:
+//                getActivity().startActivity(new Intent(getActivity(), FilterActivity.class));
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onDestroy() {
@@ -202,7 +205,7 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         mSubMenuCategories = subMenuCategories;
         subCategoryMenuAdapter.setCategories(getContext(), subMenuCategories);
         if (mSubMenuCategories != null && mSubMenuCategories.size() > 0)
-            subCategoryName = mSubMenuCategories.get(1).getName();
+            subCategoryName = mSubMenuCategories.get(0).getName();
         subCategoryMenuAdapter.notifyDataSetChanged();
         onItemClick(0);
     }
@@ -213,9 +216,8 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         emptyView.setVisibility(View.GONE);
         detailsRecyclerView.setVisibility(View.VISIBLE);
         mExtrasubcategories = new ArrayList<>();
-        mExtrasubcategories.add(0,new Extracategory());
+        mExtrasubcategories.add(0, new Extracategory());
         mExtrasubcategories.addAll(extrasubcategories);
-       // mExtrasubcategories = extrasubcategories;
         gridViewRecyclerViewAdapter.setData(subCategoryName, mExtrasubcategories);
         gridViewRecyclerViewAdapter.notifyDataSetChanged();
     }
@@ -261,7 +263,19 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
     @Override
     public void onItemClick(int position) {
         subCategoryID = String.valueOf(mSubMenuCategories.get(position).getSubCategoryId());
-        subCategoryPresenter.getExtraSubCategories(getContext(), subCategoryID);
+         subCategoryPresenter.getExtraSubCategories(getContext(), subCategoryID);
         subCategoryMenuAdapter.selected(position);
+
+/*        if (mSubMenuCategories.get(position).getExtracategory() != null) {
+
+            Timber.d("extra %s" ,mSubMenuCategories.get(position).getExtracategory());
+            emptyView.setVisibility(View.GONE);
+            detailsRecyclerView.setVisibility(View.VISIBLE);
+            mExtrasubcategories = new ArrayList<>();
+            mExtrasubcategories.add(0, new Extracategory());
+            mExtrasubcategories.addAll(mSubMenuCategories.get(position).getExtracategory());
+            gridViewRecyclerViewAdapter.setData(subCategoryName, mExtrasubcategories);
+            gridViewRecyclerViewAdapter.notifyDataSetChanged();
+        }*/
     }
 }

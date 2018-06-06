@@ -1,10 +1,13 @@
 package uk.co.ribot.androidboilerplate.ui.main_activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -12,7 +15,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,34 +57,31 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar1);
-//        toolbar.setNavigationIcon(R.drawable.ic_back);
-
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setElevation(0);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
         }
-
-        viewPager = (ViewPager) findViewById(R.id.viewPagerHome);
+        loadFragment(new HomeFragment());
+        BottomNavigationViewEx bnve = (BottomNavigationViewEx) findViewById(R.id.navigationView);
+        bnve.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bnve.enableAnimation(false);
+        bnve.enableShiftingMode(false);
+        bnve.enableItemShiftingMode(false);
+/*        viewPager = (ViewPager) findViewById(R.id.viewPagerHome);
         setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
+
+// binding with ViewPager
+        bnve.setupWithViewPager(viewPager);
+//        tabLayout = (TabLayout) findViewById(R.id.tabs);
+//        tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();*/
         if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
             startService(SyncService.getStartIntent(this));
         }
     }
-
-    //    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_main, menu);
-//        return super.onCreateOptionsMenu(menu);
-//
-//    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,14 +98,6 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    //    @Override
-//    public boolean onOptionsItemSelected( MenuItem item) {
-//        switch (item.getItemId()) {
-////            case R.id.action_search:
-////                search();
-//                return true;
-//        }
-//    }
     private void setupTabIcons() {
 
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -123,6 +118,7 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
         TextView tabFour = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabFour.setText(getString(R.string.bag_tab));
         tabFour.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[3], 0, 0);
+
         tabLayout.getTabAt(3).setCustomView(tabFour);
 
         TextView tabFive = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -174,6 +170,54 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
     @Override
     public void onUnknownError(String message) {
 
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment;
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    toolbar.setTitle(getString(R.string.home_tab));
+
+                    fragment = new HomeFragment();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_category:
+                    toolbar.setTitle(getString(R.string.category_tab));
+                    fragment = new CategoryFragment();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_search:
+                    toolbar.setTitle(getString(R.string.search_tab));
+                    fragment = new SearchFragment();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_bag:
+                    toolbar.setTitle(getString(R.string.bag_tab));
+                    fragment = new BagFragment();
+                    loadFragment(fragment);
+                    return true;
+
+                case R.id.navigation_me:
+                    toolbar.setTitle(getString(R.string.me_tab));
+                    fragment = new ProfileFragment();
+                    loadFragment(fragment);
+                    return true;
+            }
+
+            return false;
+        }
+    };
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
