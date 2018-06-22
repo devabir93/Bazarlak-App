@@ -312,7 +312,7 @@ public class DataManager {
     }
 
     public Observable<List<Product>> getFilteredProducts(final FilterBody filterBody) {
-        return mBazarlakService.getfilteredProduct(filterBody)
+        return mBazarlakService.getfilteredProduct(filterBody.getCategory(),filterBody.getExtracategory(),filterBody.getBrand(),filterBody.getColor(),filterBody.getSize(),filterBody.getPrice())
                 .concatMap(new Function<FilterProductResponse, ObservableSource<? extends List<Product>>>() {
                     @Override
                     public ObservableSource<? extends List<Product>> apply(final FilterProductResponse filterProductResponse) throws Exception {

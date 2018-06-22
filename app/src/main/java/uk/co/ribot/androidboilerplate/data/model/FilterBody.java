@@ -4,9 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class FilterBody {
-    @SerializedName("category")
+    @SerializedName("subcategory")
     @Expose
     private String category;
+
+    @SerializedName("extracategory")
+    @Expose
+    private String extracategory;
     @SerializedName("brand")
     @Expose
     private String brand;
@@ -23,8 +27,9 @@ public class FilterBody {
     public FilterBody() {
     }
 
-    public FilterBody(String category, String brand, String size, String color, String price) {
+    public FilterBody(String category,String extracategory, String brand, String size, String color, String price) {
         this.category = category;
+        this.extracategory=extracategory;
         this.brand = brand;
         this.size = size;
         this.color = color;
@@ -37,6 +42,14 @@ public class FilterBody {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getExtracategory() {
+        return extracategory;
+    }
+
+    public void setExtracategory(String extracategory) {
+        this.extracategory = extracategory;
     }
 
     public String getBrand() {

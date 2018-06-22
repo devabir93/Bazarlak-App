@@ -13,6 +13,11 @@
         android:background="@color/colorPrimary"
         app:theme="@style/ThemeOverlay.AppCompat"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp"
         app:elevation="0dp">
 
         <RelativeLayout

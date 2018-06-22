@@ -21,12 +21,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.CustomCategory;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.login.LoginFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.register.RegisterFragment;
+import uk.co.ribot.androidboilerplate.ui.profile.your_profile.YourProfileFragment;
+import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
 public class ProfileFragment extends BaseFragment implements ProfileMvpView {
     @BindView(R.id.profile_list_item)
@@ -44,7 +45,7 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
     public void login() {
         Fragment nextFrag = new LoginFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, nextFrag, LoginFragment.class.getName())
+                .replace(R.id.profile_container, nextFrag, LoginFragment.class.getName())
                 .commit();
     }
 
@@ -52,7 +53,7 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
     public void register() {
         Fragment nextFrag = new RegisterFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, nextFrag, RegisterFragment.class.getName())
+                .replace(R.id.profile_container, nextFrag, RegisterFragment.class.getName())
                 .addToBackStack(null)
                 .commit();
     }
@@ -72,6 +73,21 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
         ButterKnife.bind(this, view);
         mRecyclerView.setAdapter(profileAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        // do whatever
+
+                                openFragment(position);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
         profilePresenter.attachView(this);
         profileAdapter.setCategories(signedUserList());
         profileAdapter.notifyDataSetChanged();
@@ -80,6 +96,31 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
         }
         return view;
+    }
+
+    private void openFragment(int fragmentClass) {
+        switch (fragmentClass){
+            case 0:
+//                Fragment nextFrag = new YourProfileFragment();
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.container, nextFrag, YourProfileFragment.class.getName())
+//                        .addToBackStack(null)
+//                        .commit();
+                break;
+            case 1:
+                Fragment nextFrag2 = new YourProfileFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.profile_container, nextFrag2, YourProfileFragment.class.getName())
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
+        }
+//        Fragment nextFrag = new RegisterFragment();
+//        getActivity().getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.container, nextFrag, fragmentClass.class.getName())
+//                .addToBackStack(null)
+//                .commit();
     }
 
     @Override
@@ -115,9 +156,10 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
         List<CustomCategory> categories = new ArrayList<>();
         categories.add(new CustomCategory(-1, getString(R.string.your_orders)));
         categories.add(new CustomCategory(-1, getString(R.string.your_profile)));
-        categories.add(new CustomCategory(-1, getString(R.string.payment_details)));
-        categories.add(new CustomCategory(-1, getString(R.string.track_orders)));
+//        categories.add(new CustomCategory(-1, getString(R.string.payment_details)));
+//        categories.add(new CustomCategory(-1, getString(R.string.track_orders)));
         categories.add(new CustomCategory(R.drawable.change_lang, getString(R.string.change_lang)));
+        categories.add(new CustomCategory(R.drawable.help_center, getString(R.string.help_center)));
         categories.add(new CustomCategory(R.drawable.contactusicon, getString(R.string.contact_us)));
         categories.add(new CustomCategory(R.drawable.inviteicon, getString(R.string.invite)));
 

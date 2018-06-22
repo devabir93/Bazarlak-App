@@ -1,15 +1,23 @@
 package uk.co.ribot.androidboilerplate.ui.profile.login;
 
+import android.app.Activity;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import javax.inject.Inject;
 
@@ -64,9 +72,10 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
         }
         return view;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
         }
@@ -83,6 +92,7 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
         transaction.remove(fragment).commit();
 
     }
+
     @OnClick(R.id.login_button)
     public void onLoginClick() {
         //loginPresenter.checkConnection(getContext());
@@ -99,6 +109,52 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
 
     }
 
+    @OnClick(R.id.forgot_password_button)
+    public void onForgetPasswordClick() {
+        showforgetPasswordDialog();
+    }
+
+    void showforgetPasswordDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.full_screen_dialog));
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        View content = factory.inflate(R.layout.forget_password_dialog_layout, null);
+        Button sendButton = (Button) content.findViewById(R.id.send_button);
+        ImageView closeButton = (ImageView) content.findViewById(R.id.close_imageView);
+        EditText emailEditText = content.findViewById(R.id.email_forget_password_EditText);
+        alertDialog.setView(content);
+        final AlertDialog alertDialogObject = alertDialog.create();
+        // Here you can change the layout direction via setLayoutDirection()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            alertDialogObject.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+        }
+        int width, height;
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        WindowManager manager = (WindowManager) getActivity().getSystemService(Activity.WINDOW_SERVICE);
+
+        Point point = new Point();
+        manager.getDefaultDisplay().getSize(point);
+        width = point.x;
+        height = point.y;
+        lp.copyFrom(alertDialogObject.getWindow().getAttributes());
+        lp.width = width;
+        lp.height = height;
+        alertDialogObject.getWindow().setAttributes(lp);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogObject.dismiss();
+            }
+        });
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogObject.dismiss();
+
+            }
+        });
+        alertDialogObject.show();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -113,7 +169,7 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
 
     @Override
     public void isSuccess(LoginResponse loginResponse) {
-        Timber.d("status %s",loginResponse.getStatus());
+        Timber.d("status %s", loginResponse.getStatus());
         if (loginResponse.getStatus()) {
 
             ViewUtil.createSnackbar(loginButton.getRootView(), getResources().getString(R.string.login_success_message)).show();
@@ -147,16 +203,16 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
 
     @Override
     public void onUnknownError(String message) {
-        ViewUtil.createSnackbar(loginButton.getRootView(),message)   .show();
+        ViewUtil.createSnackbar(loginButton.getRootView(), message).show();
 
     }
 
     @Override
     public void hasActiveInternetConnection(boolean b) {
         super.hasActiveInternetConnection(b);
-        if(!b){
+        if (!b) {
             ViewUtil.createSnackbar(loginButton.getRootView(), getResources().getString(R.string.no_connection)).show();
-        }else{
+        } else {
 
             UserData userData = new UserData();
 //        userData.setName(fnameSignupEditText.getText().toString() + "" + lnameSignupEditText.getText().toString());

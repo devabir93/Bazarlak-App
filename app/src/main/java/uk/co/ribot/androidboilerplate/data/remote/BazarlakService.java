@@ -24,6 +24,7 @@ import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordResponse;
+import uk.co.ribot.androidboilerplate.data.model.SaveOrdersResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
@@ -56,13 +57,18 @@ public interface BazarlakService {
                                            @Query("extracategory") String extracategoryId,@Query("page") String page);
 
     @POST("filter_product")
-    Observable<FilterProductResponse> getfilteredProduct(@Body FilterBody filterBody);
+    Observable<FilterProductResponse> getfilteredProduct(@Query("subcategory") String subcategory,@Query("extracategory") String extracategory,
+                                                         @Query("brand") String brand,@Query("color") String color,
+                                                         @Query("size") String size,@Query("price") String price);
 
     @POST("reset_password")
     Observable<RestPasswordResponse> resetPassword(@Body RestPasswordBody restPasswordBody);
 
     @GET("homepage")
     Observable<HomePageResponse> getHomePage();
+
+    @POST("add_cart")
+    Observable<SaveOrdersResponse> saveOrders();
 
 
     /******** Helper class that sets up a new services *******/

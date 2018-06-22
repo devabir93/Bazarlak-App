@@ -8,6 +8,7 @@
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
     android:layout_marginTop="6dp"
+    android:id="@+id/items_layout"
     >
 
     <LinearLayout
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+
         android:padding="10dp">
 
         <ImageView
@@ -30,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_body"
+
             tools:text="Contact us" />
 
     </LinearLayout>

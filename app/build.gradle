@@ -100,45 +100,45 @@ dependencies {
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     def jUnit = "junit:junit:4.12"
     def mockito = "org.mockito:mockito-core:$MOCKITO_VERSION"
-    compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
-    compile 'q.rorbin:badgeview:1.1.0'
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+    implementation 'q.rorbin:badgeview:1.1.0'
 
     // App Dependencies
     implementation "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
     implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
     implementation "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"
-    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.daimajia.slider:library:1.1.5@aar'
+    implementation "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"
+    implementation "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.daimajia.slider:library:1.1.5@aar'
     //compile 'com.jaredrummler:material-spinner:1.2.4'
-    compile 'com.github.satyan:sugar:1.5'
-    compile 'com.facebook.stetho:stetho:1.4.1'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.4.1'
-    compile('com.squareup.sqlbrite2:sqlbrite:2.0.0') {
+    implementation 'com.github.satyan:sugar:1.5'
+    implementation 'com.facebook.stetho:stetho:1.4.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.4.1'
+    implementation('com.squareup.sqlbrite2:sqlbrite:2.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
-    compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
-    compile "com.android.support:percent:$SUPPORT_LIBRARY_VERSION"
-    compile project(":SmoothCheckBox")
+    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
+    implementation "com.android.support:percent:$SUPPORT_LIBRARY_VERSION"
+    implementation project(":SmoothCheckBox")
     // Percent Support Library
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
         transitive = true;
     }
-    compile 'de.hdodenhof:circleimageview:2.2.0'
-    compile 'org.apache.commons:commons-lang3:3.6'
-    compile 'com.jakewharton.timber:timber:4.1.2'
-    compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation 'com.jakewharton.timber:timber:4.1.2'
+    implementation "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
 
     // Replace provided dependency below with official AutoValue once this issue is fixed
@@ -152,7 +152,7 @@ dependencies {
     annotationProcessor 'com.squareup:javapoet:1.7.0'
 
     // https://github.com/rharter/auto-value-parcel/issues/64
-    compile "com.google.dagger:dagger:$DAGGER_VERSION"
+    implementation "com.google.dagger:dagger:$DAGGER_VERSION"
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Required by Dagger2
@@ -160,28 +160,9 @@ dependencies {
     testAnnotationProcessor daggerCompiler
     androidTestAnnotationProcessor daggerCompiler
 
-    // Instrumentation test dependencies
-    androidTestCompile jUnit
-    androidTestCompile mockito
-    androidTestCompile "org.mockito:mockito-android:$MOCKITO_VERSION"
-    androidTestCompile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
-    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$ESPRESSO_VERSION") {
-        exclude group: 'com.android.support', module: 'appcompat'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
-    }
-    androidTestCompile "com.android.support.test.espresso:espresso-core:$ESPRESSO_VERSION"
-    androidTestCompile "com.android.support.test:runner:$RUNNER_VERSION"
-    androidTestCompile "com.android.support.test:rules:$RUNNER_VERSION"
-    compile 'com.google.guava:guava:24.1-android'
+    implementation 'com.google.guava:guava:24.1-android'
 
-    // Unit tests dependencies
-    testCompile jUnit
-    testCompile mockito
-    testCompile "org.hamcrest:hamcrest-core:$HAMCREST_VERSION"
-    testCompile "org.hamcrest:hamcrest-library:$HAMCREST_VERSION"
-    testCompile "org.hamcrest:hamcrest-integration:$HAMCREST_VERSION"
-    testCompile 'org.robolectric:robolectric:3.3'
+
     implementation project(':library')
 }
 

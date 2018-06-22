@@ -31,6 +31,7 @@ public class Brand extends SugarRecord implements Parcelable {
             brandId = in.readInt();
         }
         name = in.readString();
+
     }
 
     @Override

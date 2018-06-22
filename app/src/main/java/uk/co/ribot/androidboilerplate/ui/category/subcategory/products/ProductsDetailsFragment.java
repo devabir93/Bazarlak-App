@@ -154,7 +154,7 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
     }
 
     public void showAlertDialog() {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View content = factory.inflate(R.layout.bag_dialog_layout, null);

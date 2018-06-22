@@ -103,10 +103,9 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         unbinder = ButterKnife.bind(this, view);
         subCategoryPresenter.attachView(this);
         ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
-        TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(mCategoryName);
-        ImageView filter = (ImageView) secondToolbar.findViewById(R.id.ic_filter);
-        filter.setVisibility(View.GONE);
         subCategoryMenuAdapter.setOnItemClickListener(this);
         secondToolbar.setNavigationIcon(R.drawable.ic_back);
         secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -158,20 +157,6 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         return view;
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        getActivity().getMenuInflater().inflate(R.menu.menu_second_toolbar, menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.ic_filter_action:
-//                getActivity().startActivity(new Intent(getActivity(), FilterActivity.class));
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public void onDestroy() {
@@ -222,43 +207,6 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         gridViewRecyclerViewAdapter.notifyDataSetChanged();
     }
 
-    public void showFilter() {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-        Dialog d = builderSingle.setView(new View(getActivity())).create();
-        // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(d.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        d.show();
-        d.getWindow().setAttributes(lp);
-        //builderSingle.setTitle(Html.fromHtml(getString(R.string.dialog_incomplete_questions_title)));
-        LayoutInflater factory = LayoutInflater.from(getActivity());
-        View content = factory.inflate(R.layout.layout_filter, null);
-        //ListView lv = (ListView) content.findViewById(R.id._dialog_list);
-        //TextView tv = (TextView) content.findViewById(R.id.dialog_message);
-        //tv.setText(getResources().getString(R.string.dialog_incomplete_questions_message, invalidAnswerList.size()));
-//        builderSingle.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(@NonNull DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-        builderSingle.setView(content);
-        final AlertDialog alertDialogObject = builderSingle.create();
-        // Here you can change the layout direction via setLayoutDirection()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            alertDialogObject.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
-        }
-//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//                alertDialogObject.dismiss();
-//            }
-//        });
-        alertDialogObject.show();
-    }
 
     @Override
     public void onItemClick(int position) {

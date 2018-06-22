@@ -29,4 +29,5 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="card_view_horizontal_margin">8dp</dimen>
     <dimen name="card_view_vertical_margin">4dp</dimen>
+    <dimen name="margin_profile">32dp</dimen>
 </resources>

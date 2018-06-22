@@ -1,18 +1,25 @@
 package uk.co.ribot.androidboilerplate.ui.category.subcategory.products;
 
+import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.List;
@@ -37,7 +44,6 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     ProductsGridViewRecyclerViewAdapter gridViewRecyclerViewAdapter;
     @BindView(R.id.products_recyclerView)
     RecyclerView productsRecyclerView;
-
     @Nullable
     @BindView(R.id.second_toolbar)
     Toolbar secondToolbar;
@@ -98,7 +104,8 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         productsPresenter.attachView(this);
         ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
-        TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(categoryName + "/" + ExtracategoryName);
         secondToolbar.setNavigationIcon(R.drawable.ic_back);
         secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -109,11 +116,23 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
                 transaction.remove(fragment).commit();
             }
         });
+        secondToolbar.inflateMenu(R.menu.menu_second_toolbar);//changed
+        //toolbar2 menu items CallBack listener
+        secondToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem arg0) {
+                if(arg0.getItemId() == R.id.ic_filter_action){
+                    showFilter();
+                }
+                return false;
+            }
+        });
         ProductBody productBody = new ProductBody();
         productBody.setCategory(categoryId);
         productBody.setSubcategory(subCategoryId);
         productBody.setExtracategory(ExtracategoryId);
-        productsPresenter.getProducts(getContext(), categoryId,subCategoryId,ExtracategoryId,"");
+        productsPresenter.getProducts(getContext(), categoryId, subCategoryId, ExtracategoryId, "");
         productsRecyclerView.setAdapter(gridViewRecyclerViewAdapter);
         productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
@@ -133,6 +152,25 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         );
         return view;
     }
+
+
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.menu_second_toolbar, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id) {
+//            case R.id.ic_filter_action:
+//                // do stuff, like showing settings fragment
+//                showFilter();
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void showProductDetails(Product product) {
         Timber.d("product %s", product);
@@ -165,4 +203,43 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     public void addedToBag(boolean b) {
 
     }
+
+    public void showFilter() {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        Dialog d = builderSingle.setView(new View(getActivity())).create();
+        // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(d.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        d.show();
+        d.getWindow().setAttributes(lp);
+        //builderSingle.setTitle(Html.fromHtml(getString(R.string.dialog_incomplete_questions_title)));
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        View content = factory.inflate(R.layout.layout_filter, null);
+        //ListView lv = (ListView) content.findViewById(R.id._dialog_list);
+        //TextView tv = (TextView) content.findViewById(R.id.dialog_message);
+        //tv.setText(getResources().getString(R.string.dialog_incomplete_questions_message, invalidAnswerList.size()));
+//        builderSingle.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(@NonNull DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+        builderSingle.setView(content);
+        final AlertDialog alertDialogObject = builderSingle.create();
+        // Here you can change the layout direction via setLayoutDirection()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            alertDialogObject.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+        }
+//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//                alertDialogObject.dismiss();
+//            }
+//        });
+        alertDialogObject.show();
+    }
+
 }
