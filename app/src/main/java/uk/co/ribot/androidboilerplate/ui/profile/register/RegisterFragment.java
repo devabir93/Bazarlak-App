@@ -65,7 +65,7 @@ public class RegisterFragment extends BaseFragment implements RegisterMvpView {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.signup_profile, container, false);
         ButterKnife.bind(this, view);
@@ -120,6 +120,7 @@ public class RegisterFragment extends BaseFragment implements RegisterMvpView {
     public void isSuccess(RegisterResponse loginResponse) {
         if (loginResponse.getStatus()) {
             ViewUtil.createSnackbar(registerButton.getRootView(), getResources().getString(R.string.signup_success_message)).show();
+            onBackPressed();
         } else {
             showMessage(true, loginResponse.getMessage(), Message.FAIL);
         }
@@ -138,7 +139,8 @@ public class RegisterFragment extends BaseFragment implements RegisterMvpView {
     @OnClick(R.id.register_button)
     public void onViewClicked() {
         UserData userData = new UserData();
-        userData.setName(fnameSignupEditText.getText().toString() + "" + lnameSignupEditText.getText().toString());
+        userData.setFname(fnameSignupEditText.getText().toString());
+        userData.setLname(lnameSignupEditText.getText().toString());
         userData.setEmail(emailLoginEditText.getText().toString());
         userData.setMobile(mobileEditText.getText().toString());
         userData.setGender(genderSignupEditText.getText().toString());
@@ -157,17 +159,18 @@ public class RegisterFragment extends BaseFragment implements RegisterMvpView {
     public void hasActiveInternetConnection(boolean b) {
         if (b) {
             UserData userData = new UserData();
-//        userData.setName(fnameSignupEditText.getText().toString() + "" + lnameSignupEditText.getText().toString());
-//        userData.setEmail(emailLoginEditText.getText().toString());
-//        userData.setMobile(mobileEditText.getText().toString());
-//        userData.setGender(genderSignupEditText.getText().toString());
-//        userData.setPassword(passwordLoginEditText.getText().toString());
-
-            userData.setName("Dev abir");
-            userData.setEmail("devabir9@gmail.com");
-            userData.setMobile("0599447279");
-            userData.setGender("female");
-            userData.setPassword("123456");
+            userData.setFname(fnameSignupEditText.getText().toString());
+            userData.setLname(lnameSignupEditText.getText().toString());
+            userData.setEmail(emailLoginEditText.getText().toString());
+            userData.setMobile(mobileEditText.getText().toString());
+            userData.setGender(genderSignupEditText.getText().toString());
+            userData.setPassword(passwordLoginEditText.getText().toString());
+//
+//            userData.setName("Dev abir");
+//            userData.setEmail("devabir9@gmail.com");
+//            userData.setMobile("0599447279");
+//            userData.setGender("female");
+//            userData.setPassword("123456");
             registerPresenter.register(getContext(), userData);
         } else
             ViewUtil.createSnackbar(registerButton.getRootView(), getResources().getString(R.string.no_connection)).show();

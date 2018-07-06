@@ -12,14 +12,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
+import uk.co.ribot.androidboilerplate.ui.profile.ProfileMvpView;
+import uk.co.ribot.androidboilerplate.ui.profile.ProfilePresenter;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
+import uk.co.ribot.androidboilerplate.util.Message;
 
 
-public class ChangePasswordFragment extends Fragment {
+public class ChangePasswordFragment extends BaseActivity implements ProfileMvpView {
 
     @BindView(R.id.btn_save)
     Button btnSave;
@@ -31,29 +38,17 @@ public class ChangePasswordFragment extends Fragment {
     EditText newPasswordEditText;
     @BindView(R.id.confirm_password_editText)
     EditText confirmPasswordEditText;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ChangePasswordFragment() {
-        // Required empty public constructor
-    }
+    @Inject
+    ProfilePresenter profilePresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).activityComponent().inject(this);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_change_password, container, false);
-        ButterKnife.bind(this, view);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        activityComponent().inject(this);
+        setContentView(R.layout.fragment_change_password);
+        ButterKnife.bind(this);
+        profilePresenter.attachView(this);
+        profilePresenter.setContext(this);
 
         TextView textView = toolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(getString(R.string.change_password_label));
@@ -61,15 +56,64 @@ public class ChangePasswordFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(ChangePasswordFragment.class.getName());
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.remove(fragment).commit();
+                finish();
             }
         });
-        return view;
     }
 
     @OnClick(R.id.btn_save)
     public void onViewClicked() {
+        profilePresenter.checkConnection(this);
+    }
+
+    @Override
+    public void showMessage(String s) {
+        if (s != null && !s.isEmpty())
+            DialogFactory.createSimpleOkDialog(this, s);
+
+    }
+
+    @Override
+    public void showMessage(boolean b, String string, Message logging) {
+
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(this, b);
+    }
+
+    @Override
+    public void finishActivity(boolean b) {
+        this.finish();
+
+    }
+
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+        super.hasActiveInternetConnection(b);
+        if (b) {
+            RestPasswordBody restPasswordBody = new RestPasswordBody();
+            restPasswordBody.setOldPassword(oldPasswordEditText.getText().toString());
+            restPasswordBody.setNewPassword(newPasswordEditText.getText().toString());
+            restPasswordBody.setConfirmPassword(confirmPasswordEditText.getText().toString());
+            profilePresenter.resetPassword(restPasswordBody);
+        }
+
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
+    @Override
+    public void onNetworkError() {
+
+    }
+
+    @Override
+    public void onUnknownError(String message) {
+
     }
 }

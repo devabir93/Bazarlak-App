@@ -115,8 +115,8 @@
     <string name="lname_plus_label">Last Name*</string>
     <string name="phone_label">Phone</string>
     <string name="hint_country_plus">Country*</string>
-    <string name="email_plus_label">Your Email*</string>
-    <string name="confrim_email_plus_label">Confirm Email*</string>
+    <string name="email_plus_label">Old Email*</string>
+    <string name="confrim_email_plus_label">New Email*</string>
     <string name="change_email_label">Change Email</string>
     <string name="old_password_plus_label">Old Password*</string>
     <string name="new_password_plus_label">New Password*</string>
@@ -124,5 +124,6 @@
     <string name="change_password_label">Change Password</string>
     <string name="enter_email_hint">Enter Your Email*</string>
     <string name="send_label">Send</string>
+    <string name="title_activity_payment_details">PaymentDetailsActivity</string>
 
 </resources>

@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import uk.co.ribot.androidboilerplate.R;
 
@@ -24,12 +26,13 @@ public final class DialogFactory {
     }
 
     public static Dialog createDialogWithOptions(@NonNull Context context, String title,
-                                                 String[] items , DialogInterface.OnClickListener listener ) {
+                                                 String[] items, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title)
                 .setItems(items, listener);
         return builder.create();
     }
+
     public static Dialog createSimpleOkDialog(@NonNull Context context, String message) {
 
         AlertDialog builder = new AlertDialog.Builder(context)
@@ -98,6 +101,19 @@ public final class DialogFactory {
         return createProgressDialog(context, context.getString(messageResource));
     }
 
+    @NonNull
+    public static ProgressBar createNormailProgressBar(@NonNull Context context, boolean showProgress) {
+        ProgressBar progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
+        if (showProgress) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+
+        }
+
+        return progressBar;
+    }
+
     public static Dialog createAlertDialog(@NonNull final Context context, @StringRes int titleResource,
                                            @StringRes int messageResource) {
         AlertDialog builder = new AlertDialog.Builder(context)
@@ -127,8 +143,9 @@ public final class DialogFactory {
 
         return builder;
     }
+
     public static Dialog createAlertDialog(@NonNull final Context context,
-                                           @StringRes int titleResource , @StringRes int messageResource , @NonNull final OnOkClickListener listener) {
+                                           @StringRes int titleResource, @StringRes int messageResource, @NonNull final OnOkClickListener listener) {
         AlertDialog builder = new AlertDialog.Builder(context)
                 .setTitle(titleResource)
                 .setMessage(messageResource)
@@ -144,8 +161,9 @@ public final class DialogFactory {
     }
 
 
-    public interface OnOkClickListener{
+    public interface OnOkClickListener {
         void onOkClickListener();
+
         void onCancelClickListener();
     }
 }

@@ -121,22 +121,6 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         detailsRecyclerView.setAdapter(gridViewRecyclerViewAdapter);
         detailsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-//        menuRecyclerView.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getActivity(), menuRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        // do whatever
-//                        subCategoryID = String.valueOf(mSubMenuCategories.get(position).getSubCategoryId());
-//                        subCategoryPresenter.getExtraSubCategories(getContext(), subCategoryID);
-//
-//                    }
-//
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//                        // do whatever
-//                    }
-//                })
-//        );
 
         detailsRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), detailsRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -222,7 +206,7 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
             mExtrasubcategories = new ArrayList<>();
             mExtrasubcategories.add(0, new Extracategory());
             mExtrasubcategories.addAll(mSubMenuCategories.get(position).getExtracategory());
-            gridViewRecyclerViewAdapter.setData(subCategoryName, mExtrasubcategories);
+            gridViewRecyclerViewAdapter.setCategoriesData(subCategoryName, mExtrasubcategories);
             gridViewRecyclerViewAdapter.notifyDataSetChanged();
         }*/
     }

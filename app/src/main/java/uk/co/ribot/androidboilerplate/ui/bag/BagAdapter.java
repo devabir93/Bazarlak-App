@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import javax.inject.Inject;
 
@@ -26,8 +25,6 @@ import cn.refactor.library.SmoothCheckBox;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.Order;
 import uk.co.ribot.androidboilerplate.data.model.Product;
-import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
-import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryMenuAdapter;
 
 public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHolder> {
 

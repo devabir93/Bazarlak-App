@@ -3,26 +3,28 @@ package uk.co.ribot.androidboilerplate.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class ProductFeature extends SugarRecord implements Parcelable {
+public class ProductFeature implements Parcelable
+{
 
     @SerializedName("id")
     @Expose
-    private Integer ProductFeatureId;
+    private Integer id;
     @SerializedName("product_id")
     @Expose
     private String productId;
     @SerializedName("color")
     @Expose
     private String color;
+    @SerializedName("size")
+    @Expose
+    private String size;
     @SerializedName("dimensions")
     @Expose
     private Object dimensions;
@@ -31,7 +33,7 @@ public class ProductFeature extends SugarRecord implements Parcelable {
     private String quentity;
     @SerializedName("price")
     @Expose
-    private Object price;
+    private String price;
     @SerializedName("offer_price")
     @Expose
     private Object offerPrice;
@@ -41,57 +43,77 @@ public class ProductFeature extends SugarRecord implements Parcelable {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("size")
-    @Expose
-    private String size;
+    public final static Creator<ProductFeature> CREATOR = new Creator<ProductFeature>() {
 
-    public ProductFeature() {
-    }
 
-    protected ProductFeature(Parcel in) {
-        if (in.readByte() == 0) {
-            ProductFeatureId = null;
-        } else {
-            ProductFeatureId = in.readInt();
-        }
-        productId = in.readString();
-        color = in.readString();
-        quentity = in.readString();
-        status = in.readString();
-        size = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (ProductFeatureId == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(ProductFeatureId);
-        }
-        dest.writeString(productId);
-        dest.writeString(color);
-        dest.writeString(quentity);
-        dest.writeString(status);
-        dest.writeString(size);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<ProductFeature> CREATOR = new Creator<ProductFeature>() {
-        @Override
+        @SuppressWarnings({
+            "unchecked"
+        })
         public ProductFeature createFromParcel(Parcel in) {
             return new ProductFeature(in);
         }
 
-        @Override
         public ProductFeature[] newArray(int size) {
-            return new ProductFeature[size];
+            return (new ProductFeature[size]);
         }
-    };
+
+    }
+    ;
+
+    protected ProductFeature(Parcel in) {
+        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.productId = ((String) in.readValue((String.class.getClassLoader())));
+        this.color = ((String) in.readValue((String.class.getClassLoader())));
+        this.size = ((String) in.readValue((String.class.getClassLoader())));
+        this.dimensions = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.quentity = ((String) in.readValue((String.class.getClassLoader())));
+        this.price = ((String) in.readValue((String.class.getClassLoader())));
+        this.offerPrice = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.dayDeliverd = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.status = ((String) in.readValue((String.class.getClassLoader())));
+    }
+
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public ProductFeature() {
+    }
+
+    /**
+     * 
+     * @param id
+     * @param price
+     * @param status
+     * @param color
+     * @param offerPrice
+     * @param quentity
+     * @param dimensions
+     * @param dayDeliverd
+     * @param size
+     * @param productId
+     */
+    public ProductFeature(Integer id, String productId, String color, String size, Object dimensions, String quentity, String price, Object offerPrice, Object dayDeliverd, String status) {
+        super();
+        this.id = id;
+        this.productId = productId;
+        this.color = color;
+        this.size = size;
+        this.dimensions = dimensions;
+        this.quentity = quentity;
+        this.price = price;
+        this.offerPrice = offerPrice;
+        this.dayDeliverd = dayDeliverd;
+        this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getProductId() {
         return productId;
@@ -107,6 +129,14 @@ public class ProductFeature extends SugarRecord implements Parcelable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public Object getDimensions() {
@@ -125,11 +155,11 @@ public class ProductFeature extends SugarRecord implements Parcelable {
         this.quentity = quentity;
     }
 
-    public Object getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Object price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -157,22 +187,14 @@ public class ProductFeature extends SugarRecord implements Parcelable {
         this.status = status;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("ProductFeatureId", ProductFeatureId).append("productId", productId).append("color", color).append("dimensions", dimensions).append("quentity", quentity).append("price", price).append("offerPrice", offerPrice).append("dayDeliverd", dayDeliverd).append("status", status).append("size", size).toString();
+        return new ToStringBuilder(this).append("id", id).append("productId", productId).append("color", color).append("size", size).append("dimensions", dimensions).append("quentity", quentity).append("price", price).append("offerPrice", offerPrice).append("dayDeliverd", dayDeliverd).append("status", status).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(price).append(status).append(color).append(offerPrice).append(quentity).append(dimensions).append(dayDeliverd).append(size).append(productId).append(ProductFeatureId).toHashCode();
+        return new HashCodeBuilder().append(id).append(price).append(status).append(color).append(offerPrice).append(quentity).append(dimensions).append(dayDeliverd).append(size).append(productId).toHashCode();
     }
 
     @Override
@@ -180,18 +202,28 @@ public class ProductFeature extends SugarRecord implements Parcelable {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof ProductFeature)) {
+        if ((other instanceof ProductFeature) == false) {
             return false;
         }
         ProductFeature rhs = ((ProductFeature) other);
-        return new EqualsBuilder().append(price, rhs.price).append(status, rhs.status).append(color, rhs.color).append(offerPrice, rhs.offerPrice).append(quentity, rhs.quentity).append(dimensions, rhs.dimensions).append(dayDeliverd, rhs.dayDeliverd).append(size, rhs.size).append(productId, rhs.productId).append(ProductFeatureId, rhs.ProductFeatureId).isEquals();
+        return new EqualsBuilder().append(id, rhs.id).append(price, rhs.price).append(status, rhs.status).append(color, rhs.color).append(offerPrice, rhs.offerPrice).append(quentity, rhs.quentity).append(dimensions, rhs.dimensions).append(dayDeliverd, rhs.dayDeliverd).append(size, rhs.size).append(productId, rhs.productId).isEquals();
     }
 
-    public Integer getProductFeatureId() {
-        return ProductFeatureId;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(id);
+        dest.writeValue(productId);
+        dest.writeValue(color);
+        dest.writeValue(size);
+        dest.writeValue(dimensions);
+        dest.writeValue(quentity);
+        dest.writeValue(price);
+        dest.writeValue(offerPrice);
+        dest.writeValue(dayDeliverd);
+        dest.writeValue(status);
     }
 
-    public void setProductFeatureId(Integer ProductFeatureId) {
-        this.ProductFeatureId = ProductFeatureId;
+    public int describeContents() {
+        return  0;
     }
+
 }

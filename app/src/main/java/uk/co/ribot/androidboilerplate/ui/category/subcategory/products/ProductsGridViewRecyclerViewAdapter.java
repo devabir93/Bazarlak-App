@@ -68,8 +68,6 @@ public class ProductsGridViewRecyclerViewAdapter extends RecyclerView.Adapter<Pr
 //            holder.productImageView.setImageResource(category.getImg());
 //
 //
-
-
     }
 
     // total number of cells

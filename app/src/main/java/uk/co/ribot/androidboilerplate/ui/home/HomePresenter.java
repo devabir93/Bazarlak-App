@@ -10,6 +10,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageData;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -37,7 +38,7 @@ public class HomePresenter extends BasePresenter<HomeMvpView> {
         if (mDisposable != null) mDisposable.dispose();
     }
 
-    public void getHomePage(Context context){
+    public void getHomePage(Context context) {
         Timber.d("hom prese");
         checkViewAttached();
         RxUtil.dispose(mDisposable);
@@ -68,5 +69,40 @@ public class HomePresenter extends BasePresenter<HomeMvpView> {
                     }
                 });
     }
+
+    public void getProductById(String productId) {
+        Timber.d("getProductById");
+        checkViewAttached();
+        RxUtil.dispose(mDisposable);
+        mDataManager.getProductById(productId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<GetProductByIdResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(GetProductByIdResponseBody productByIdResponseBody) {
+                        Timber.d("productByIdResponseBody %s",productByIdResponseBody);
+
+                        if (productByIdResponseBody.getStatus())
+                            getMvpView().showOfferProduct(productByIdResponseBody);
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
 
 }

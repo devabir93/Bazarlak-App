@@ -1,12 +1,12 @@
 package uk.co.ribot.androidboilerplate.ui.profile.login;
 
-import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
 import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 import uk.co.ribot.androidboilerplate.util.Message;
 
 public interface LoginMvpView extends MvpView {
 
-    void isSuccess(LoginResponse isSuccess);
+    void isSuccess(RegisterResponse isSuccess);
 
     void showMessage(boolean showProgress, String Message, Message messageType);
 
@@ -17,4 +17,10 @@ public interface LoginMvpView extends MvpView {
     void onNetworkError();
 
     void onUnknownError(String message);
+
+    void showProgresBar(boolean b);
+
+    void finishActivity(boolean b);
+
+    void showMessage(String message);
 }

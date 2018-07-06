@@ -1,7 +1,6 @@
 
 package uk.co.ribot.androidboilerplate.data.model;
 
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
@@ -25,7 +24,7 @@ public class ProductResponse implements Parcelable
     private String message;
     @SerializedName("data")
     @Expose
-    private List<Product> productData = null;
+    private Data data;
     public final static Creator<ProductResponse> CREATOR = new Creator<ProductResponse>() {
 
 
@@ -47,7 +46,7 @@ public class ProductResponse implements Parcelable
         this.status = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.code = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.productData, (Product.class.getClassLoader()));
+        this.data = ((Data) in.readValue((Data.class.getClassLoader())));
     }
 
     /**
@@ -61,15 +60,15 @@ public class ProductResponse implements Parcelable
      * 
      * @param message
      * @param status
-     * @param productData
+     * @param data
      * @param code
      */
-    public ProductResponse(Boolean status, Integer code, String message, List<Product> productData) {
+    public ProductResponse(Boolean status, Integer code, String message, Data data) {
         super();
         this.status = status;
         this.code = code;
         this.message = message;
-        this.productData = productData;
+        this.data = data;
     }
 
     public Boolean getStatus() {
@@ -96,22 +95,22 @@ public class ProductResponse implements Parcelable
         this.message = message;
     }
 
-    public List<Product> getProductData() {
-        return productData;
+    public Data getData() {
+        return data;
     }
 
-    public void setProductData(List<Product> productData) {
-        this.productData = productData;
+    public void setData(Data data) {
+        this.data = data;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("status", status).append("code", code).append("message", message).append("productData", productData).toString();
+        return new ToStringBuilder(this).append("status", status).append("code", code).append("message", message).append("data", data).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(message).append(status).append(productData).append(code).toHashCode();
+        return new HashCodeBuilder().append(message).append(status).append(data).append(code).toHashCode();
     }
 
     @Override
@@ -123,14 +122,14 @@ public class ProductResponse implements Parcelable
             return false;
         }
         ProductResponse rhs = ((ProductResponse) other);
-        return new EqualsBuilder().append(message, rhs.message).append(status, rhs.status).append(productData, rhs.productData).append(code, rhs.code).isEquals();
+        return new EqualsBuilder().append(message, rhs.message).append(status, rhs.status).append(data, rhs.data).append(code, rhs.code).isEquals();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(status);
         dest.writeValue(code);
         dest.writeValue(message);
-        dest.writeList(productData);
+        dest.writeValue(data);
     }
 
     public int describeContents() {

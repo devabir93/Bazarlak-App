@@ -107,7 +107,7 @@ dependencies {
     implementation "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
     implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
     implementation "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"
     implementation "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
     implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
@@ -140,12 +140,13 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.1.2'
     implementation "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
+    implementation 'com.afollestad:easyvideoplayer:0.3.0'
 
     // Replace provided dependency below with official AutoValue once this issue is fixed
 
     // https://github.com/google/auto/issues/268
-    provided "com.jakewharton.auto.value:auto-value-annotations:$AUTO_VALUE_VERSION"
-    provided "com.ryanharter.auto.value:auto-value-gson:$AUTO_VALUE_GSON_VERSION"
+    compileOnly "com.jakewharton.auto.value:auto-value-annotations:$AUTO_VALUE_VERSION"
+    compileOnly "com.ryanharter.auto.value:auto-value-gson:$AUTO_VALUE_GSON_VERSION"
     annotationProcessor "com.google.auto.value:auto-value:$AUTO_VALUE_VERSION"
     annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.4-rc2'
     annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$AUTO_VALUE_GSON_VERSION"
@@ -153,7 +154,7 @@ dependencies {
 
     // https://github.com/rharter/auto-value-parcel/issues/64
     implementation "com.google.dagger:dagger:$DAGGER_VERSION"
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
 
     //Required by Dagger2
     annotationProcessor daggerCompiler

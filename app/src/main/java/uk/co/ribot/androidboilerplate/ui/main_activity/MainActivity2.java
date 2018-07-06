@@ -63,24 +63,17 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
         }
+        if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
+            startService(SyncService.getStartIntent(this));
+        }
         loadFragment(new HomeFragment());
         BottomNavigationViewEx bnve = (BottomNavigationViewEx) findViewById(R.id.navigationView);
         bnve.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bnve.enableAnimation(false);
         bnve.enableShiftingMode(false);
         bnve.enableItemShiftingMode(false);
-/*        viewPager = (ViewPager) findViewById(R.id.viewPagerHome);
-        setupViewPager(viewPager);
 
 
-// binding with ViewPager
-        bnve.setupWithViewPager(viewPager);
-//        tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();*/
-        if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
-            startService(SyncService.getStartIntent(this));
-        }
     }
 
     @Override

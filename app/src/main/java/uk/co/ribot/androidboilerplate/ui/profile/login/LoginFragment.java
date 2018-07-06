@@ -17,7 +17,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -26,10 +26,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
+import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
-import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.Message;
 import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
@@ -45,6 +47,7 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
     Button loginButton;
     @BindView(R.id.forgot_password_button)
     Button forgotPasswordButton;
+    private AlertDialog alertDialogObject;
 
 
     public LoginFragment() {
@@ -80,6 +83,15 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
                 onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     private void onBackPressed() {
@@ -120,9 +132,9 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
         View content = factory.inflate(R.layout.forget_password_dialog_layout, null);
         Button sendButton = (Button) content.findViewById(R.id.send_button);
         ImageView closeButton = (ImageView) content.findViewById(R.id.close_imageView);
-        EditText emailEditText = content.findViewById(R.id.email_forget_password_EditText);
+        final EditText emailEditText = content.findViewById(R.id.email_forget_password_EditText);
         alertDialog.setView(content);
-        final AlertDialog alertDialogObject = alertDialog.create();
+        alertDialogObject = alertDialog.create();
         // Here you can change the layout direction via setLayoutDirection()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             alertDialogObject.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
@@ -142,7 +154,9 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialogObject.dismiss();
+                RestEmailBody restEmailBody = new RestEmailBody();
+                restEmailBody.setEmail(emailEditText.getText().toString());
+                loginPresenter.forgotPassword(restEmailBody);
             }
         });
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +168,30 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
         });
         alertDialogObject.show();
     }
+
+    void showSentPasswordDialog(String msg) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.full_screen_dialog));
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        View content = factory.inflate(R.layout.forgot_password_dialog_layout, null);
+        Button okButton = (Button) content.findViewById(R.id.ok_button);
+        TextView message = content.findViewById(R.id.message_textView);
+        message.setText(msg);
+        alertDialog.setView(content);
+        alertDialogObject = alertDialog.create();
+        // Here you can change the layout direction via setLayoutDirection()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            alertDialogObject.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+        }
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogObject.dismiss();
+
+            }
+        });
+        alertDialogObject.show();
+    }
+
 
     @Override
     public void onDestroy() {
@@ -168,11 +206,30 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
     }
 
     @Override
-    public void isSuccess(LoginResponse loginResponse) {
+    public void showMessage(String s) {
+        if (s != null && !s.isEmpty())
+            showSentPasswordDialog(s);
+
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(getContext(), b);
+    }
+
+    @Override
+    public void finishActivity(boolean b) {
+        alertDialogObject.dismiss();
+
+    }
+
+    @Override
+    public void isSuccess(RegisterResponse loginResponse) {
         Timber.d("status %s", loginResponse.getStatus());
         if (loginResponse.getStatus()) {
 
             ViewUtil.createSnackbar(loginButton.getRootView(), getResources().getString(R.string.login_success_message)).show();
+            onBackPressed();
 
         } else {
             showMessage(true, loginResponse.getMessage(), Message.FAIL);
@@ -216,13 +273,13 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
 
             UserData userData = new UserData();
 //        userData.setName(fnameSignupEditText.getText().toString() + "" + lnameSignupEditText.getText().toString());
-//        userData.setEmail(emailLoginEditText.getText().toString());
+            userData.setEmail(emailLoginEditText.getText().toString());
 //        userData.setMobile(mobileEditText.getText().toString());
 //        userData.setGender(genderSignupEditText.getText().toString());
-//        userData.setPassword(passwordLoginEditText.getText().toString());
+            userData.setPassword(passwordLoginEditText.getText().toString());
 
-            userData.setEmail("devabir9@gmail.com");
-            userData.setPassword("123456");
+//            userData.setEmail("devabir9@gmail.com");
+//            userData.setPassword("123456");
             loginPresenter.login(getContext(), userData);
         }
     }

@@ -9,6 +9,7 @@ public interface ProductsMvpView extends MvpView {
 
 
     void showProducts(List<Product> productList);
+
     void showEmpty();
 
     void addedToBag(boolean b);

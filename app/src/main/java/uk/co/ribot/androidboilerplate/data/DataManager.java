@@ -20,22 +20,23 @@ import io.reactivex.functions.Function;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.data.model.AddressBody;
 import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.Extracategory;
 import uk.co.ribot.androidboilerplate.data.model.FilterBody;
 import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
+import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageData;
 import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
-import uk.co.ribot.androidboilerplate.data.model.Image;
 import uk.co.ribot.androidboilerplate.data.model.Product;
-import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
+import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
-import uk.co.ribot.androidboilerplate.data.model.RestPasswordResponse;
-import uk.co.ribot.androidboilerplate.data.model.ProductFeature;
+import uk.co.ribot.androidboilerplate.data.model.RestResponse;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
+import uk.co.ribot.androidboilerplate.data.model.UpdateProfileResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
@@ -51,6 +52,7 @@ public class DataManager {
     private final PreferencesHelper mPreferencesHelper;
     protected SugarDb sugarDb;
     Context mContext;
+    String token;
 
     @Inject
     public DataManager(BazarlakService bazarlakService, PreferencesHelper preferencesHelper,
@@ -65,9 +67,13 @@ public class DataManager {
         return mPreferencesHelper;
     }
 
-    public UserData getCurrentUser() {
-        UserData currentUser = getPreferencesHelper().getCurrentUser();
-        return currentUser;
+    public String getToken() {
+        if (getPreferencesHelper().getCurrentUser().getAccessToken() != null &&
+                !getPreferencesHelper().getCurrentUser().getAccessToken().isEmpty()) {
+            token = "Bearer " + getPreferencesHelper().getCurrentUser().getAccessToken();
+        }
+        Timber.d("token %s", token);
+        return token;
     }
 
     public Observable<Ribot> syncRibots() {
@@ -86,26 +92,28 @@ public class DataManager {
     }
 
     @android.support.annotation.NonNull
-    public Observable<LoginResponse> makeLogin(String token, UserData userData) {
+    public Observable<RegisterResponse> makeLogin(UserData userData) {
 
         return mBazarlakService.login(userData)
-                .concatMap(new Function<LoginResponse, ObservableSource<? extends LoginResponse>>() {
+                .concatMap(new Function<RegisterResponse, ObservableSource<? extends RegisterResponse>>() {
                     @Override
-                    public ObservableSource<? extends LoginResponse> apply(final LoginResponse loginResponse) throws Exception {
+                    public ObservableSource<? extends RegisterResponse> apply(final RegisterResponse loginResponse) throws Exception {
 
                         if (loginResponse.getStatus()) {
-                            return Observable.create(new ObservableOnSubscribe<LoginResponse>() {
+                            return Observable.create(new ObservableOnSubscribe<RegisterResponse>() {
                                 @Override
-                                public void subscribe(ObservableEmitter<LoginResponse> e) throws Exception {
-//                                    getPreferencesHelper().addUserSession(loginResponse);
+                                public void subscribe(ObservableEmitter<RegisterResponse> e) throws Exception {
+                                    getPreferencesHelper().clear();
+                                    getPreferencesHelper().addUserSession(loginResponse.getUserData());
+                                    Timber.d("loginResponse.getUserData() %s", loginResponse.getUserData().getAccessToken());
                                     e.onNext(loginResponse);
                                     e.onComplete();
                                 }
                             });
                         } else
-                            return Observable.create(new ObservableOnSubscribe<LoginResponse>() {
+                            return Observable.create(new ObservableOnSubscribe<RegisterResponse>() {
                                 @Override
-                                public void subscribe(ObservableEmitter<LoginResponse> e) throws Exception {
+                                public void subscribe(ObservableEmitter<RegisterResponse> e) throws Exception {
 
                                     e.onNext(loginResponse);
                                     e.onComplete();
@@ -144,12 +152,105 @@ public class DataManager {
                 });
     }
 
-    public Observable<RestPasswordResponse> resetPassword(RestPasswordBody restPasswordBody) {
-        return mBazarlakService.resetPassword(restPasswordBody)
-                .concatMap(new Function<RestPasswordResponse, ObservableSource<? extends RestPasswordResponse>>() {
+    public Observable<RestResponse> resetPassword(RestPasswordBody restPasswordBody) {
+        return mBazarlakService.resetPassword(getToken(), restPasswordBody)
+                .concatMap(new Function<RestResponse, ObservableSource<? extends RestResponse>>() {
                     @Override
-                    public ObservableSource<? extends RestPasswordResponse> apply(RestPasswordResponse restPasswordResponse) throws Exception {
-                        return null;
+                    public ObservableSource<? extends RestResponse> apply(final RestResponse restResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<RestResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
+                                try {
+                                    e.onNext(restResponse);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<RestResponse> resetEmail(RestEmailBody restEmailBody) {
+        return mBazarlakService.resetEmail(getToken(), restEmailBody)
+                .concatMap(new Function<RestResponse, ObservableSource<? extends RestResponse>>() {
+                    @Override
+                    public ObservableSource<? extends RestResponse> apply(final RestResponse restResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<RestResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
+                                try {
+                                    e.onNext(restResponse);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<RestResponse> forgotPassword(RestEmailBody restEmailBody) {
+        return mBazarlakService.forgotPassword(restEmailBody)
+                .concatMap(new Function<RestResponse, ObservableSource<? extends RestResponse>>() {
+                    @Override
+                    public ObservableSource<? extends RestResponse> apply(final RestResponse restResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<RestResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
+                                try {
+                                    e.onNext(restResponse);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<UpdateProfileResponse> updateProfile(UserData userData) {
+        return mBazarlakService.updateProfile(getToken(), userData)
+                .concatMap(new Function<UpdateProfileResponse, ObservableSource<? extends UpdateProfileResponse>>() {
+                    @Override
+                    public ObservableSource<? extends UpdateProfileResponse> apply(final UpdateProfileResponse updateProfileResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<UpdateProfileResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<UpdateProfileResponse> e) throws Exception {
+                                try {
+                                    e.onNext(updateProfileResponse);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<RestResponse> updateAddress(AddressBody addressBody) {
+        return mBazarlakService.updateAddress(getToken(), addressBody)
+                .concatMap(new Function<RestResponse, ObservableSource<? extends RestResponse>>() {
+                    @Override
+                    public ObservableSource<? extends RestResponse> apply(final RestResponse restResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<RestResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
+                                try {
+                                    e.onNext(restResponse);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+                            }
+                        });
                     }
                 });
     }
@@ -165,7 +266,7 @@ public class DataManager {
                             public void subscribe(ObservableEmitter<CategoryResponse> e) throws Exception {
                                 try {
                                     openDatabase();
-                                    List<Category> categoryList = categoryResponse.getData().getCategories().getData();
+                                    List<Category> categoryList = categoryResponse.getCategoriesData().getCategories().getData();
                                     if (categoryList.size() > 0) {
                                         for (Category category :
                                                 categoryList) {
@@ -254,32 +355,33 @@ public class DataManager {
         });
     }
 
-    public Observable<List<Product>> getProducts( String categoryId, String subCategoryId, String extracategoryId,String page) {
-        return mBazarlakService.getProduct(categoryId,subCategoryId,extracategoryId,page)
-                .concatMap(new Function<ProductResponse, ObservableSource<? extends List<Product>>>() {
+    public Observable<ProductResponse> getProducts(String categoryId, String subCategoryId, String extracategoryId, String page) {
+        return mBazarlakService.getProduct(categoryId, subCategoryId, extracategoryId, page)
+                .concatMap(new Function<ProductResponse, ObservableSource<? extends ProductResponse>>() {
                     @Override
-                    public ObservableSource<? extends List<Product>> apply(final ProductResponse productResponse) throws Exception {
-                        return Observable.create(new ObservableOnSubscribe<List<Product>>() {
+                    public ObservableSource<? extends ProductResponse> apply(final ProductResponse productResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<ProductResponse>() {
                             @Override
-                            public void subscribe(ObservableEmitter<List<Product>> e) throws Exception {
+                            public void subscribe(ObservableEmitter<ProductResponse> e) throws Exception {
                                 try {
-                                    for (Product product :
-                                            productResponse.getProductData()) {
-                                        product.setId(Long.valueOf(product.getProductId()));
-                                        product.save();
-                                        for (Image image :
-                                                product.getImages()) {
-                                            image.setId(Long.valueOf(image.getImageId()));
-                                            image.save();
-                                        }
-
-                                        for (ProductFeature productFeature :
-                                                product.getColorFeatures()) {
-                                            productFeature.setId(Long.valueOf(productFeature.getProductFeatureId()));
-                                            productFeature.save();
-                                        }
-                                    }
-                                    e.onNext(productResponse.getProductData());
+                                    Timber.d("productResponse %s", productResponse.toString());
+//                                    for (Product product :
+//                                            productResponse.getProductData()) {
+//                                        product.setId(Long.valueOf(product.getProductId()));
+//                                        product.save();
+//                                        for (Image image :
+//                                                product.getImages()) {
+//                                            image.setId(Long.valueOf(image.getImageId()));
+//                                            image.save();
+//                                        }
+//
+//                                        for (ProductFeature productFeature :
+//                                                product.getColorFeatures()) {
+//                                            productFeature.setId(Long.valueOf(productFeature.getProductFeatureId()));
+//                                            productFeature.save();
+//                                        }
+//                                    }
+                                    e.onNext(productResponse);
                                     e.onComplete();
                                 } catch (Exception ex) {
                                     e.onError(ex);
@@ -290,8 +392,30 @@ public class DataManager {
                 });
     }
 
-    public Observable<FilterDataResponse> getFiltersData(String subcategory,String extracategory) {
-        return mBazarlakService.getFiltersData(subcategory,extracategory)
+    public Observable<GetProductByIdResponseBody> getProductById(String productId){
+        return mBazarlakService.getProductById(productId)
+                .concatMap(new Function<GetProductByIdResponseBody, ObservableSource<? extends GetProductByIdResponseBody>>() {
+                    @Override
+                    public ObservableSource<? extends GetProductByIdResponseBody> apply(final GetProductByIdResponseBody productResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<GetProductByIdResponseBody>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<GetProductByIdResponseBody> e) throws Exception {
+                                try {
+                                    Timber.d("productResponse %s",productResponse);
+
+                                    e.onNext(productResponse);
+                                    e.onComplete();
+                                } catch (Exception ex) {
+                                    e.onError(ex);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<FilterDataResponse> getFiltersData(String subcategory, String extracategory) {
+        return mBazarlakService.getFiltersData(subcategory, extracategory)
                 .concatMap(new Function<FilterDataResponse, ObservableSource<? extends FilterDataResponse>>() {
                     @Override
                     public ObservableSource<? extends FilterDataResponse> apply(@NonNull final FilterDataResponse brandResponse)
@@ -312,7 +436,7 @@ public class DataManager {
     }
 
     public Observable<List<Product>> getFilteredProducts(final FilterBody filterBody) {
-        return mBazarlakService.getfilteredProduct(filterBody.getCategory(),filterBody.getExtracategory(),filterBody.getBrand(),filterBody.getColor(),filterBody.getSize(),filterBody.getPrice())
+        return mBazarlakService.getfilteredProduct(filterBody.getCategory(), filterBody.getExtracategory(), filterBody.getBrand(), filterBody.getColor(), filterBody.getSize(), filterBody.getPrice())
                 .concatMap(new Function<FilterProductResponse, ObservableSource<? extends List<Product>>>() {
                     @Override
                     public ObservableSource<? extends List<Product>> apply(final FilterProductResponse filterProductResponse) throws Exception {

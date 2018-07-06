@@ -3,7 +3,7 @@ package uk.co.ribot.androidboilerplate.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -13,9 +13,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Data implements Parcelable
 {
 
-    @SerializedName("categories")
+    @SerializedName("products")
     @Expose
-    private Categories categories;
+    private Products products;
     public final static Creator<Data> CREATOR = new Creator<Data>() {
 
 
@@ -34,7 +34,7 @@ public class Data implements Parcelable
     ;
 
     protected Data(Parcel in) {
-        this.categories = ((Categories) in.readValue((Categories.class.getClassLoader())));
+        this.products = ((Products) in.readValue((Products.class.getClassLoader())));
     }
 
     /**
@@ -46,29 +46,29 @@ public class Data implements Parcelable
 
     /**
      * 
-     * @param categories
+     * @param products
      */
-    public Data(Categories categories) {
+    public Data(Products products) {
         super();
-        this.categories = categories;
+        this.products = products;
     }
 
-    public Categories getCategories() {
-        return categories;
+    public Products getProducts() {
+        return products;
     }
 
-    public void setCategories(Categories categories) {
-        this.categories = categories;
+    public void setProducts(Products products) {
+        this.products = products;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("categories", categories).toString();
+        return new ToStringBuilder(this).append("products", products).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(categories).toHashCode();
+        return new HashCodeBuilder().append(products).toHashCode();
     }
 
     @Override
@@ -80,11 +80,11 @@ public class Data implements Parcelable
             return false;
         }
         Data rhs = ((Data) other);
-        return new EqualsBuilder().append(categories, rhs.categories).isEquals();
+        return new EqualsBuilder().append(products, rhs.products).isEquals();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(categories);
+        dest.writeValue(products);
     }
 
     public int describeContents() {

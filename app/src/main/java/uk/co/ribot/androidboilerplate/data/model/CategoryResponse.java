@@ -24,7 +24,7 @@ public class CategoryResponse implements Parcelable
     private String message;
     @SerializedName("data")
     @Expose
-    private Data data;
+    private CategoriesData categoriesData;
     public final static Creator<CategoryResponse> CREATOR = new Creator<CategoryResponse>() {
 
 
@@ -46,7 +46,7 @@ public class CategoryResponse implements Parcelable
         this.status = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.code = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
-        this.data = ((Data) in.readValue((Data.class.getClassLoader())));
+        this.categoriesData = ((CategoriesData) in.readValue((CategoriesData.class.getClassLoader())));
     }
 
     /**
@@ -60,15 +60,15 @@ public class CategoryResponse implements Parcelable
      * 
      * @param message
      * @param status
-     * @param data
+     * @param categoriesData
      * @param code
      */
-    public CategoryResponse(Boolean status, Integer code, String message, Data data) {
+    public CategoryResponse(Boolean status, Integer code, String message, CategoriesData categoriesData) {
         super();
         this.status = status;
         this.code = code;
         this.message = message;
-        this.data = data;
+        this.categoriesData = categoriesData;
     }
 
     public Boolean getStatus() {
@@ -95,22 +95,22 @@ public class CategoryResponse implements Parcelable
         this.message = message;
     }
 
-    public Data getData() {
-        return data;
+    public CategoriesData getCategoriesData() {
+        return categoriesData;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setCategoriesData(CategoriesData categoriesData) {
+        this.categoriesData = categoriesData;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("status", status).append("code", code).append("message", message).append("data", data).toString();
+        return new ToStringBuilder(this).append("status", status).append("code", code).append("message", message).append("categoriesData", categoriesData).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(message).append(status).append(data).append(code).toHashCode();
+        return new HashCodeBuilder().append(message).append(status).append(categoriesData).append(code).toHashCode();
     }
 
     @Override
@@ -122,14 +122,14 @@ public class CategoryResponse implements Parcelable
             return false;
         }
         CategoryResponse rhs = ((CategoryResponse) other);
-        return new EqualsBuilder().append(message, rhs.message).append(status, rhs.status).append(data, rhs.data).append(code, rhs.code).isEquals();
+        return new EqualsBuilder().append(message, rhs.message).append(status, rhs.status).append(categoriesData, rhs.categoriesData).append(code, rhs.code).isEquals();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(status);
         dest.writeValue(code);
         dest.writeValue(message);
-        dest.writeValue(data);
+        dest.writeValue(categoriesData);
     }
 
     public int describeContents() {

@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:id="@+id/container"
     >
 
-    <VideoView
+    <com.afollestad.easyvideoplayer.EasyVideoPlayer
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.4"
+        app:evp_autoPlay="true"
+        app:evp_customLabelText="Custom label text if rightAction is customLabel"
+        app:evp_disableControls="false"
+        app:evp_hideControlsOnPlay="true"
+        app:evp_leftAction="restart"
+        app:evp_pauseDrawable="@drawable/evp_action_pause"
+        app:evp_playDrawable="@drawable/evp_action_play"
+        app:evp_restartDrawable="@drawable/evp_action_restart"
+        app:evp_retryText="@string/evp_retry"
+        app:evp_rightAction="none"
+        app:evp_submitText="@string/evp_submit"
+        app:evp_themeColor="@color/colorPrimary"
+        app:evp_autoFullscreen="false"
+        app:evp_loop="false"
         />
+    <!--<com.afollestad.easyvideoplayer.EasyVideoPlayer-->
+    <!--android:id="@+id/player"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--app:layout_constraintVertical_weight=""-->
+    <!--android:layout_weight=".3"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/photosGrid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintTop_toBottomOf="@+id/video_view" />
+</android.support.constraint.ConstraintLayout>

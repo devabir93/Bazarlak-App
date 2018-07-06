@@ -46,7 +46,15 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="uk.co.ribot.androidboilerplate.data.model" />
 
-        <activity android:name=".ui.category.subcategory.filter.FilterActivity"></activity>
+        <activity android:name=".ui.category.subcategory.filter.FilterActivity" />
+        <activity android:name=".ui.profile.your_profile.YourProfileFragment" />
+        <activity android:name=".ui.profile.your_profile.ChangePasswordFragment" />
+        <activity android:name=".ui.profile.your_profile.ChangeEmailFragment" />
+        <activity android:name=".ui.profile.your_profile.AccountInfoFragment" />
+        <activity
+            android:name=".ui.profile.your_profile.PaymentDetailsActivity"
+            android:label="@string/title_activity_payment_details"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

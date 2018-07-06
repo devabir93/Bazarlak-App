@@ -10,18 +10,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
+import uk.co.ribot.androidboilerplate.ui.profile.ProfileMvpView;
+import uk.co.ribot.androidboilerplate.ui.profile.ProfilePresenter;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
+import uk.co.ribot.androidboilerplate.util.Message;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 
-public class AccountInfoFragment extends Fragment {
+public class AccountInfoFragment extends BaseActivity implements ProfileMvpView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,44 +53,20 @@ public class AccountInfoFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    ProgressBar progressBar;
 
-    public AccountInfoFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AccountInfoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AccountInfoFragment newInstance(String param1, String param2) {
-        AccountInfoFragment fragment = new AccountInfoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    @Inject
+    ProfilePresenter profilePresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).activityComponent().inject(this);
+        activityComponent().inject(this);
+        setContentView(R.layout.fragment_account_info);
+        ButterKnife.bind(this);
+        profilePresenter.attachView(this);
+        profilePresenter.setContext(AccountInfoFragment.this);
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_account_info, container, false);
-        ButterKnife.bind(this, view);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         TextView textView = toolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(getString(R.string.account_info_label));
@@ -89,21 +74,62 @@ public class AccountInfoFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(AccountInfoFragment.class.getName());
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.remove(fragment).commit();
+                finish();
             }
         });
-        return view;
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @OnClick(R.id.btn_save)
     public void onViewClicked() {
+        profilePresenter.checkConnection(this);
+    }
+
+    @Override
+    public void showMessage(String s) {
+        if (s != null && !s.isEmpty())
+            DialogFactory.createSimpleOkDialog(this, s);
+
+    }
+
+    @Override
+    public void showMessage(boolean b, String string, Message logging) {
+
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(this, b);
+    }
+
+    @Override
+    public void finishActivity(boolean b) {
+        this.finish();
+
+    }
+
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+        super.hasActiveInternetConnection(b);
+        if (b) {
+            UserData userData = new UserData();
+            //userData.setGender(genderSpinner.getSe);
+            profilePresenter.updateProfileInfo(userData);
+        }
+
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
+    @Override
+    public void onNetworkError() {
+
+    }
+
+    @Override
+    public void onUnknownError(String message) {
+
     }
 }

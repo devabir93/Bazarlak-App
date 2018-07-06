@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,14 +45,23 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     public void onBindViewHolder(final ProfileAdapter.ProfileViewHolder holder, int position) {
         CustomCategory category = mCategories.get(position);
         if (category.getIcon() == -1) {
-            holder.imageView.setVisibility(View.GONE);
+            holder.imageView.setVisibility(View.INVISIBLE);
+            holder.imageView_go.setVisibility(View.VISIBLE);
 //            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
 //            params.gravity = Gravity.CENTER_HORIZONTAL;
 //
 //            holder.linearLayout.setLayoutParams(params);
-            holder.linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-        } else
-        holder.imageView.setImageResource(category.getIcon());
+//            holder.linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+            RelativeLayout.LayoutParams layoutParams =
+                    (RelativeLayout.LayoutParams)holder.textView.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            holder.textView.setLayoutParams(layoutParams);
+
+        } else{
+            holder.imageView.setVisibility(View.VISIBLE);
+            holder.imageView_go.setVisibility(View.INVISIBLE);
+            holder.imageView.setImageResource(category.getIcon());
+        }
         holder.textView.setText(category.getTitle());
     }
 
@@ -64,6 +74,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
         @BindView(R.id.icon_profile)
         ImageView imageView;
+        @BindView(R.id.icon_go)
+        ImageView imageView_go;
         @BindView(R.id.text_name) TextView textView;
         @BindView(R.id.items_layout)
         LinearLayout linearLayout;

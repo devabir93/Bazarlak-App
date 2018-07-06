@@ -8,17 +8,19 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BazarlakeApplication;
+import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.ActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 /**
  * Abstract activity that every other Activity in this application must implement. It handles
  * creation of Dagger components and makes sure that instances of ConfigPersistentComponent survive
  * across configuration changes.
  */
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements MvpView {
 
     private static final String KEY_ACTIVITY_ID = "KEY_ACTIVITY_ID";
     private static final AtomicLong NEXT_ID = new AtomicLong(0);
@@ -68,4 +70,25 @@ public class BaseActivity extends AppCompatActivity {
         return mActivityComponent;
     }
 
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+        if (!b) {
+            ViewUtil.createSnackbar(getWindow().getDecorView().getRootView(), getResources().getString(R.string.no_connection));
+        }
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
+    @Override
+    public void onNetworkError() {
+
+    }
+
+    @Override
+    public void onUnknownError(String message) {
+
+    }
 }

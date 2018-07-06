@@ -1,5 +1,6 @@
 package uk.co.ribot.androidboilerplate.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.login.LoginFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.register.RegisterFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.your_profile.YourProfileFragment;
+import uk.co.ribot.androidboilerplate.util.Message;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
 public class ProfileFragment extends BaseFragment implements ProfileMvpView {
@@ -91,10 +93,7 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
         profilePresenter.attachView(this);
         profileAdapter.setCategories(signedUserList());
         profileAdapter.notifyDataSetChanged();
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
-        }
+
         return view;
     }
 
@@ -108,19 +107,12 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
 //                        .commit();
                 break;
             case 1:
-                Fragment nextFrag2 = new YourProfileFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.profile_container, nextFrag2, YourProfileFragment.class.getName())
-                        .addToBackStack(null)
-                        .commit();
+                startActivity(new Intent(getActivity(),YourProfileFragment.class));
+
                 break;
 
         }
-//        Fragment nextFrag = new RegisterFragment();
-//        getActivity().getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.container, nextFrag, fragmentClass.class.getName())
-//                .addToBackStack(null)
-//                .commit();
+
     }
 
     @Override
@@ -131,10 +123,10 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
     @Override
     public void onResume() {
         super.onResume();
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
-        }
+//        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+//        }
     }
 
     @Override
@@ -156,13 +148,31 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
         List<CustomCategory> categories = new ArrayList<>();
         categories.add(new CustomCategory(-1, getString(R.string.your_orders)));
         categories.add(new CustomCategory(-1, getString(R.string.your_profile)));
-//        categories.add(new CustomCategory(-1, getString(R.string.payment_details)));
-//        categories.add(new CustomCategory(-1, getString(R.string.track_orders)));
         categories.add(new CustomCategory(R.drawable.change_lang, getString(R.string.change_lang)));
         categories.add(new CustomCategory(R.drawable.help_center, getString(R.string.help_center)));
         categories.add(new CustomCategory(R.drawable.contactusicon, getString(R.string.contact_us)));
         categories.add(new CustomCategory(R.drawable.inviteicon, getString(R.string.invite)));
 
         return categories;
+    }
+
+    @Override
+    public void showMessage(String s) {
+
+    }
+
+    @Override
+    public void showMessage(boolean b, String string, Message logging) {
+
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+
+    }
+
+    @Override
+    public void finishActivity(boolean b) {
+
     }
 }

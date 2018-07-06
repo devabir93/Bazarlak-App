@@ -22,9 +22,10 @@ public class BaseFragment extends Fragment implements MvpView {
 
     @Override
     public void hasActiveInternetConnection(boolean b) {
-//        if (!b) {
-//            ViewUtil.createSnackbar(getView(), getResources().getString(R.string.no_connection));
-//        }
+        if (!b) {
+            Timber.d("no connection");
+            ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(), getResources().getString(R.string.no_connection));
+        }
     }
 
     @Override

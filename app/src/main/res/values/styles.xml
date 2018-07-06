@@ -7,10 +7,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <!-- Customize color of navigation drawer icon and back arrow -->
         <item name="colorControlNormal">@color/white</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -57,6 +59,7 @@
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">12sp</item>
     </style>
+
     <style name="checkboxStyle">
         <item name="android:colorAccent">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/colorPrimary</item>

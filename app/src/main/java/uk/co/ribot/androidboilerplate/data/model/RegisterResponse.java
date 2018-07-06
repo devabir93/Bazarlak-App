@@ -19,7 +19,7 @@ public class RegisterResponse {
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("userData")
+    @SerializedName("data")
     @Expose
     private UserData userData;
 

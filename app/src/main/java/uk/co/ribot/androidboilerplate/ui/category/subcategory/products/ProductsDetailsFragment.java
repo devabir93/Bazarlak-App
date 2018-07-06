@@ -28,8 +28,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.FilterSize;
+import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
@@ -133,10 +133,10 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
         if (b) showAlertDialog();
     }
 
-    @OnClick({R.id.ic_close, R.id.add_to_bag_layout})
+    @OnClick({R.id.relative_close, R.id.add_to_bag_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.ic_close:
+            case R.id.relative_close:
                 closeFragment();
                 break;
             case R.id.add_to_bag_layout:

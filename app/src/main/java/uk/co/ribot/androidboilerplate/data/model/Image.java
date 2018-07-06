@@ -6,18 +6,16 @@ import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Image extends SugarRecord implements  Parcelable
+public class Image implements Parcelable
 {
 
     @SerializedName("id")
     @Expose
-    private Integer imageId;
+    private Integer id;
     @SerializedName("product_id")
     @Expose
     private String productId;
@@ -42,7 +40,7 @@ public class Image extends SugarRecord implements  Parcelable
     ;
 
     protected Image(Parcel in) {
-        this.imageId = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.productId = ((String) in.readValue((String.class.getClassLoader())));
         this.image = ((String) in.readValue((String.class.getClassLoader())));
     }
@@ -62,17 +60,17 @@ public class Image extends SugarRecord implements  Parcelable
      */
     public Image(Integer id, String productId, String image) {
         super();
-        this.imageId = id;
+        this.id = id;
         this.productId = productId;
         this.image = image;
     }
 
-    public Integer getImageId() {
-        return imageId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setImageId(Integer id) {
-        this.imageId = id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getProductId() {
@@ -93,12 +91,12 @@ public class Image extends SugarRecord implements  Parcelable
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("imageId", imageId).append("productId", productId).append("image", image).toString();
+        return new ToStringBuilder(this).append("id", id).append("productId", productId).append("image", image).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(imageId).append(image).append(productId).toHashCode();
+        return new HashCodeBuilder().append(id).append(image).append(productId).toHashCode();
     }
 
     @Override
@@ -110,11 +108,11 @@ public class Image extends SugarRecord implements  Parcelable
             return false;
         }
         Image rhs = ((Image) other);
-        return new EqualsBuilder().append(imageId, rhs.imageId).append(image, rhs.image).append(productId, rhs.productId).isEquals();
+        return new EqualsBuilder().append(id, rhs.id).append(image, rhs.image).append(productId, rhs.productId).isEquals();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(imageId);
+        dest.writeValue(id);
         dest.writeValue(productId);
         dest.writeValue(image);
     }

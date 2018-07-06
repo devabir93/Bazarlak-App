@@ -18,6 +18,9 @@ import uk.co.ribot.androidboilerplate.ui.profile.ProfileFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.your_profile.AccountInfoFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.your_profile.ChangeEmailFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.your_profile.ChangePasswordFragment;
+import uk.co.ribot.androidboilerplate.ui.profile.your_profile.PaymentDetailsActivity;
+import uk.co.ribot.androidboilerplate.ui.profile.your_profile.PaymentDetailsActivityFragment;
+import uk.co.ribot.androidboilerplate.ui.profile.your_profile.ShippingAddressActivityFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.your_profile.YourProfileFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.login.LoginFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.register.RegisterFragment;
@@ -67,4 +70,10 @@ public interface ActivityComponent {
     void inject(ChangeEmailFragment changeEmailFragment);
 
     void inject(ChangePasswordFragment changePasswordFragment);
+
+    void inject(PaymentDetailsActivity paymentDetailsActivity);
+
+    void inject(PaymentDetailsActivityFragment paymentDetailsActivityFragment);
+
+    void inject(ShippingAddressActivityFragment shippingAddressActivityFragment);
 }

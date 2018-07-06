@@ -17,6 +17,9 @@ import retrofit2.HttpException;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
+import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
+import uk.co.ribot.androidboilerplate.data.model.RestResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
@@ -50,17 +53,17 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         getMvpView().showMessage(true, context.getResources().getString(R.string.logging_message), Message.LOGGING);
         checkViewAttached();
         RxUtil.dispose(mDisposable);
-        mDataManager.makeLogin("", userData)
+        mDataManager.makeLogin( userData)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<LoginResponse>() {
+                .subscribe(new Observer<RegisterResponse>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                         mDisposable = d;
                     }
 
                     @Override
-                    public void onNext(@NonNull LoginResponse loginResponse) {
+                    public void onNext(@NonNull RegisterResponse loginResponse) {
                         getMvpView().isSuccess(loginResponse);
                         //getMvpView().showMessage(true, context.getResources().getString(R.string.login_success_message), Message.SUCCESS);
                         getMvpView().showMessage(false, context.getResources().getString(R.string.logging_message), Message.LOGGING);
@@ -87,6 +90,51 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                     @Override
                     public void onComplete() {
                         getMvpView().showMessage(false, context.getResources().getString(R.string.logging_message), Message.LOGGING);
+                    }
+                });
+    }
+    public void forgotPassword( final RestEmailBody restEmailBody) {
+        getMvpView().showProgresBar(true);
+        checkViewAttached();
+        RxUtil.dispose(mDisposable);
+        mDataManager.forgotPassword(restEmailBody)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<RestResponse>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull RestResponse updateProfileResponse) {
+                        if (!updateProfileResponse.getStatus()) {
+                            getMvpView().showMessage(updateProfileResponse.getMessage());
+                        }else
+                            getMvpView().finishActivity(true);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        if (e instanceof HttpException) {
+                            ResponseBody responseBody = ((HttpException) e).response().errorBody();
+                            // view.onUnknownError(getErrorMessage(responseBody));
+                        } else if (e instanceof SocketTimeoutException) {
+                            getMvpView().onTimeout();
+                        } else if (e instanceof IOException) {
+                            getMvpView().onNetworkError();
+                        } else {
+                            //  getMvpView().showError();
+                            getMvpView().onUnknownError(e.getMessage());
+                        }
+                        Timber.e(e, "There was an error while forgotPassword");
+                        //getMvpView().showError();
+                        getMvpView().showProgresBar(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        getMvpView().showProgresBar(false);
                     }
                 });
     }

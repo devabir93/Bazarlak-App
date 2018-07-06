@@ -14,8 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +46,9 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     @BindView(R.id.second_toolbar)
     Toolbar secondToolbar;
     Unbinder unbinder;
-    String categoryId;
-    String subCategoryId;
-    String ExtracategoryId;
+    String categoryId="";
+    String subCategoryId="";
+    String ExtracategoryId="";
     String categoryName, ExtracategoryName;
     private List<Product> mproductList;
 
@@ -106,7 +104,6 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView_secondary);
-        textView.setText(categoryName + "/" + ExtracategoryName);
         secondToolbar.setNavigationIcon(R.drawable.ic_back);
         secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +125,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
                 return false;
             }
         });
+        textView.setText(categoryName + "/" + ExtracategoryName);
         ProductBody productBody = new ProductBody();
         productBody.setCategory(categoryId);
         productBody.setSubcategory(subCategoryId);

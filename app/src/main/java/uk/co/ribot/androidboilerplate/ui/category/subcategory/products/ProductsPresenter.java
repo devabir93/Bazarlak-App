@@ -2,8 +2,6 @@ package uk.co.ribot.androidboilerplate.ui.category.subcategory.products;
 
 import android.content.Context;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observer;
@@ -12,11 +10,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
-import uk.co.ribot.androidboilerplate.data.model.Product;
-import uk.co.ribot.androidboilerplate.data.model.ProductBody;
+import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
-import uk.co.ribot.androidboilerplate.ui.category.CategoryMvpView;
 
 @ConfigPersistent
 public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
@@ -40,21 +36,21 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
         if (mDisposable != null) mDisposable.dispose();
     }
 
-    void getProducts(Context context, String categoryId, String subCategoryId, String extracategoryId,String page) {
-        mDataManager.getProducts(categoryId,subCategoryId,extracategoryId,page)
+    void getProducts(Context context, String categoryId, String subCategoryId, String extracategoryId, String page) {
+        mDataManager.getProducts(categoryId, subCategoryId, extracategoryId, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<Product>>() {
+                .subscribe(new Observer<ProductResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<Product> productList) {
-                        Timber.d("productList %s", productList);
-                        if (productList.size() > 0) {
-                            getMvpView().showProducts(productList);
+                    public void onNext(ProductResponse productResponses) {
+                        Timber.d("productList %s", productResponses);
+                        if (productResponses.getStatus()) {
+                            getMvpView().showProducts(productResponses.getData().getProducts().getData());
                         } else
                             getMvpView().showEmpty();
                     }
@@ -74,7 +70,7 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
 //                            getMvpView().onUnknownError(e.getMessage());
 //                        }
 //                        // getMvpView().showError();
-                        Timber.e(e, "There was an error while getAllCategories");
+                        Timber.e(e, "There was an error while getProducts");
                     }
 
                     @Override
