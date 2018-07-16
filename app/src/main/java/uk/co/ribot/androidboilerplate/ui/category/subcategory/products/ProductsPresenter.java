@@ -10,7 +10,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.Order;
+import uk.co.ribot.androidboilerplate.data.model.OrderData;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
+import uk.co.ribot.androidboilerplate.data.model.RestResponse;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 
@@ -80,9 +83,36 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
                 });
     }
 
-    void addToBag(String ProductId) {
+    void addToBag(Order order) {
 
-        getMvpView().addedToBag(true);
+        OrderData orderData = new OrderData();
+        orderData.setOrder(order);
+        mDataManager.saveOrders(orderData)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<RestResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(RestResponse restResponse) {
+
+                        if (restResponse.getStatus())
+                            getMvpView().addedToBag(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 

@@ -24,6 +24,7 @@ import uk.co.ribot.androidboilerplate.ui.profile.ProfileMvpView;
 import uk.co.ribot.androidboilerplate.ui.profile.ProfilePresenter;
 import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.Message;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 
 public class ChangePasswordFragment extends BaseActivity implements ProfileMvpView {
@@ -92,7 +93,9 @@ public class ChangePasswordFragment extends BaseActivity implements ProfileMvpVi
     @Override
     public void hasActiveInternetConnection(boolean b) {
         super.hasActiveInternetConnection(b);
-        if (b) {
+        if (!b) {
+            ViewUtil.createSnackbar(btnSave.getRootView(), getResources().getString(R.string.no_connection));
+        }else {
             RestPasswordBody restPasswordBody = new RestPasswordBody();
             restPasswordBody.setOldPassword(oldPasswordEditText.getText().toString());
             restPasswordBody.setNewPassword(newPasswordEditText.getText().toString());
@@ -102,6 +105,12 @@ public class ChangePasswordFragment extends BaseActivity implements ProfileMvpVi
 
     }
 
+
+    @Override
+    public void showSnackBar(String message) {
+        ViewUtil.createSnackbar(btnSave.getRootView(),message);
+
+    }
     @Override
     public void onTimeout() {
 

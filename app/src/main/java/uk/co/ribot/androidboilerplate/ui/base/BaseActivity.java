@@ -13,6 +13,7 @@ import uk.co.ribot.androidboilerplate.injection.component.ActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 /**
@@ -89,6 +90,17 @@ public class BaseActivity extends AppCompatActivity implements MvpView {
 
     @Override
     public void onUnknownError(String message) {
+
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(this, b);
+    }
+
+    @Override
+    public void showSnackBar(String message) {
+        ViewUtil.createSnackbar(getWindow().getDecorView().getRootView(),message);
 
     }
 }

@@ -24,6 +24,7 @@ import uk.co.ribot.androidboilerplate.ui.profile.ProfileMvpView;
 import uk.co.ribot.androidboilerplate.ui.profile.ProfilePresenter;
 import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.Message;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 
 public class ChangeEmailFragment extends BaseActivity implements ProfileMvpView {
@@ -51,7 +52,6 @@ public class ChangeEmailFragment extends BaseActivity implements ProfileMvpView 
         ButterKnife.bind(this);
         profilePresenter.attachView(this);
         profilePresenter.setContext(this);
-
         TextView textView = toolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(getString(R.string.change_email_label));
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -96,12 +96,21 @@ public class ChangeEmailFragment extends BaseActivity implements ProfileMvpView 
     @Override
     public void hasActiveInternetConnection(boolean b) {
         super.hasActiveInternetConnection(b);
-        if(b){
+        if (!b) {
+            ViewUtil.createSnackbar(btnSave.getRootView(), getResources().getString(R.string.no_connection));
+        } else {
             RestEmailBody restEmailBody = new RestEmailBody();
             restEmailBody.setOldEmail(emailEditText.getText().toString());
             restEmailBody.setEmail(confirmEmailEditText.getText().toString());
             profilePresenter.resetEmail(restEmailBody);
         }
+
+    }
+
+    @Override
+    public void showSnackBar(String message) {
+        super.showSnackBar(message);
+        ViewUtil.createSnackbar(getWindow().getDecorView().getRootView(), message);
 
     }
 

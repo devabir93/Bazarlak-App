@@ -20,6 +20,9 @@ public class Brand extends SugarRecord implements Parcelable {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("trader_id")
+    @Expose
+    private String traderId;
 
     public Brand() {
     }
@@ -31,7 +34,7 @@ public class Brand extends SugarRecord implements Parcelable {
             brandId = in.readInt();
         }
         name = in.readString();
-
+        traderId = in.readString();
     }
 
     @Override
@@ -43,6 +46,7 @@ public class Brand extends SugarRecord implements Parcelable {
             dest.writeInt(brandId);
         }
         dest.writeString(name);
+        dest.writeString(traderId);
     }
 
     @Override
@@ -80,12 +84,12 @@ public class Brand extends SugarRecord implements Parcelable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", brandId).append("name", name).toString();
+        return new ToStringBuilder(this).append("id", brandId).append("traderId", traderId).append("name", name).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(brandId).append(name).toHashCode();
+        return new HashCodeBuilder().append(brandId).append(traderId).append(name).toHashCode();
     }
 
     @Override
@@ -97,7 +101,20 @@ public class Brand extends SugarRecord implements Parcelable {
             return false;
         }
         Brand rhs = ((Brand) other);
-        return new EqualsBuilder().append(brandId, rhs.brandId).append(name, rhs.name).isEquals();
+        return new EqualsBuilder().append(brandId, rhs.brandId).append(traderId,rhs.traderId).append(name, rhs.name).isEquals();
     }
 
+    public Brand(Integer brandId, String name, String traderId) {
+        this.brandId = brandId;
+        this.name = name;
+        this.traderId = traderId;
+    }
+
+    public String getTraderId() {
+        return traderId;
+    }
+
+    public void setTraderId(String traderId) {
+        this.traderId = traderId;
+    }
 }

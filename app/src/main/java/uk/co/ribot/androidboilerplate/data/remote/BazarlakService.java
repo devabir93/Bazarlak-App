@@ -32,6 +32,7 @@ import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
+import uk.co.ribot.androidboilerplate.data.model.OrderData;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
@@ -51,7 +52,7 @@ public interface BazarlakService {
     String IMAGE_URL = "http://bazarlak.com/";
 
     @POST("login")
-    Observable<RegisterResponse> login( @Body UserData userData);
+    Observable<RegisterResponse> login(@Body UserData userData);
 
     @POST("register")
     Observable<RegisterResponse> register(@Body UserData userData);
@@ -60,7 +61,7 @@ public interface BazarlakService {
     Observable<CategoryResponse> getAllCategories();
 
     @GET("get_filter")
-    Observable<FilterDataResponse> getFiltersData(@Field("subcategory") String subcategory, @Field("extracategory") String extracategory);
+    Observable<FilterDataResponse> getFiltersData(@Query("subcategory") String subcategory, @Query("extracategory") String extracategory);
 
     @GET("ribots")
     Observable<List<Ribot>> getRibots();
@@ -71,35 +72,36 @@ public interface BazarlakService {
 
     @GET("products/{query}")
     Observable<GetProductByIdResponseBody> getProductById(@Path("query") String productId);
+
     @GET("filter_product")
-    Observable<FilterProductResponse> getfilteredProduct(@Field("subcategory") String subcategory, @Field("extracategory") String extracategory,
-                                                         @Field("brand") String brand, @Field("color") String color,
-                                                         @Field("size") String size, @Field("price") String price);
+    Observable<FilterProductResponse> getfilteredProduct(@Query("subcategory") String subcategory, @Query("extracategory") String extracategory,
+                                                         @Query("brand") String brand, @Query("color") String color,
+                                                         @Query("size") String size, @Query("price") String price);
 
 
     @GET("homepage")
     Observable<HomePageResponse> getHomePage();
 
     @POST("add_cart")
-    Observable<SaveOrdersResponse> saveOrders();
+    Observable<RestResponse> saveOrders(@Header("Authorization") String token, @Body OrderData orderData);
 
-//    @Headers({"Accept: application/json"
+    //    @Headers({"Accept: application/json"
 //            , "Accept-Language:en"
 //            , ""})
     @POST("forget_password")
     Observable<RestResponse> forgotPassword(RestEmailBody restEmailBody);
 
     @POST("reset_password")
-    Observable<RestResponse> resetPassword(@Header("Authorization")String token,@Body RestPasswordBody restPasswordBody);
+    Observable<RestResponse> resetPassword(@Header("Authorization") String token, @Body RestPasswordBody restPasswordBody);
 
     @POST("reset_email")
-    Observable<RestResponse> resetEmail(@Header("Authorization")String token,@Body RestEmailBody restEmailBody);
+    Observable<RestResponse> resetEmail(@Header("Authorization") String token, @Body RestEmailBody restEmailBody);
 
     @POST("update")
-    Observable<UpdateProfileResponse> updateProfile(@Header("Authorization")String token,@Body UserData userData);
+    Observable<UpdateProfileResponse> updateProfile(@Header("Authorization") String token, @Body UserData userData);
 
     @POST("GetPayAddress")
-    Observable<RestResponse> updateAddress(@Header("Authorization")String token,@Body AddressBody addressBody);
+    Observable<RestResponse> updateAddress(@Header("Authorization") String token, @Body AddressBody addressBody);
 
     /******** Helper class that sets up a new services *******/
     class Creator {
@@ -119,11 +121,10 @@ public interface BazarlakService {
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
-//                    String token = preferencesHelper.getCurrentUser().getAccessToken();
                     Request newRequest = chain.request().newBuilder()
-                            .addHeader("Accept","application/json")
+                            .addHeader("Accept", "application/json")
                             //.addHeader("Authorization", "Bearer " + )
-                            .addHeader("Accept-Language" ,"en")
+                            //.addHeader("Accept-Language" ,"en")
                             .build();
                     return chain.proceed(newRequest);
                 }

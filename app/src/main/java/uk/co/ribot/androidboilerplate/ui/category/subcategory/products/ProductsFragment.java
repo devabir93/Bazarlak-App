@@ -1,6 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.category.subcategory.products;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,9 @@ import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
+import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryFragment;
+import uk.co.ribot.androidboilerplate.ui.category.subcategory.filter.FilterActivity;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
 public class ProductsFragment extends BaseFragment implements ProductsMvpView {
@@ -45,10 +51,12 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     @Nullable
     @BindView(R.id.second_toolbar)
     Toolbar secondToolbar;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
     Unbinder unbinder;
-    String categoryId="";
-    String subCategoryId="";
-    String ExtracategoryId="";
+    String categoryId = "";
+    String subCategoryId = "";
+    String ExtracategoryId = "";
     String categoryName, ExtracategoryName;
     private List<Product> mproductList;
 
@@ -91,6 +99,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((BaseActivity) getActivity()).activityComponent().inject(this);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -101,35 +110,39 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         ButterKnife.bind(this, view);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         productsPresenter.attachView(this);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView_secondary);
-        secondToolbar.setNavigationIcon(R.drawable.ic_back);
-        secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(ProductsFragment.class.getName());
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.remove(fragment).commit();
-            }
-        });
-        secondToolbar.inflateMenu(R.menu.menu_second_toolbar);//changed
-        //toolbar2 menu items CallBack listener
-        secondToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem arg0) {
-                if(arg0.getItemId() == R.id.ic_filter_action){
-                    showFilter();
-                }
-                return false;
-            }
-        });
         textView.setText(categoryName + "/" + ExtracategoryName);
+
+//        secondToolbar.setNavigationIcon(R.drawable.ic_back);
+//        secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(ProductsFragment.class.getName());
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                transaction.remove(fragment).commit();
+//            }
+//        });
+//        secondToolbar.inflateMenu(R.menu.menu_second_toolbar);//changed
+//        //toolbar2 menu items CallBack listener
+//        secondToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//
+//            @Override
+//            public boolean onMenuItemClick(MenuItem arg0) {
+//                if (arg0.getItemId() == R.id.ic_filter_action) {
+//                    showFilter();
+//                }
+//                return false;
+//            }
+//        });
         ProductBody productBody = new ProductBody();
         productBody.setCategory(categoryId);
         productBody.setSubcategory(subCategoryId);
         productBody.setExtracategory(ExtracategoryId);
+
         productsPresenter.getProducts(getContext(), categoryId, subCategoryId, ExtracategoryId, "");
         productsRecyclerView.setAdapter(gridViewRecyclerViewAdapter);
         productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -152,22 +165,51 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     }
 
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.menu_second_toolbar, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        switch (id) {
-//            case R.id.ic_filter_action:
-//                // do stuff, like showing settings fragment
-//                showFilter();
-//                return true;
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_second_toolbar, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.ic_filter_action:
+                // do stuff, like showing settings fragment
+                //showFilter();
+                Intent intent = new Intent(getContext(), FilterActivity.class);
+                intent.putExtra("subCategoryId", subCategoryId);
+                intent.putExtra("ExtracategoryId", ExtracategoryId);
+                intent.putExtra("categoryName",categoryName);
+                startActivity(intent);
+                return true;
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+//    private void onBackPressed() {
+//        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
 //        }
-//        return super.onOptionsItemSelected(item);
+//        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(ProductsFragment.class.getName());
+//        FragmentTransaction transaction =getActivity().getSupportFragmentManager().beginTransaction();
+//        transaction.remove(fragment).commit();
+//
 //    }
 
     private void showProductDetails(Product product) {
@@ -187,6 +229,8 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
 
     @Override
     public void showProducts(List<Product> productList) {
+        emptyView.setVisibility(View.GONE);
+        productsRecyclerView.setVisibility(View.VISIBLE);
         mproductList = productList;
         gridViewRecyclerViewAdapter.setProductData(getContext(), productList);
         gridViewRecyclerViewAdapter.notifyDataSetChanged();
@@ -194,7 +238,8 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
 
     @Override
     public void showEmpty() {
-
+        emptyView.setVisibility(View.VISIBLE);
+        productsRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -213,7 +258,6 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
         d.show();
         d.getWindow().setAttributes(lp);
-        //builderSingle.setTitle(Html.fromHtml(getString(R.string.dialog_incomplete_questions_title)));
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View content = factory.inflate(R.layout.layout_filter, null);
         //ListView lv = (ListView) content.findViewById(R.id._dialog_list);
@@ -237,7 +281,12 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
 //                alertDialogObject.dismiss();
 //            }
 //        });
+        alertDialogObject.getWindow().setAttributes(lp);
         alertDialogObject.show();
     }
 
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(getContext(), b);
+    }
 }

@@ -22,47 +22,5 @@
         android:textSize="18sp"
         android:textStyle="bold"
         />
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--&gt;-->
 
-            <!--&lt;!&ndash;<ImageButton&ndash;&gt;-->
-                <!--&lt;!&ndash;android:visibility="gone"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:id="@+id/ic_back"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_alignParentStart="true"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:adjustViewBounds="true"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:background="@null"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:cropToPadding="true"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:srcCompat="@drawable/ic_back" />&ndash;&gt;-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/activity_name_textView"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:text="Activity"-->
-                <!--android:textColor="@android:color/background_dark"-->
-                <!--android:textSize="22sp"-->
-                <!--android:textStyle="bold"-->
-                <!--/>-->
-
-            <!--<ImageButton-->
-                <!--android:visibility="gone"-->
-                <!--android:id="@+id/ic_filter"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:adjustViewBounds="true"-->
-                <!--android:background="@null"-->
-                <!--android:cropToPadding="true"-->
-                <!--android:backgroundTint="@android:color/background_dark"-->
-                <!--app:srcCompat="@drawable/ic_filter" />-->
-
-        <!--</RelativeLayout>-->
 </android.support.v7.widget.Toolbar>

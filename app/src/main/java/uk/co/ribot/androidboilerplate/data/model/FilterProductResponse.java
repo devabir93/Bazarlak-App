@@ -25,7 +25,7 @@ public class FilterProductResponse implements Parcelable
     private String message;
     @SerializedName("items")
     @Expose
-    private List<Product> items = null;
+    private List<Products> items = null;
     public final static Creator<FilterProductResponse> CREATOR = new Creator<FilterProductResponse>() {
 
 
@@ -47,7 +47,7 @@ public class FilterProductResponse implements Parcelable
         this.status = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.code = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.items, (uk.co.ribot.androidboilerplate.data.model.Product.class.getClassLoader()));
+        in.readList(this.items, (uk.co.ribot.androidboilerplate.data.model.Products.class.getClassLoader()));
     }
 
     /**
@@ -64,7 +64,7 @@ public class FilterProductResponse implements Parcelable
      * @param status
      * @param code
      */
-    public FilterProductResponse(Boolean status, Integer code, String message, List<Product> items) {
+    public FilterProductResponse(Boolean status, Integer code, String message, List<Products> items) {
         super();
         this.status = status;
         this.code = code;
@@ -96,11 +96,11 @@ public class FilterProductResponse implements Parcelable
         this.message = message;
     }
 
-    public List<Product> getItems() {
+    public List<Products> getItems() {
         return items;
     }
 
-    public void setItems(List<Product> items) {
+    public void setItems(List<Products> items) {
         this.items = items;
     }
 

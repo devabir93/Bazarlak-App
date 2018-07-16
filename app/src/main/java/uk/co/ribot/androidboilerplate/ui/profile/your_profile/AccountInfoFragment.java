@@ -66,7 +66,7 @@ public class AccountInfoFragment extends BaseActivity implements ProfileMvpView 
         ButterKnife.bind(this);
         profilePresenter.attachView(this);
         profilePresenter.setContext(AccountInfoFragment.this);
-
+        profilePresenter.checkConnection(this);
 
         TextView textView = toolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(getString(R.string.account_info_label));
@@ -110,11 +110,20 @@ public class AccountInfoFragment extends BaseActivity implements ProfileMvpView 
     @Override
     public void hasActiveInternetConnection(boolean b) {
         super.hasActiveInternetConnection(b);
-        if (b) {
+        if (!b) {
+            ViewUtil.createSnackbar(btnSave.getRootView(), getResources().getString(R.string.no_connection));
+        } else {
             UserData userData = new UserData();
             //userData.setGender(genderSpinner.getSe);
             profilePresenter.updateProfileInfo(userData);
         }
+
+    }
+
+    @Override
+    public void showSnackBar(String message) {
+        super.showSnackBar(message);
+        ViewUtil.createSnackbar(getWindow().getDecorView().getRootView(), message);
 
     }
 

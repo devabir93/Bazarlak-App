@@ -40,6 +40,7 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
     }
 
     void getAllCategories(Context context) {
+        getMvpView().showProgresBar(true);
         checkViewAttached();
         RxUtil.dispose(mDisposable);
         mDataManager.getCategories()
@@ -76,10 +77,13 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
 //                        }
 //                        // getMvpView().showError();
                         Timber.e(e, "There was an error while getAllCategories");
+                        getMvpView().showProgresBar(false);
+
                     }
 
                     @Override
                     public void onComplete() {
+                        getMvpView().showProgresBar(false);
 
                     }
                 });

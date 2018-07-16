@@ -30,8 +30,10 @@ import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageData;
 import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
+import uk.co.ribot.androidboilerplate.data.model.OrderData;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
+import uk.co.ribot.androidboilerplate.data.model.Products;
 import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
 import uk.co.ribot.androidboilerplate.data.model.RestResponse;
@@ -356,6 +358,11 @@ public class DataManager {
     }
 
     public Observable<ProductResponse> getProducts(String categoryId, String subCategoryId, String extracategoryId, String page) {
+        Timber.d("categoryId %s subCategoryId%s ExtracategoryId%s", categoryId, subCategoryId, extracategoryId);
+        if (extracategoryId == null || extracategoryId.equals("null"))
+            extracategoryId = "";
+        Timber.d("categoryId %s subCategoryId%s ExtracategoryId%s", categoryId, subCategoryId, extracategoryId);
+
         return mBazarlakService.getProduct(categoryId, subCategoryId, extracategoryId, page)
                 .concatMap(new Function<ProductResponse, ObservableSource<? extends ProductResponse>>() {
                     @Override
@@ -392,7 +399,7 @@ public class DataManager {
                 });
     }
 
-    public Observable<GetProductByIdResponseBody> getProductById(String productId){
+    public Observable<GetProductByIdResponseBody> getProductById(String productId) {
         return mBazarlakService.getProductById(productId)
                 .concatMap(new Function<GetProductByIdResponseBody, ObservableSource<? extends GetProductByIdResponseBody>>() {
                     @Override
@@ -401,7 +408,7 @@ public class DataManager {
                             @Override
                             public void subscribe(ObservableEmitter<GetProductByIdResponseBody> e) throws Exception {
                                 try {
-                                    Timber.d("productResponse %s",productResponse);
+                                    Timber.d("productResponse %s", productResponse);
 
                                     e.onNext(productResponse);
                                     e.onComplete();
@@ -435,17 +442,18 @@ public class DataManager {
                 });
     }
 
-    public Observable<List<Product>> getFilteredProducts(final FilterBody filterBody) {
+    public Observable<FilterProductResponse> getFilteredProducts(final FilterBody filterBody) {
         return mBazarlakService.getfilteredProduct(filterBody.getCategory(), filterBody.getExtracategory(), filterBody.getBrand(), filterBody.getColor(), filterBody.getSize(), filterBody.getPrice())
-                .concatMap(new Function<FilterProductResponse, ObservableSource<? extends List<Product>>>() {
+                .concatMap(new Function<FilterProductResponse, ObservableSource<? extends FilterProductResponse>>() {
                     @Override
-                    public ObservableSource<? extends List<Product>> apply(final FilterProductResponse filterProductResponse) throws Exception {
-                        return Observable.create(new ObservableOnSubscribe<List<Product>>() {
+                    public ObservableSource<? extends FilterProductResponse> apply(final FilterProductResponse filterProductResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<FilterProductResponse>() {
                             @Override
-                            public void subscribe(ObservableEmitter<List<Product>> e) throws Exception {
+                            public void subscribe(ObservableEmitter<FilterProductResponse> e) throws Exception {
+                                Timber.d("filterProductResponse %s", filterProductResponse);
                                 try {
                                     if (filterProductResponse.getStatus())
-                                        e.onNext(filterProductResponse.getItems());
+                                        e.onNext(filterProductResponse);
                                     else
                                         e.onNext(null);
                                     e.onComplete();
@@ -478,6 +486,26 @@ public class DataManager {
                 });
     }
 
+    public Observable<RestResponse> saveOrders(OrderData orderData) {
+        return mBazarlakService.saveOrders(getToken(), orderData)
+                .concatMap(new Function<RestResponse, ObservableSource<? extends RestResponse>>() {
+                    @Override
+                    public ObservableSource<? extends RestResponse> apply(final RestResponse restResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<RestResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
+                                try {
+                                    Timber.d("restResponse %s", restResponse);
+                                    e.onNext(restResponse);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
 
     private void closeDatabase() {
         sugarDb.close();

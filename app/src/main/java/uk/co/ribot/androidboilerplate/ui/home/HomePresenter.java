@@ -39,6 +39,7 @@ public class HomePresenter extends BasePresenter<HomeMvpView> {
     }
 
     public void getHomePage(Context context) {
+        getMvpView().showProgresBar(true);
         Timber.d("hom prese");
         checkViewAttached();
         RxUtil.dispose(mDisposable);
@@ -60,11 +61,13 @@ public class HomePresenter extends BasePresenter<HomeMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
+                        getMvpView().showProgresBar(false);
 
                     }
 
                     @Override
                     public void onComplete() {
+                        getMvpView().showProgresBar(false);
 
                     }
                 });

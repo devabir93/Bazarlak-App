@@ -77,8 +77,6 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
     @OnClick(R.id.btn_save)
     public void onViewClicked() {
         profilePresenter.checkConnection(getContext());
-
-
     }
 
     @Override
@@ -93,10 +91,10 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
 
     }
 
-    @Override
-    public void showProgresBar(boolean b) {
-        DialogFactory.createNormailProgressBar(getContext(), b);
-    }
+//    @Override
+//    public void showProgresBar(boolean b) {
+//        DialogFactory.createNormailProgressBar(getContext(), b);
+//    }
 
     @Override
     public void finishActivity(boolean b) {
@@ -124,7 +122,11 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
             profilePresenter.updateAddress(addressBody);
         }
     }
+    @Override
+    public void showSnackBar(String message) {
+        ViewUtil.createSnackbar(getView(),message);
 
+    }
     @Override
     public void onTimeout() {
 

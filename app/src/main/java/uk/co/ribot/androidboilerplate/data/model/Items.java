@@ -14,9 +14,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Items implements Parcelable
 {
 
-    @SerializedName("filterSize")
+    @SerializedName("size")
     @Expose
-    private List<FilterSize> filterSize = null;
+    private List<String> filterSize = null;
     @SerializedName("brand")
     @Expose
     private List<Brand> brand = null;
@@ -38,7 +38,7 @@ public class Items implements Parcelable
     ;
 
     protected Items(Parcel in) {
-        in.readList(this.filterSize, (FilterSize.class.getClassLoader()));
+        in.readList(this.filterSize, (String.class.getClassLoader()));
         in.readList(this.brand, (Brand.class.getClassLoader()));
     }
 
@@ -54,17 +54,17 @@ public class Items implements Parcelable
      * @param brand
      * @param filterSize
      */
-    public Items(List<FilterSize> filterSize, List<Brand> brand) {
+    public Items(List<String> filterSize, List<Brand> brand) {
         super();
         this.filterSize = filterSize;
         this.brand = brand;
     }
 
-    public List<FilterSize> getFilterSize() {
+    public List<String> getFilterSize() {
         return filterSize;
     }
 
-    public void setFilterSize(List<FilterSize> filterSize) {
+    public void setFilterSize(List<String> filterSize) {
         this.filterSize = filterSize;
     }
 

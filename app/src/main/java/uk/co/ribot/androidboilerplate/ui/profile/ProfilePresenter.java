@@ -125,7 +125,7 @@ public class ProfilePresenter extends BasePresenter<ProfileMvpView> {
                         if (!updateProfileResponse.getStatus()) {
                             getMvpView().showMessage(updateProfileResponse.getMessage());
                         } else {
-                            getMvpView().showMessage(updateProfileResponse.getMessage());
+                            getMvpView().showSnackBar(updateProfileResponse.getMessage());
                             getMvpView().finishActivity(true);
                         }
                     }

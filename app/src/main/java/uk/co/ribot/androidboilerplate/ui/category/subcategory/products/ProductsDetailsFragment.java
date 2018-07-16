@@ -6,12 +6,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -29,12 +33,14 @@ import butterknife.OnClick;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.FilterSize;
+import uk.co.ribot.androidboilerplate.data.model.Order;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.ProductFeature;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
-public class ProductsDetailsFragment extends BaseFragment implements ProductsMvpView {
+public class ProductsDetailsFragment extends BaseFragment implements ProductsMvpView,MaterialSpinner.OnItemSelectedListener{
     @Inject
     ProductsPresenter productsPresenter;
     Product mProduct;
@@ -58,7 +64,9 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
     TextView brandName;
     @BindView(R.id.product_imageView)
     ImageView productImageView;
-
+    SpinnerAdapter spinnerAdapter;
+    String size;
+    Order order;
 
     public ProductsDetailsFragment() {
         // Required empty public constructor
@@ -80,6 +88,14 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((BaseActivity) getActivity()).activityComponent().inject(this);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+
     }
 
     @Override
@@ -97,19 +113,38 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
             if (mProduct.getImage() != null && !mProduct.getImage().isEmpty())
                 Picasso.with(getContext()).load(mProduct.getImage()).into(productImageView);
             priceTextView.setText(mProduct.getPrice());
-            List<String> colorsList = new ArrayList<>();
-            List<String> sizesList = new ArrayList<>();
-            HashMap<String, List<FilterSize>> hashMap = new HashMap<>();
-//                for (ColorFeature colorFeature :
-//                        mProduct.getColorFeatures()) {
-//                    hashMap.put(colorFeature.getColor(), colorFeature.getProductFeatures());
-//                    // colorsList.add(colorFeature.getColor());
-//                }
-//                colorSpinner.setItems(hashMap.keySet());
+
+            HashMap<String, String> hashMap = new HashMap<>();
+            if (mProduct.getProductFeatures() != null) {
+                for (ProductFeature productFeature :
+                        mProduct.getProductFeatures()) {
+                    hashMap.put(productFeature.getSize(), productFeature.getColor());
+                    // colorsList.add(colorFeature.getColor());
+                }
+            }
+            final List<String> keys = new ArrayList<>(hashMap.keySet());
+            List<String> values = new ArrayList<>(hashMap.values());
+            sizeSpinner.setItems(keys);
+            //colorSpinner.setItems(values);
+            spinnerAdapter = new SpinnerAdapter(getContext(), values);
+            colorSpinner.setAdapter(spinnerAdapter);
+            colorSpinner.setDropdownHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+            colorSpinner.setMinimumHeight(50);
+
+            sizeSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+                @Override
+                public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                    // Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
+                    size = keys.get(position);
+                }
+            });
+
         }
 
         return view;
     }
+
 
     @Override
     public void onDestroy() {
@@ -141,7 +176,7 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
                 break;
             case R.id.add_to_bag_layout:
                 //showAlertDialog();
-                productsPresenter.addToBag(String.valueOf(mProduct.getProductId()));
+                productsPresenter.addToBag(order);
                 break;
         }
     }
@@ -154,7 +189,7 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
     }
 
     public void showAlertDialog() {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View content = factory.inflate(R.layout.bag_dialog_layout, null);
@@ -185,6 +220,11 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
             }
         });
         alertDialogObject.show();
+    }
+
+    @Override
+    public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
     }
 
 }

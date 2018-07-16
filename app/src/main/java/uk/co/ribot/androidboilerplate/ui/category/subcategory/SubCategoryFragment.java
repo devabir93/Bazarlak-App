@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,8 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.filter.FilterActivity;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.products.ProductsFragment;
+import uk.co.ribot.androidboilerplate.ui.main_activity.MainActivity2;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
 public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpView, SubCategoryMenuAdapter.UpdateDataClickListener {
@@ -62,7 +65,8 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
 
     Integer mParentCategoryId;
     String mCategoryName, mExtracategoryName;
-    String subCategoryID, ExtracategoryId;
+    String subCategoryID = "";
+    String ExtracategoryId = "";
 
     private List<Subcategory> mSubMenuCategories;
     private List<Extracategory> mExtrasubcategories;
@@ -102,20 +106,14 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         final View view = inflater.inflate(R.layout.sub_category_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
         subCategoryPresenter.attachView(this);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(secondToolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(mCategoryName);
         subCategoryMenuAdapter.setOnItemClickListener(this);
-        secondToolbar.setNavigationIcon(R.drawable.ic_back);
-        secondToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(SubCategoryFragment.class.getName());
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.remove(fragment).commit();
-            }
-        });
         subCategoryPresenter.getAllSubCategories(getContext(), mParentCategoryId);
         menuRecyclerView.setAdapter(subCategoryMenuAdapter);
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -129,6 +127,9 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
                         // do whatever
                         ExtracategoryId = String.valueOf(mExtrasubcategories.get(position).getExtracategoryId());
                         mExtracategoryName = mExtrasubcategories.get(position).getName();
+                        if (position == 0) {
+                            mExtracategoryName = subCategoryName;
+                        }
                         showProduct(ExtracategoryId, mExtracategoryName);
                     }
 
@@ -141,6 +142,39 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         return view;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+//                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+//                }
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+//    private void onBackPressed() {
+//        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+//        }
+//        Fragment fragment =  getActivity().getSupportFragmentManager().findFragmentByTag(SubCategoryFragment.class.getName());
+//        FragmentTransaction transaction =  getActivity().getSupportFragmentManager().beginTransaction();
+//        transaction.remove(fragment).commit();
+//
+//    }
 
     @Override
     public void onDestroy() {
@@ -150,10 +184,12 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
 
     private void showProduct(String ExtracategoryId, String mExtracategoryName) {
 
+        FragmentManager fragmentManager =  getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment nextFrag = ProductsFragment.newInstance(String.valueOf(mParentCategoryId), mCategoryName, subCategoryID, mExtracategoryName, ExtracategoryId);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_sub_category, nextFrag, ProductsFragment.class.getName())
-                .commit();
+        transaction.add(R.id.container_sub_category, nextFrag, ProductsFragment.class.getName());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -173,8 +209,8 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         Timber.d("submenu %s", subMenuCategories);
         mSubMenuCategories = subMenuCategories;
         subCategoryMenuAdapter.setCategories(getContext(), subMenuCategories);
-        if (mSubMenuCategories != null && mSubMenuCategories.size() > 0)
-            subCategoryName = mSubMenuCategories.get(0).getName();
+//        if (mSubMenuCategories != null && mSubMenuCategories.size() > 0)
+//            subCategoryName = mSubMenuCategories.get(0).getName();
         subCategoryMenuAdapter.notifyDataSetChanged();
         onItemClick(0);
     }
@@ -194,20 +230,14 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
 
     @Override
     public void onItemClick(int position) {
+        subCategoryName = mSubMenuCategories.get(position).getName();
         subCategoryID = String.valueOf(mSubMenuCategories.get(position).getSubCategoryId());
-         subCategoryPresenter.getExtraSubCategories(getContext(), subCategoryID);
+        subCategoryPresenter.getExtraSubCategories(getContext(), subCategoryID);
         subCategoryMenuAdapter.selected(position);
+    }
 
-/*        if (mSubMenuCategories.get(position).getExtracategory() != null) {
-
-            Timber.d("extra %s" ,mSubMenuCategories.get(position).getExtracategory());
-            emptyView.setVisibility(View.GONE);
-            detailsRecyclerView.setVisibility(View.VISIBLE);
-            mExtrasubcategories = new ArrayList<>();
-            mExtrasubcategories.add(0, new Extracategory());
-            mExtrasubcategories.addAll(mSubMenuCategories.get(position).getExtracategory());
-            gridViewRecyclerViewAdapter.setCategoriesData(subCategoryName, mExtrasubcategories);
-            gridViewRecyclerViewAdapter.notifyDataSetChanged();
-        }*/
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(getContext(), b);
     }
 }

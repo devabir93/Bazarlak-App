@@ -15,4 +15,8 @@ public interface MvpView {
     void onNetworkError();
 
     void onUnknownError(String message);
+
+    void showProgresBar(boolean b);
+
+    void showSnackBar(String message);
 }

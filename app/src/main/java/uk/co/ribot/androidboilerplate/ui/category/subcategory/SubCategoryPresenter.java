@@ -40,6 +40,7 @@ public class SubCategoryPresenter extends BasePresenter<SubCategoryMvpView> {
     }
 
     void getAllSubCategories(Context context, Integer parentCategoryId) {
+        getMvpView().showProgresBar(true);
         mDataManager.getSubCategories(parentCategoryId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -74,16 +75,20 @@ public class SubCategoryPresenter extends BasePresenter<SubCategoryMvpView> {
 //                        }
 //                        // getMvpView().showError();
                         Timber.e(e, "There was an error while getAllCategories");
+                        getMvpView().showProgresBar(false);
+
                     }
 
                     @Override
                     public void onComplete() {
+                        getMvpView().showProgresBar(false);
 
                     }
                 });
     }
 
     void getExtraSubCategories(Context context, String subCategoryId) {
+        getMvpView().showProgresBar(true);
         mDataManager.getExtraSubCategories(subCategoryId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -118,11 +123,13 @@ public class SubCategoryPresenter extends BasePresenter<SubCategoryMvpView> {
 //                        }
 //                        // getMvpView().showError();
                         Timber.e(e, "There was an error while getAllCategories");
+                        getMvpView().showProgresBar(false);
                     }
 
                     @Override
                     public void onComplete() {
 
+                        getMvpView().showProgresBar(false);
                     }
                 });
     }

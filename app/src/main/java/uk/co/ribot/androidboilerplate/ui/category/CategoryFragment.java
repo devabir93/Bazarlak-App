@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,9 +23,10 @@ import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryFragment;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
 
-public  class CategoryFragment extends BaseFragment implements CategoryMvpView {
+public class CategoryFragment extends BaseFragment implements CategoryMvpView {
     @Inject
     CategoryPresenter categoryPresenter;
     @Inject
@@ -50,6 +52,10 @@ public  class CategoryFragment extends BaseFragment implements CategoryMvpView {
         final View view = inflater.inflate(R.layout.category_fragment, container, false);
         ButterKnife.bind(this, view);
         mRecyclerView.setAdapter(categoryAdapter);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         categoryPresenter.attachView(this);
         categoryPresenter.getAllCategories(getContext());
@@ -77,12 +83,20 @@ public  class CategoryFragment extends BaseFragment implements CategoryMvpView {
         categoryPresenter.detachView();
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        }
+//    }
+
     private void showSubCategory(Integer categoryId, String categoryName) {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment nextFrag = SubCategoryFragment.newInstance(categoryId, categoryName);
-//        getActivity().getSupportFragmentManager().beginTransaction()
-        transaction.replace(R.id.container_category, nextFrag, SubCategoryFragment.class.getName());
+        transaction.add(R.id.container_category, nextFrag, SubCategoryFragment.class.getName());
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -99,5 +113,10 @@ public  class CategoryFragment extends BaseFragment implements CategoryMvpView {
         mRecyclerView.setVisibility(View.VISIBLE);
         categoryAdapter.setCategories(getContext(), categories);
         categoryAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(getContext(), b);
     }
 }

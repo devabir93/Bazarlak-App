@@ -15,4 +15,5 @@ public interface HomeMvpView extends MvpView {
     void showOffers(List<Offerproduct> offerproducts);
 
     void showOfferProduct(GetProductByIdResponseBody productByIdResponseBody);
+
 }

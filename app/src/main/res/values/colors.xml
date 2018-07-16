@@ -3,7 +3,7 @@
     <color name="primary">#222222</color>
     <color name="primary_dark">#000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="gray">#ffdfdfdf</color>
+    <color name="gray">#dfdfdf</color>
     <color name="app_dark_red">#a91b0d</color>
     <color name="app_menu_grey">#ebebeb</color>
 
@@ -19,5 +19,24 @@
     <color name="text_light_grey">#999999</color>
     <color name="search_background">#d7d7d7</color>
     <color name="placeholder_background">#dbdbdb</color>
+
+    <string-array name="colors_list">
+        <item name="white_">#FFFFFF</item>
+        <item name="yellow">#FFFF00</item>
+        <item name="fuchsia">#FF00FF</item>
+        <item name="red">#FF0000</item>
+        <item name="silver">#C0C0C0</item>
+        <item name="gray_">#808080</item>
+        <item name="olive">#808000</item>
+        <item name="purple">#800080</item>
+        <item name="maroon">#800000</item>
+        <item name="aqua">#00FFFF</item>
+        <item name="lime">#00FF00</item>
+        <item name="teal">#008080</item>
+        <item name="green">#008000</item>
+        <item name="blue">#0000FF</item>
+        <item name="navy">#000080</item>
+        <item name="black_">#000000</item>
+    </string-array>
 
 </resources>

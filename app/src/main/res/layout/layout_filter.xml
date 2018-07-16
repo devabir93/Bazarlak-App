@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:background="@color/white"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,6 +12,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/close_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/activity_vertical_margin">
@@ -29,85 +31,227 @@
                 android:src="@drawable/ic_expand" />
 
         </RelativeLayout>
-        
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/primary"
-            />
+            android:background="@color/primary" />
 
         <TextView
             style="@style/thickBlackText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
             android:text="@string/sort_label" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/app_menu_grey"
-            />
-        <TextView
-            style="@style/normalBlackText"
-            android:layout_width="wrap_content"
+            android:background="@color/app_menu_grey" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/price1_label" />
+            android:layout_gravity="center"
+            android:gravity="center">
+
+
+            <RadioButton
+                android:id="@+id/highPrice_radioButton"
+                style="@style/normalBlackText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:checked="true"
+                android:text="@string/price1_label" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/app_menu_grey" />
+
+            <RadioButton
+                android:id="@+id/lowPrice_radioButton"
+                style="@style/normalBlackText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/price2_label" />
+        </RadioGroup>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/app_menu_grey"
-            />
-        <TextView
-            style="@style/normalBlackText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/price2_label" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/app_menu_grey"
-            />
+            android:background="@color/app_menu_grey" />
 
         <TextView
             style="@style/thickBlackText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
             android:text="@string/refine_label" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/app_menu_grey"
-            />
+            android:background="@color/app_menu_grey" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/refine_recyclerView"
+        <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/refine_recyclerView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+
+        <RelativeLayout
+            android:id="@+id/category_filter_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/normalBlackText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:text="@string/filter_category"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/category_filter_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="4dp"
+                android:text="kids"
+                android:textStyle="bold"
+                android:textColor="@color/text_light_grey" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/brand_filter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/normalBlackText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:text="@string/filter_brand"
+                android:textStyle="bold" />
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/brand_filter_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:textColor="@color/text_light_grey"
+                app:ms_hint="@string/filter_brand"
+                app:ms_hide_arrow="true"
+                app:ms_hint_color="@color/text_light_grey" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/color_filter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/normalBlackText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:text="@string/filter_color"
+                android:textStyle="bold" />
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/color_filter_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:textColor="@color/text_light_grey"
+                app:ms_hint="@string/filter_color"
+                app:ms_hide_arrow="true"
+                app:ms_hint_color="@color/text_light_grey" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/size_filter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/normalBlackText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:text="@string/filter_size"
+                android:textStyle="bold" />
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/size_filter_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:textColor="@color/text_light_grey"
+                android:gravity="end"
+                android:textAlignment="gravity"
+                app:ms_hint="@string/filter_size"
+                app:ms_hide_arrow="true"
+                app:ms_hint_color="@color/text_light_grey" />
+
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 
     <Button
         android:id="@+id/apply_button"
+        style="@style/redButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        style="@style/redButton"
         android:layout_alignParentBottom="true"
-        android:text="@string/apply_label"
-        />
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:text="@string/apply_label" />
 </RelativeLayout>
  

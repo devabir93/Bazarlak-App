@@ -19,10 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Dev_Abir\Desktop\bazarlakwomen\bag1 copy.png" />
-                                      <entry key="outputName" value="ic_bag_selected" />
+                                      <entry key="imageAsset" value="C:\Users\Dev_Abir\Desktop\bazarlakwomen\ic_filter.png" />
+                                      <entry key="outputName" value="ic_filter_white" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="a91b0d" />
+                                      <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
                                 </PersistentState>

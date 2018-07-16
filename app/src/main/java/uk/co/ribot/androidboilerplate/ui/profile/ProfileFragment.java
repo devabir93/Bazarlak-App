@@ -48,6 +48,7 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
         Fragment nextFrag = new LoginFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.profile_container, nextFrag, LoginFragment.class.getName())
+                .addToBackStack(null)
                 .commit();
     }
 

@@ -29,11 +29,13 @@ import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.Mainvideo;
 import uk.co.ribot.androidboilerplate.data.model.Offerproduct;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.products.ProductsDetailsFragment;
 import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideoCallback {
     @BindView(R.id.video_view)
@@ -63,7 +65,7 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         ButterKnife.bind(this, view);
         homePresenter.attachView(this);
-        homePresenter.getHomePage(getContext());
+        homePresenter.checkConnection(getContext());
         photosGrid.setAdapter(homeGridViewAdapter);
         photosGrid.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         photosGrid.addOnItemTouchListener(
@@ -179,5 +181,29 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
     @Override
     public void onSubmit(EasyVideoPlayer player, Uri source) {
 
+    }
+
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+        super.hasActiveInternetConnection(b);
+        if (!b) {
+            ViewUtil.createSnackbar(photosGrid.getRootView(), getResources().getString(R.string.no_connection)).show();
+        } else {
+            homePresenter.getHomePage(getContext());
+        }
+
+    }
+
+    @Override
+    public void showSnackBar(String message) {
+        super.showSnackBar(message);
+        ViewUtil.createSnackbar(photosGrid.getRootView(), message).show();
+
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+        if (getContext() != null)
+            DialogFactory.createNormailProgressBar(getContext(), b);
     }
 }

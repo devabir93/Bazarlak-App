@@ -24,6 +24,7 @@ import uk.co.ribot.androidboilerplate.ui.profile.ProfileMvpView;
 import uk.co.ribot.androidboilerplate.ui.profile.ProfilePresenter;
 import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.Message;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -92,10 +93,16 @@ public class PaymentDetailsActivityFragment extends BaseFragment implements Prof
 
     @Override
     public void hasActiveInternetConnection(boolean b) {
-        super.hasActiveInternetConnection(b);
-
+        if (!b) {
+            ViewUtil.createSnackbar(getView(), getResources().getString(R.string.no_connection));
+        }
     }
 
+    @Override
+    public void showSnackBar(String message) {
+        ViewUtil.createSnackbar(getView(),message);
+
+    }
     @Override
     public void onTimeout() {
 

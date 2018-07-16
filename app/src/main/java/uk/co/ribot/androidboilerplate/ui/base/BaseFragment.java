@@ -11,10 +11,13 @@ import javax.inject.Inject;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BazarlakeApplication;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
 public class BaseFragment extends Fragment implements MvpView {
+
     @Override
+
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BazarlakeApplication.get(getActivity()).getComponent().inject(this);
@@ -24,7 +27,7 @@ public class BaseFragment extends Fragment implements MvpView {
     public void hasActiveInternetConnection(boolean b) {
         if (!b) {
             Timber.d("no connection");
-            ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(), getResources().getString(R.string.no_connection));
+            ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(), getResources().getString(R.string.no_connection)).show();
         }
     }
 
@@ -40,6 +43,17 @@ public class BaseFragment extends Fragment implements MvpView {
 
     @Override
     public void onUnknownError(String message) {
+
+    }
+
+    @Override
+    public void showProgresBar(boolean b) {
+        DialogFactory.createNormailProgressBar(getActivity(), b);
+    }
+
+    @Override
+    public void showSnackBar(String message) {
+        ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(),message).show();
 
     }
 }
