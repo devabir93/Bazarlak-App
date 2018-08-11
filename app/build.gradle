@@ -138,8 +138,11 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.6'
     implementation 'com.jakewharton.timber:timber:4.1.2'
     implementation "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    implementation 'com.android.support:support-v4:27.0.2'
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
     implementation 'com.afollestad:easyvideoplayer:0.3.0'
+    implementation 'com.braintreepayments:card-form:3.3.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 
     // Replace provided dependency below with official AutoValue once this issue is fixed
 

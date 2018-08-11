@@ -3,9 +3,12 @@ package uk.co.ribot.androidboilerplate.ui.bag.billing;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +26,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Order;
-import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
+import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
 import uk.co.ribot.androidboilerplate.ui.bag.address.AddressFragment;
+import uk.co.ribot.androidboilerplate.ui.bag.billing.payment.PaymentFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
@@ -33,7 +36,7 @@ public class BillingAndShippingFragment extends BaseFragment implements BillingA
 
     @Inject
     BillingAndShippingPresenter billingAndShippingPresenter;
-    List<Order> orders;
+    List<ProductOrder> productOrders;
     @BindView(R.id.choose_payment_textView)
     TextView choosePaymentTextView;
     @BindView(R.id.payment_imageView)
@@ -75,14 +78,14 @@ public class BillingAndShippingFragment extends BaseFragment implements BillingA
         // Required empty public constructor
     }
 
-    public void setOrder(List<Order> order) {
-        this.orders = order;
+    public void setOrder(List<ProductOrder> productOrder) {
+        this.productOrders = productOrder;
     }
 
     @NonNull
-    public static BillingAndShippingFragment newInstance(List<Order> order) {
+    public static BillingAndShippingFragment newInstance(List<ProductOrder> productOrder) {
         BillingAndShippingFragment fragment = new BillingAndShippingFragment();
-        fragment.setOrder(order);
+        fragment.setOrder(productOrder);
         return fragment;
     }
 
@@ -97,16 +100,39 @@ public class BillingAndShippingFragment extends BaseFragment implements BillingA
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragmentBillingAndShippingFragment
         final View view = inflater.inflate(R.layout.fragment_billing_and_shipping, container, false);
         ButterKnife.bind(this, view);
         Timber.d("onCreateView BillingAndShippingFragment");
         billingAndShippingPresenter.attachView(this);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        //menu.clear();
+        MenuItem filter = menu.findItem(R.id.ic_filter_action);
+        MenuItem bag = menu.findItem(R.id.ic_delete_action);
+        if (filter != null)
+            filter.setVisible(false); // Display clear filters
+        if (bag != null)
+            bag.setVisible(true); // Display clear filters
+        MenuItem backAction = menu.findItem(android.R.id.home);
+        if (backAction != null)
+            backAction.setVisible(false); // Display clear filters
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -126,7 +152,7 @@ public class BillingAndShippingFragment extends BaseFragment implements BillingA
         Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(BillingAndShippingFragment.class.getName());
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.remove(fragment).commit();
- 
+
     }
 
     @Override
@@ -145,6 +171,7 @@ public class BillingAndShippingFragment extends BaseFragment implements BillingA
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.payment_layout:
+                showPaymentFragment();
                 break;
             case R.id.shipping_layout:
                 showAddressFragment();
@@ -156,16 +183,21 @@ public class BillingAndShippingFragment extends BaseFragment implements BillingA
 
 
     private void showPaymentFragment() {
-//        Fragment nextFrag = BillingAndShippingFragment.newInstance();
-////        getActivity().getSupportFragmentManager().beginTransaction()
-////                .replace(R.id.container_billing_and_shipping, nextFrag, BillingAndShippingFragment.class.getName())
-////                .commit();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment nextFrag = PaymentFragment.newInstance();
+//        getActivity().getSupportFragmentManager().beginTransaction()
+        transaction.add(R.id.container_billing_and_shipping, nextFrag, PaymentFragment.class.getName());
+        transaction.addToBackStack(null);
+        transaction.commit();
+
     }
 
     private void showAddressFragment() {
         Fragment nextFrag = AddressFragment.newInstance();
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_billing_and_shipping, nextFrag, AddressFragment.class.getName())
+                .add(R.id.container_billing_and_shipping, nextFrag, AddressFragment.class.getName())
+                .addToBackStack(null)
                 .commit();
     }
 }

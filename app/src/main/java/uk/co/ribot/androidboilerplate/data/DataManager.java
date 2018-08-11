@@ -17,6 +17,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import okhttp3.ResponseBody;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
@@ -30,8 +31,10 @@ import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageData;
 import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
-import uk.co.ribot.androidboilerplate.data.model.OrderData;
+import uk.co.ribot.androidboilerplate.data.model.PaymentDataBody;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
+import uk.co.ribot.androidboilerplate.data.model.OrderData;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.Products;
 import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
@@ -40,7 +43,6 @@ import uk.co.ribot.androidboilerplate.data.model.RestResponse;
 import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.data.model.UpdateProfileResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
-import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
@@ -246,6 +248,7 @@ public class DataManager {
                             @Override
                             public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
                                 try {
+                                    Timber.d("updateAddress %s", restResponse.toString());
                                     e.onNext(restResponse);
                                     e.onComplete();
                                 } catch (Exception e1) {
@@ -443,6 +446,7 @@ public class DataManager {
     }
 
     public Observable<FilterProductResponse> getFilteredProducts(final FilterBody filterBody) {
+        Timber.d("getFilteredProducts2");
         return mBazarlakService.getfilteredProduct(filterBody.getCategory(), filterBody.getExtracategory(), filterBody.getBrand(), filterBody.getColor(), filterBody.getSize(), filterBody.getPrice())
                 .concatMap(new Function<FilterProductResponse, ObservableSource<? extends FilterProductResponse>>() {
                     @Override
@@ -496,6 +500,125 @@ public class DataManager {
                             public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
                                 try {
                                     Timber.d("restResponse %s", restResponse);
+                                    e.onNext(restResponse);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<Boolean> addTobag(final ProductOrder productOrder) {
+        Timber.d("productOrder %s", productOrder);
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> subscriber) throws Exception {
+                try {
+                    boolean isSavedInDatabase = saveOrderWithoutRX(productOrder);
+                    Timber.d("isSavedInDatabase %s", isSavedInDatabase);
+
+                    subscriber.onNext(isSavedInDatabase);
+                    subscriber.onComplete();
+                } catch (Exception e) {
+                    subscriber.onNext(false);
+                    subscriber.onError(e);
+                }
+            }
+        });
+
+    }
+
+    public Boolean saveOrderWithoutRX(ProductOrder productOrder) {
+        boolean isSavedInDatabase = false;
+        Timber.d("saveOrderWithoutRX");
+
+        List<ProductOrder> productOrderList;
+
+        productOrderList = ProductOrder.find(ProductOrder.class, "product_id=? and product_feature=?", new String[]{String.valueOf(productOrder.getProductId()), String.valueOf(productOrder.getProductFeature())});
+        if (productOrderList.size() > 0) {
+            Timber.d("saved productOrder");
+            productOrderList.get(0).setQuantity(productOrder.getQuantity());
+            productOrderList.get(0).setProductFeature(productOrder.getProductFeature());
+            productOrderList.get(0).setProductId(productOrder.getProductId());
+            productOrderList.get(0).setProduct(productOrder.getProduct());
+            productOrderList.get(0).save();
+            if (productOrderList.get(0).save() > 0)
+                isSavedInDatabase = true;
+        } else {
+            productOrder.setProductId(productOrder.getProductId());
+            productOrder.setId(Long.valueOf(productOrder.getProductId()));
+            productOrder.setProductFeature(productOrder.getProductFeature());
+            productOrder.setProduct(productOrder.getProduct());
+            Product product = productOrder.getProduct();
+            product.setId(Long.valueOf(productOrder.getProduct().getProductId()));
+            product.save();
+            productOrder.save();
+            if (productOrder.save() > 0) {
+                isSavedInDatabase = true;
+                Timber.d("save productOrder %s", productOrder.getProductId());
+            }
+
+        }
+        return isSavedInDatabase;
+
+    }
+
+    public Observable<List<ProductOrder>> getSavedOrders() {
+
+        return Observable.create(new ObservableOnSubscribe<List<ProductOrder>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<ProductOrder>> e) throws Exception {
+                openDatabase();
+                Iterator<ProductOrder> productOrderIterator = ProductOrder.findAll(ProductOrder.class);
+                List<ProductOrder> productOrderList = Lists.newArrayList(productOrderIterator);
+                closeDatabase();
+                Timber.d("productOrderList %s", productOrderList);
+                try {
+                    e.onNext(productOrderList);
+                    e.onComplete();
+                } catch (Exception ex) {
+                    e.onError(ex);
+                }
+            }
+        });
+    }
+
+    public Observable<Products> getSearchResult(String key, String page) {
+        return mBazarlakService.getSearchResult(key, key)
+                .concatMap(new Function<ProductResponse, ObservableSource<? extends Products>>() {
+                    @Override
+                    public ObservableSource<? extends Products> apply(final ProductResponse productResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<Products>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<Products> e) throws Exception {
+                                try {
+                                    Timber.d("productResponse %s", productResponse);
+                                    if (productResponse.getStatus())
+                                        e.onNext(productResponse.getData().getProducts());
+
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<RestResponse> setPaymentData(PaymentDataBody paymentDataBody) {
+        return mBazarlakService.setPaymentData(getToken(), paymentDataBody)
+                .concatMap(new Function<RestResponse, ObservableSource<? extends RestResponse>>() {
+                    @Override
+                    public ObservableSource<? extends RestResponse> apply(final RestResponse restResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<RestResponse>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
+                                try {
+                                    Timber.d("setPaymentData %s", restResponse.toString());
                                     e.onNext(restResponse);
                                     e.onComplete();
                                 } catch (Exception e1) {

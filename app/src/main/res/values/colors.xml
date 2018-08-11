@@ -9,7 +9,7 @@
 
     <color name="app_menu_txt_color">#5c5c5c</color>
     <color name="colorPrimary">#a91b0d</color>
-    <color name="colorPrimaryDark">#a91b0d</color>
+    <color name="colorPrimaryDark">#730000</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="black">#000000</color>

@@ -68,4 +68,12 @@
     <string name="change_password_label">Change Password</string>
     <string name="enter_email_hint">Enter Your Email*</string>
     <string name="send_label">Send</string>
+    <string name="current_label">Current</string>
+    <string name="prev_label">Previous</string>
+    <string name="order_status">Order Status:</string>
+    <string name="delete_order">Delete Order</string>
+    <string name="hint_card_no">card number</string>
+    <string name="save_card_label">save this as default payment method</string>
+    <string name="empty_inputs">Please check non valid inputs</string>
+    <string name="empty_label">This field is required</string>
 </resources>

@@ -125,5 +125,18 @@
     <string name="enter_email_hint">Enter Your Email*</string>
     <string name="send_label">Send</string>
     <string name="title_activity_payment_details">PaymentDetailsActivity</string>
+    <string name="title_activity_your_order">Your Order</string>
+    <string name="current_label">Current</string>
+    <string name="prev_label">Previous</string>
+    <string name="order_status"><b> Order Status:</b><b><font fgcolor="#ff0000">%1$s</font> </b></string>
+    <string name="order_no"><b> Order NO:</b><b><font fgcolor="#808080">%1$s</font> </b></string>
+    <string name="delete_order">Delete Order</string>
+    <string name="hint_card_no">CARD NUMBER</string>
+    <string name="hint_expire">EXPIRE DATE</string>
+    <string name="hint_name">NAME ON CARD</string>
+    <string name="hint_cvv">CVV</string>
+    <string name="save_card_label">save this as default payment method</string>
+    <string name="empty_inputs">Please check non valid inputs</string>
+    <string name="empty_label">This field is required</string>
 
 </resources>

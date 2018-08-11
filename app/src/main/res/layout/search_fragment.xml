@@ -1,36 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     android:orientation="vertical">
-    <LinearLayout
-        android:id="@+id/view"
-        android:paddingTop="@dimen/search_view_padding_top"
-        android:paddingBottom="@dimen/search_view_padding_top"
-        android:paddingEnd="@dimen/search_view_padding_top"
-        android:paddingStart="@dimen/search_view_padding_top"
-        android:paddingLeft="@dimen/search_view_padding_top"
-        android:paddingRight="@dimen/search_view_padding_top"
-        android:background="@color/search_background"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/searchView"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/white_button_no_stroke_shap">
-        </android.support.v7.widget.SearchView>
+            android:background="@color/search_background"
+            android:paddingBottom="@dimen/search_view_padding_top"
+            android:paddingEnd="@dimen/search_view_padding_top"
+            android:paddingLeft="@dimen/search_view_padding_top"
+            android:paddingRight="@dimen/search_view_padding_top"
+            android:paddingStart="@dimen/search_view_padding_top"
+            android:paddingTop="@dimen/search_view_padding_top">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_button_no_stroke_shap"
+                app:iconifiedByDefault="true"
+                app:searchIcon="@drawable/ic_search" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_result_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/empty_view"
+            android:visibility="gone" />
+
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/search_result_recycler_view"
-        android:layout_width="match_parent"
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:padding="8dp"
-        android:scrollbars="none" />
-</LinearLayout>
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</FrameLayout>

@@ -107,8 +107,10 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
         unbinder = ButterKnife.bind(this, view);
         subCategoryPresenter.attachView(this);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView_secondary);
@@ -184,7 +186,7 @@ public class SubCategoryFragment extends BaseFragment implements SubCategoryMvpV
 
     private void showProduct(String ExtracategoryId, String mExtracategoryName) {
 
-        FragmentManager fragmentManager =  getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment nextFrag = ProductsFragment.newInstance(String.valueOf(mParentCategoryId), mCategoryName, subCategoryID, mExtracategoryName, ExtracategoryId);
         transaction.add(R.id.container_sub_category, nextFrag, ProductsFragment.class.getName());

@@ -23,24 +23,24 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.refactor.library.SmoothCheckBox;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.Order;
+import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 
 public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHolder> {
 
 
-    private List<Order> mProducts;
-    private List<Order> savedOrders;
+    private List<ProductOrder> mProducts;
+    private List<ProductOrder> savedProductOrders;
     private Context mcontext;
     UpdateDataClickListener updateDataClickListener;
 
     @Inject
     public BagAdapter() {
         mProducts = new ArrayList<>();
-        savedOrders = new ArrayList<>();
+        savedProductOrders = new ArrayList<>();
     }
 
-    public void setProducts(Context context, UpdateDataClickListener updateDataClickListener, List<Order> products) {
+    public void setProducts(Context context, UpdateDataClickListener updateDataClickListener, List<ProductOrder> products) {
         mProducts = products;
         mcontext = context;
         this.updateDataClickListener = updateDataClickListener;
@@ -56,38 +56,41 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
     @Override
     public void onBindViewHolder(final CategoryViewHolder holder, int position) {
         Product product = mProducts.get(position).getProduct();
-        holder.brandName.setText(product.getName());
-        holder.priceTextView.setText(String.format("%s", product.getPrice()));
-        holder.itemType.setText(product.getDescription());
-        holder.itemSize.setText(mProducts.get(position).getSize());
-        holder.itemQyn.setText(mProducts.get(position).getQuantity());
-        holder.itemQyn.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    // do your stuff here
-                    mProducts.get(holder.getAdapterPosition()).setQuantity(holder.itemQyn.getText().toString());
-                    Log.d("quantity %s", holder.itemQyn.getText().toString());
-                    holder.itemQyn.setCursorVisible(false);
-                }
-                return false;
-            }
-        });
-        holder.checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
-                if (isChecked) {
-                    if (!savedOrders.contains(mProducts.get(holder.getAdapterPosition())))
-                        savedOrders.add(mProducts.get(holder.getAdapterPosition()));
-                } else
-                    savedOrders.remove(mProducts.get(holder.getAdapterPosition()));
+        if (product != null) {
 
-                updateDataClickListener.oncheckOrder(savedOrders);
-            }
-        });
-        if (product.getImage() != null && !product.getImage().isEmpty())
-            Picasso.with(mcontext).load(product.getImage()).into(holder.bagImageView);
-        // holder.imageView.setImageResource(category.getImg());
+            holder.brandName.setText(product.getName());
+            holder.priceTextView.setText(String.format("%s", product.getPrice()));
+            holder.itemType.setText(product.getDescription());
+            holder.itemSize.setText(mProducts.get(position).getSize());
+            holder.itemQyn.setText(mProducts.get(position).getQuantity());
+            holder.itemQyn.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        // do your stuff here
+                        mProducts.get(holder.getAdapterPosition()).setQuantity(holder.itemQyn.getText().toString());
+                        Log.d("quantity %s", holder.itemQyn.getText().toString());
+                        holder.itemQyn.setCursorVisible(false);
+                    }
+                    return false;
+                }
+            });
+            holder.checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
+                    if (isChecked) {
+                        if (!savedProductOrders.contains(mProducts.get(holder.getAdapterPosition())))
+                            savedProductOrders.add(mProducts.get(holder.getAdapterPosition()));
+                    } else
+                        savedProductOrders.remove(mProducts.get(holder.getAdapterPosition()));
+
+                    updateDataClickListener.oncheckOrder(savedProductOrders);
+                }
+            });
+            if (product.getImage() != null && !product.getImage().isEmpty())
+                Picasso.with(mcontext).load(product.getImage()).into(holder.bagImageView);
+            // holder.imageView.setImageResource(category.getImg());
+        }
     }
 
     @Override
@@ -120,6 +123,6 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
     }
 
     interface UpdateDataClickListener {
-        void oncheckOrder(List<Order> products);
+        void oncheckOrder(List<ProductOrder> products);
     }
 }

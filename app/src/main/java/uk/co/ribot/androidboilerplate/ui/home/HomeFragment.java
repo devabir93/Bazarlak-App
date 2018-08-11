@@ -1,16 +1,22 @@
 package uk.co.ribot.androidboilerplate.ui.home;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -32,6 +38,7 @@ import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
+import uk.co.ribot.androidboilerplate.ui.category.subcategory.filter.FilterActivity;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.products.ProductsDetailsFragment;
 import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
@@ -42,6 +49,8 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
     EasyVideoPlayer player;
     @BindView(R.id.photosGrid)
     RecyclerView photosGrid;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
     @Inject
     HomeGridViewAdapter homeGridViewAdapter;
     @Inject
@@ -56,6 +65,7 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((BaseActivity) getActivity()).activityComponent().inject(this);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -67,6 +77,12 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
         homePresenter.attachView(this);
         homePresenter.checkConnection(getContext());
         photosGrid.setAdapter(homeGridViewAdapter);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         photosGrid.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         photosGrid.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), photosGrid, new RecyclerItemClickListener.OnItemClickListener() {
@@ -87,9 +103,27 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
         return view;
     }
 
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        //inflater.inflate(R.menu.menu_second_toolbar, menu);
+//        menu.clear();
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    //    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        return super.onOptionsItemSelected(item);
+//    }
+
     private void showProductDetails(Product offerproduct) {
         Fragment nextFrag = ProductsDetailsFragment.newInstance(offerproduct);
-
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, nextFrag, ProductsDetailsFragment.class.getName())
                 .commit();
@@ -117,6 +151,7 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
 
     @Override
     public void showOfferProduct(GetProductByIdResponseBody productByIdResponseBody) {
+        player.pause();
         showProductDetails(productByIdResponseBody.getByIdData().getProduct().get(0)
         );
     }
@@ -203,7 +238,11 @@ public class HomeFragment extends BaseFragment implements HomeMvpView, EasyVideo
 
     @Override
     public void showProgresBar(boolean b) {
-        if (getContext() != null)
-            DialogFactory.createNormailProgressBar(getContext(), b);
+        if (b) {
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setIndeterminate(true);
+
+        } else
+            progressBar.setVisibility(View.GONE);
     }
 }

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -57,10 +58,13 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
         activityComponent().inject(this);
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//            getSupportActionBar().setCustomView(R.layout.toolbar_layout);
             getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
         }
@@ -79,14 +83,20 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        //  menu.clear();
         MenuItem backAction = menu.findItem(android.R.id.home);
+        MenuItem filter = menu.findItem(R.id.ic_filter_action);
+        MenuItem bag = menu.findItem(R.id.ic_delete_action);
+        if (filter != null)
+            filter.setVisible(false); // Display clear filters
+        if (bag != null)
+            bag.setVisible(false); // Display clear filters
         if (backAction != null)
             backAction.setVisible(false); // Display clear filters
         return super.onPrepareOptionsMenu(menu);
@@ -135,28 +145,28 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
             Fragment fragment;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    toolbar.setTitle(getString(R.string.home_tab));
+                    //toolbar.setTitle(getString(R.string.home_tab));
                     fragment = new HomeFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_category:
-                    toolbar.setTitle(getString(R.string.category_tab));
+                    //toolbar.setTitle(getString(R.string.category_tab));
                     fragment = new CategoryFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_search:
-                    toolbar.setTitle(getString(R.string.search_tab));
+                    // toolbar.setTitle(getString(R.string.search_tab));
                     fragment = new SearchFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_bag:
-                    toolbar.setTitle(getString(R.string.bag_tab));
+                    // toolbar.setTitle(getString(R.string.bag_tab));
                     fragment = new BagFragment();
                     loadFragment(fragment);
                     return true;
 
                 case R.id.navigation_me:
-                    toolbar.setTitle(getString(R.string.me_tab));
+                    // toolbar.setTitle(getString(R.string.me_tab));
                     fragment = new ProfileFragment();
                     loadFragment(fragment);
                     return true;
@@ -176,10 +186,10 @@ public class MainActivity2 extends BaseActivity implements MainMvpView {
     @Override
     public void onBackPressed() {
 
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
-            getSupportFragmentManager().popBackStackImmediate();
+//        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+//            getSupportFragmentManager().popBackStackImmediate();
 
-        //else super.onBackPressed();
+         super.onBackPressed();
 
     }
 

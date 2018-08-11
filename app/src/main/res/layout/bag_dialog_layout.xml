@@ -10,44 +10,44 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
         android:text="@string/dialog_title_label"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#474747" />
+        android:background="@color/gray" />
 
     <Button
         android:id="@+id/cont_shopping_button"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
         android:text="@string/continue_shopping_label"
         android:textAllCaps="false"
         android:textColor="#127cee"
-        android:textSize="20sp" />
+        android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#474747" />
+        android:background="@color/gray" />
 
     <Button
         android:id="@+id/view_bag_button"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
         android:text="@string/view_bag_label"
         android:textAllCaps="false"
         android:textColor="#127cee"
-        android:textSize="20sp" />
+        android:textSize="14sp" />
 </LinearLayout>

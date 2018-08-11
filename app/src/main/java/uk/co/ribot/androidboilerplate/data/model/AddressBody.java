@@ -4,14 +4,15 @@ package uk.co.ribot.androidboilerplate.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class AddressBody implements Parcelable
-{
+public class AddressBody implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -47,7 +48,7 @@ public class AddressBody implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public AddressBody createFromParcel(Parcel in) {
             return new AddressBody(in);
@@ -57,8 +58,7 @@ public class AddressBody implements Parcelable
             return (new AddressBody[size]);
         }
 
-    }
-    ;
+    };
 
     protected AddressBody(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
@@ -75,13 +75,11 @@ public class AddressBody implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public AddressBody() {
     }
 
     /**
-     * 
      * @param id
      * @param userId
      * @param state
@@ -105,6 +103,17 @@ public class AddressBody implements Parcelable
         this.address1 = address1;
         this.address2 = address2;
         this.postcode = postcode;
+    }
+
+    public AddressBody(String name, String mobile, String country, String city, String state, String address1, String address2, String postCode) {
+        this.fullname = name;
+        this.mobile = mobile;
+        this.country = country;
+        this.city = city;
+        this.state = state;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.postcode = postCode;
     }
 
     public Integer getId() {
@@ -223,7 +232,7 @@ public class AddressBody implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

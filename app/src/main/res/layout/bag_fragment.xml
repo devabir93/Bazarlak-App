@@ -3,15 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_bag"
-    android:background="?android:windowBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/white">
 
     <include
         android:id="@+id/empty_bag"
         layout="@layout/empty_bag_fragment"
         android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/bag_layout"
@@ -22,17 +29,17 @@
             android:id="@+id/bag_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/gray"
-            android:layout_above="@+id/checkout_bt" />
+            android:layout_above="@+id/checkout_bt"
+            android:background="@color/gray" />
 
         <Button
             android:id="@+id/checkout_bt"
             style="@style/redButton"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="@string/checkout_label" />
     </RelativeLayout>
-
 
 </FrameLayout>

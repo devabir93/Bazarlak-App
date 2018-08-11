@@ -7,18 +7,17 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-public class Order extends SugarRecord implements Parcelable {
+public class ProductOrder extends SugarRecord implements Parcelable {
 
     @SerializedName("product_id")
     @Expose
     private int productId;
-
     @SerializedName("feature_id")
     @Expose
     private int productFeature;
     @SerializedName("quantity")
     @Expose
-    private String quantity;
+    private String quantity = "1";
     @SerializedName("size")
     @Expose
     private String size;
@@ -27,10 +26,10 @@ public class Order extends SugarRecord implements Parcelable {
     private String color;
     private Product product;
 
-    public Order() {
+    public ProductOrder() {
     }
 
-    protected Order(Parcel in) {
+    protected ProductOrder(Parcel in) {
         productId = in.readInt();
         product = in.readParcelable(Product.class.getClassLoader());
         productFeature = in.readInt();
@@ -54,19 +53,19 @@ public class Order extends SugarRecord implements Parcelable {
         return 0;
     }
 
-    public static final Creator<Order> CREATOR = new Creator<Order>() {
+    public static final Creator<ProductOrder> CREATOR = new Creator<ProductOrder>() {
         @Override
-        public Order createFromParcel(Parcel in) {
-            return new Order(in);
+        public ProductOrder createFromParcel(Parcel in) {
+            return new ProductOrder(in);
         }
 
         @Override
-        public Order[] newArray(int size) {
-            return new Order[size];
+        public ProductOrder[] newArray(int size) {
+            return new ProductOrder[size];
         }
     };
 
-    public Order(int productId, Product product, int productFeature, String quantity, String size, String color) {
+    public ProductOrder(int productId, Product product, int productFeature, String quantity, String size, String color) {
         this.productId = productId;
         this.product = product;
         this.productFeature = productFeature;
@@ -80,15 +79,17 @@ public class Order extends SugarRecord implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Order order = (Order) o;
+        ProductOrder productOrder = (ProductOrder) o;
 
-        if (productId != order.productId) return false;
-        if (productFeature != order.productFeature) return false;
-        if (product != null ? !product.equals(order.product) : order.product != null) return false;
-        if (quantity != null ? !quantity.equals(order.quantity) : order.quantity != null)
+        if (productId != productOrder.productId) return false;
+        if (productFeature != productOrder.productFeature) return false;
+        if (product != null ? !product.equals(productOrder.product) : productOrder.product != null)
             return false;
-        if (size != null ? !size.equals(order.size) : order.size != null) return false;
-        return color != null ? color.equals(order.color) : order.color == null;
+        if (quantity != null ? !quantity.equals(productOrder.quantity) : productOrder.quantity != null)
+            return false;
+        if (size != null ? !size.equals(productOrder.size) : productOrder.size != null)
+            return false;
+        return color != null ? color.equals(productOrder.color) : productOrder.color == null;
     }
 
     @Override
@@ -152,11 +153,13 @@ public class Order extends SugarRecord implements Parcelable {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "product=" + product +
+        return "ProductOrder{" +
+                "productId=" + productId +
+                ", productFeature=" + productFeature +
                 ", quantity='" + quantity + '\'' +
                 ", size='" + size + '\'' +
                 ", color='" + color + '\'' +
+                ", product=" + product +
                 '}';
     }
 }

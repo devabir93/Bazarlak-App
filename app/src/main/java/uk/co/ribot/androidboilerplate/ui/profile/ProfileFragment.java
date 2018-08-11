@@ -27,6 +27,7 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.login.LoginFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.register.RegisterFragment;
+import uk.co.ribot.androidboilerplate.ui.profile.your_order.YourOrderActivity;
 import uk.co.ribot.androidboilerplate.ui.profile.your_profile.YourProfileFragment;
 import uk.co.ribot.androidboilerplate.util.Message;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
@@ -82,7 +83,7 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
                     public void onItemClick(View view, int position) {
                         // do whatever
 
-                                openFragment(position);
+                        openFragment(position);
                     }
 
                     @Override
@@ -99,8 +100,10 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
     }
 
     private void openFragment(int fragmentClass) {
-        switch (fragmentClass){
+        switch (fragmentClass) {
             case 0:
+                startActivity(new Intent(getActivity(), YourOrderActivity.class));
+
 //                Fragment nextFrag = new YourProfileFragment();
 //                getActivity().getSupportFragmentManager().beginTransaction()
 //                        .replace(R.id.container, nextFrag, YourProfileFragment.class.getName())
@@ -108,17 +111,12 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
 //                        .commit();
                 break;
             case 1:
-                startActivity(new Intent(getActivity(),YourProfileFragment.class));
+                startActivity(new Intent(getActivity(), YourProfileFragment.class));
 
                 break;
 
         }
 
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -132,11 +130,24 @@ public class ProfileFragment extends BaseFragment implements ProfileMvpView {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem backAction = menu.findItem(android.R.id.home);
-        if (backAction != null)
-            backAction.setVisible(false); // Display clear filters
+        menu.clear();
         super.onPrepareOptionsMenu(menu);
     }
+//
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        super.onPrepareOptionsMenu(menu);
+//        menu.clear();
+//        MenuItem filter = menu.findItem(R.id.ic_filter_action);
+//        MenuItem bag = menu.findItem(R.id.ic_delete_action);
+//        if (filter != null)
+//            filter.setVisible(false); // Display clear filters
+//        if (bag != null)
+//            bag.setVisible(false); // Display clear filters
+//        MenuItem backAction = menu.findItem(android.R.id.home);
+//        if (backAction != null)
+//            backAction.setVisible(false); // Display clear filters
+//    }
 
     @Override
     public void onDestroy() {

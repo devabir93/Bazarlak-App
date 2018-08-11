@@ -96,8 +96,8 @@ public class FilterActivity extends BaseActivity implements FiltersDataMvpView {
         categoryFilterText.setText(categoryName);
         spinnerAdapter = new SpinnerAdapter(this, colorsArrayList);
         colorFilterSpinner.setAdapter(spinnerAdapter);
-        colorFilterSpinner.setDropdownHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-
+        colorFilterSpinner.setDropdownHeight(200);
+        colorFilterSpinner.setMinimumWidth(100);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
@@ -147,15 +147,7 @@ public class FilterActivity extends BaseActivity implements FiltersDataMvpView {
 
     @OnClick(R.id.apply_button)
     void onApplyClick() {
-        Timber.d("onApplyClick");
-        FilterBody filterBody = new FilterBody();
-        filterBody.setCategory(subCategoryId);
-        filterBody.setExtracategory(ExtracategoryId);
-        filterBody.setBrand(brand);
-        filterBody.setSize(size);
-        filterBody.setColor(color);
-        filterBody.setPrice(price);
-        filtersDataPresenter.getFilteredProducts(filterBody);
+        filtersDataPresenter.checkConnection(this);
 
     }
 
@@ -180,9 +172,6 @@ public class FilterActivity extends BaseActivity implements FiltersDataMvpView {
                 stringList.add(brand.getName());
             }
         brandFilterSpinner.setItems(stringList);
-//        stringListHashMap.put(getString(R.string.filter_brand), brandList);
-//        filterAdapter.setData(FilterActivity.this, stringListHashMap);
-//        filterAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -195,9 +184,6 @@ public class FilterActivity extends BaseActivity implements FiltersDataMvpView {
         sizeList = filterSize;
         if (filterSize != null)
             sizeFilterSpinner.setItems(filterSize);
-//        stringListHashMap.put(getString(R.string.filter_size), filterSize);
-//        filterAdapter.setData(FilterActivity.this, stringListHashMap);
-//        filterAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -208,6 +194,18 @@ public class FilterActivity extends BaseActivity implements FiltersDataMvpView {
     @Override
     public void hasActiveInternetConnection(boolean b) {
 
+        super.hasActiveInternetConnection(b);
+        if (b) {
+            Timber.d("onApplyClick");
+            FilterBody filterBody = new FilterBody();
+            filterBody.setCategory(subCategoryId);
+            filterBody.setExtracategory(ExtracategoryId);
+            filterBody.setBrand(brand);
+            filterBody.setSize(size);
+            filterBody.setColor(color);
+            filterBody.setPrice(price);
+            filtersDataPresenter.getFilteredProducts(filterBody);
+        }
     }
 
     @Override

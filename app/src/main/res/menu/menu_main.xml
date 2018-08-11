@@ -2,4 +2,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
+    <item
+        android:id="@+id/ic_delete_action"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete_order"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/ic_filter_action"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/filter_label"
+        app:showAsAction="always" />
 </menu>

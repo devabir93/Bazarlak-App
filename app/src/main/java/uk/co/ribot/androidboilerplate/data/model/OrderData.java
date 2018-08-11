@@ -6,20 +6,20 @@ import com.google.gson.annotations.SerializedName;
 public class OrderData {
     @SerializedName("data")
     @Expose
-    private Order order;
+    private ProductOrder productOrder;
 
-    public OrderData(Order order) {
-        this.order = order;
+    public OrderData(ProductOrder productOrder) {
+        this.productOrder = productOrder;
     }
 
     public OrderData() {
     }
 
-    public Order getOrder() {
-        return order;
+    public ProductOrder getProductOrder() {
+        return productOrder;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setProductOrder(ProductOrder productOrder) {
+        this.productOrder = productOrder;
     }
 }

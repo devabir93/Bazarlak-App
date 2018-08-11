@@ -10,10 +10,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
-import uk.co.ribot.androidboilerplate.data.model.Order;
-import uk.co.ribot.androidboilerplate.data.model.OrderData;
+import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
-import uk.co.ribot.androidboilerplate.data.model.RestResponse;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 
@@ -40,6 +38,7 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
     }
 
     void getProducts(Context context, String categoryId, String subCategoryId, String extracategoryId, String page) {
+        getMvpView().showProgresBar(true);
         mDataManager.getProducts(categoryId, subCategoryId, extracategoryId, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -52,10 +51,12 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
                     @Override
                     public void onNext(ProductResponse productResponses) {
                         Timber.d("productList %s", productResponses);
-                        if (productResponses.getStatus()) {
-                            getMvpView().showProducts(productResponses.getData().getProducts().getData());
-                        } else
-                            getMvpView().showEmpty();
+                        if (getMvpView() != null) {
+                            if (productResponses.getStatus()) {
+                                getMvpView().showProducts(productResponses.getData().getProducts().getData());
+                            } else
+                                getMvpView().showEmpty();
+                        }
                     }
 
                     @Override
@@ -74,33 +75,65 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
 //                        }
 //                        // getMvpView().showError();
                         Timber.e(e, "There was an error while getProducts");
+                        getMvpView().showProgresBar(false);
                     }
 
                     @Override
                     public void onComplete() {
+                        if (getMvpView() != null)
+                            getMvpView().showProgresBar(false);
 
                     }
                 });
     }
 
-    void addToBag(Order order) {
+    void saveOrders(ProductOrder productOrder) {
+        getMvpView().addedToBag(true);
 
-        OrderData orderData = new OrderData();
-        orderData.setOrder(order);
-        mDataManager.saveOrders(orderData)
+//        OrderData orderData = new OrderData();
+//        orderData.setProductOrder(productOrder);
+//        mDataManager.saveOrders(orderData)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Observer<RestResponse>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(RestResponse restResponse) {
+//
+//                        if (restResponse.getStatus())
+//                            getMvpView().addedToBag(true);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+
+    }
+
+    public void addToBag(ProductOrder productOrder) {
+        mDataManager.addTobag(productOrder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<RestResponse>() {
+                .subscribe(new Observer<Boolean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(RestResponse restResponse) {
-
-                        if (restResponse.getStatus())
-                            getMvpView().addedToBag(true);
+                    public void onNext(Boolean aBoolean) {
+                        getMvpView().addedToBag(aBoolean);
                     }
 
                     @Override
@@ -113,7 +146,6 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
 
                     }
                 });
-
     }
 
 }

@@ -61,7 +61,9 @@ public class SpinnerAdapter extends MaterialSpinnerAdapter<String> {
         TextView textView = new TextView(mContext);
         int red = Color.parseColor(mItems.get(position));
         textView.setBackgroundColor(red);
-        textView.setPadding(0,4,0,4);
+       // textView.setHeight(48);
+        textView.setPadding(0,8,0,8);
+
 
 
         return textView;

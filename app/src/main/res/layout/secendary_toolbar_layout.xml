@@ -4,23 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/white"
-    app:popupTheme="@style/AppTheme.PopupOverlay"
-    app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp"
-    app:contentInsetRight="0dp"
     app:contentInsetEnd="0dp"
+    app:contentInsetLeft="0dp"
+    app:contentInsetRight="0dp"
+    app:contentInsetStart="0dp"
     app:contentInsetStartWithNavigation="0dp"
-    >
+    app:popupTheme="@style/AppTheme.PopupOverlay">
 
-    <TextView
-        android:id="@+id/activity_name_textView_secondary"
-        android:layout_width="wrap_content"
+<!--    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Activity"
-        android:textColor="@android:color/background_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        />
+        android:orientation="vertical">-->
 
+        <TextView
+            android:id="@+id/activity_name_textView_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:text="Activity"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+<!--
+        <view
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/gray" />
+
+    </RelativeLayout>-->
 </android.support.v7.widget.Toolbar>

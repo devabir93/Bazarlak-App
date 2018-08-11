@@ -119,7 +119,7 @@ public class FilterProductResponse implements Parcelable
         if (other == this) {
             return true;
         }
-        if ((other instanceof FilterProductResponse) == false) {
+        if (!(other instanceof FilterProductResponse)) {
             return false;
         }
         FilterProductResponse rhs = ((FilterProductResponse) other);

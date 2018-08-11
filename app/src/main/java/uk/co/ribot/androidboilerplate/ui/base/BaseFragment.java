@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import javax.inject.Inject;
 
@@ -27,7 +29,8 @@ public class BaseFragment extends Fragment implements MvpView {
     public void hasActiveInternetConnection(boolean b) {
         if (!b) {
             Timber.d("no connection");
-            ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(), getResources().getString(R.string.no_connection)).show();
+            if (getActivity() != null)
+                ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(), getResources().getString(R.string.no_connection)).show();
         }
     }
 
@@ -48,12 +51,20 @@ public class BaseFragment extends Fragment implements MvpView {
 
     @Override
     public void showProgresBar(boolean b) {
-        DialogFactory.createNormailProgressBar(getActivity(), b);
+        if (getActivity() != null) {
+            ProgressBar progressBar = DialogFactory.createNormailProgressBar(getActivity(), b);
+            if (b) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else
+                progressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void showSnackBar(String message) {
-        ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(),message).show();
+        if (getActivity() != null) {
+            ViewUtil.createSnackbar(getActivity().getWindow().getDecorView().getRootView(), message).show();
+        }
 
     }
 }

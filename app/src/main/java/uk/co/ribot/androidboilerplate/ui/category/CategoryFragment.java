@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,6 +46,7 @@ public class CategoryFragment extends BaseFragment implements CategoryMvpView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((BaseActivity) getActivity()).activityComponent().inject(this);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -53,9 +57,15 @@ public class CategoryFragment extends BaseFragment implements CategoryMvpView {
         ButterKnife.bind(this, view);
         mRecyclerView.setAdapter(categoryAdapter);
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+//        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+//        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         categoryPresenter.attachView(this);
         categoryPresenter.getAllCategories(getContext());
@@ -78,19 +88,40 @@ public class CategoryFragment extends BaseFragment implements CategoryMvpView {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        super.onPrepareOptionsMenu(menu);
+    }
+
+
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        super.onPrepareOptionsMenu(menu);
+//        menu.clear();
+//        MenuItem filter = menu.findItem(R.id.ic_filter_action);
+//        MenuItem bag = menu.findItem(R.id.ic_delete_action);
+//        filter.setVisible(false); // Display clear filters
+//        bag.setVisible(false); // Display clear filters
+//        MenuItem backAction = menu.findItem(android.R.id.home);
+//        if (backAction != null)
+//            backAction.setVisible(false); // Display clear filters
+//    }
+//
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         categoryPresenter.detachView();
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        }
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+        }
+    }
 
     private void showSubCategory(Integer categoryId, String categoryName) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

@@ -127,7 +127,7 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
     }
 
     void showforgetPasswordDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.full_screen_dialog));
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(),android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View content = factory.inflate(R.layout.forget_password_dialog_layout, null);
         Button sendButton = (Button) content.findViewById(R.id.send_button);
@@ -139,17 +139,10 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             alertDialogObject.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
         }
-        int width, height;
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        WindowManager manager = (WindowManager) getActivity().getSystemService(Activity.WINDOW_SERVICE);
-
-        Point point = new Point();
-        manager.getDefaultDisplay().getSize(point);
-        width = point.x;
-        height = point.y;
         lp.copyFrom(alertDialogObject.getWindow().getAttributes());
-        lp.width = width;
-        lp.height = height;
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
         alertDialogObject.getWindow().setAttributes(lp);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

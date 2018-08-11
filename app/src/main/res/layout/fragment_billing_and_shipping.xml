@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container_billing_and_shipping"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:windowBackground">
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/thickBlackText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:text="@string/pay_label"
+        android:textSize="20sp" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_above="@+id/buy_button"
+        android:layout_below="@+id/title">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -16,16 +30,6 @@
             android:background="@color/gray"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/thickBlackText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center"
-                android:paddingBottom="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_horizontal_margin"
-                android:text="@string/pay_label"
-                android:textSize="20sp" />
 
             <RelativeLayout
                 android:id="@+id/payment_layout"
@@ -200,9 +204,11 @@
     <Button
         android:id="@+id/buy_button"
         style="@style/redButton"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:text="@string/buy_now_label" />
 
-</FrameLayout>
+</RelativeLayout>

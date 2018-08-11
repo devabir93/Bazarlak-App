@@ -110,9 +110,13 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
         ButterKnife.bind(this, view);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         productsPresenter.attachView(this);
+
         if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
         }
         TextView textView = (TextView) secondToolbar.findViewById(R.id.activity_name_textView_secondary);
         textView.setText(categoryName + "/" + ExtracategoryName);
@@ -167,10 +171,27 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_second_toolbar, menu);
+        inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        //menu.clear();
+        MenuItem filter = menu.findItem(R.id.ic_filter_action);
+        MenuItem bag = menu.findItem(R.id.ic_delete_action);
+        if (filter != null)
+            filter.setVisible(true); // Display clear filters
+        if (bag != null)
+            bag.setVisible(false); // Display clear filters
+        MenuItem backAction = menu.findItem(android.R.id.home);
+        if (backAction != null)
+            backAction.setVisible(false); // Display clear filters
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    //
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -181,7 +202,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
                 Intent intent = new Intent(getContext(), FilterActivity.class);
                 intent.putExtra("subCategoryId", subCategoryId);
                 intent.putExtra("ExtracategoryId", ExtracategoryId);
-                intent.putExtra("categoryName",categoryName);
+                intent.putExtra("categoryName", categoryName);
                 startActivity(intent);
                 return true;
             case android.R.id.home:
@@ -248,7 +269,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     }
 
     public void showFilter() {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         Dialog d = builderSingle.setView(new View(getActivity())).create();
         // (That new View is just there to have something inside the dialog that can grow big enough to cover the whole screen.)
 

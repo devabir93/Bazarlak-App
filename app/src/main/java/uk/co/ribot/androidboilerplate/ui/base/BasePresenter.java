@@ -1,6 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.base;
 
 import android.content.Context;
+
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -31,7 +32,7 @@ public class BasePresenter<T extends MvpView> implements Presenter<T> {
     }
 
     public T getMvpView() {
-        return mMvpView;
+        return (mMvpView);
     }
 
     public void checkViewAttached() {

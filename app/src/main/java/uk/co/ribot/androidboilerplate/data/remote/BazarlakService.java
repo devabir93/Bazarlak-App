@@ -13,6 +13,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -33,6 +34,7 @@ import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
 import uk.co.ribot.androidboilerplate.data.model.OrderData;
+import uk.co.ribot.androidboilerplate.data.model.PaymentDataBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
@@ -103,6 +105,12 @@ public interface BazarlakService {
     @POST("GetPayAddress")
     Observable<RestResponse> updateAddress(@Header("Authorization") String token, @Body AddressBody addressBody);
 
+    @GET("search")
+    Observable<ProductResponse> getSearchResult(@Query("key") String key, @Query("page") String page);
+
+    @POST("SetPayData")
+    Observable<RestResponse> setPaymentData(@Header("Authorization") String token, @Body PaymentDataBody paymentDataBody);
+
     /******** Helper class that sets up a new services *******/
     class Creator {
 
@@ -124,7 +132,7 @@ public interface BazarlakService {
                     Request newRequest = chain.request().newBuilder()
                             .addHeader("Accept", "application/json")
                             //.addHeader("Authorization", "Bearer " + )
-                            //.addHeader("Accept-Language" ,"en")
+                            .addHeader("Accept-Language", "en")
                             .build();
                     return chain.proceed(newRequest);
                 }

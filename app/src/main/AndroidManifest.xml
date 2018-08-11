@@ -9,7 +9,7 @@
     <application
         android:name=".BazarlakeApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/bazarlakbag"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,android:icon">
@@ -24,7 +24,7 @@
         </receiver>
 
         <activity
-            android:name=".ui.main_activity.MainActivity2"
+            android:name=".ui.main.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.main_activity.MainActivity2" />
 
         <meta-data
             android:name="DATABASE"
@@ -54,7 +55,11 @@
         <activity
             android:name=".ui.profile.your_profile.PaymentDetailsActivity"
             android:label="@string/title_activity_payment_details"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.profile.your_order.YourOrderActivity"
+            android:label="@string/title_activity_your_order"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

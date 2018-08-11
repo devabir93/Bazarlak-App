@@ -104,6 +104,8 @@ public final class DialogFactory {
     @NonNull
     public static ProgressBar createNormailProgressBar(@NonNull Context context, boolean showProgress) {
         ProgressBar progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
         if (showProgress) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
