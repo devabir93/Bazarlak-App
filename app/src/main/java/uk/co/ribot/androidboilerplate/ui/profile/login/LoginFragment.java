@@ -108,16 +108,9 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
     @OnClick(R.id.login_button)
     public void onLoginClick() {
         //loginPresenter.checkConnection(getContext());
-        UserData userData = new UserData();
-//        userData.setName(fnameSignupEditText.getText().toString() + "" + lnameSignupEditText.getText().toString());
-        userData.setEmail(emailLoginEditText.getText().toString());
-//        userData.setMobile(mobileEditText.getText().toString());
-//        userData.setGender(genderSignupEditText.getText().toString());
-        userData.setPassword(passwordLoginEditText.getText().toString());
 
-//        userData.setEmail("devabir9@gmail.com");
-//        userData.setPassword("123456");
-        loginPresenter.login(getContext(), userData);
+
+        loginPresenter.checkConnection(getContext());
 
     }
 
@@ -127,7 +120,7 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
     }
 
     void showforgetPasswordDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(),android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View content = factory.inflate(R.layout.forget_password_dialog_layout, null);
         Button sendButton = (Button) content.findViewById(R.id.send_button);
@@ -260,19 +253,10 @@ public class LoginFragment extends BaseFragment implements LoginMvpView {
     @Override
     public void hasActiveInternetConnection(boolean b) {
         super.hasActiveInternetConnection(b);
-        if (!b) {
-            ViewUtil.createSnackbar(loginButton.getRootView(), getResources().getString(R.string.no_connection)).show();
-        } else {
-
+        if (b) {
             UserData userData = new UserData();
-//        userData.setName(fnameSignupEditText.getText().toString() + "" + lnameSignupEditText.getText().toString());
             userData.setEmail(emailLoginEditText.getText().toString());
-//        userData.setMobile(mobileEditText.getText().toString());
-//        userData.setGender(genderSignupEditText.getText().toString());
             userData.setPassword(passwordLoginEditText.getText().toString());
-
-//            userData.setEmail("devabir9@gmail.com");
-//            userData.setPassword("123456");
             loginPresenter.login(getContext(), userData);
         }
     }

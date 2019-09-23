@@ -88,7 +88,7 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
     }
 
     void saveOrders(ProductOrder productOrder) {
-        getMvpView().addedToBag(true);
+      //  getMvpView().addedToBag(true);
 
 //        OrderData orderData = new OrderData();
 //        orderData.setProductOrder(productOrder);
@@ -125,14 +125,14 @@ public class ProductsPresenter extends BasePresenter<ProductsMvpView> {
         mDataManager.addTobag(productOrder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<Boolean>() {
+                .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(Boolean aBoolean) {
+                    public void onNext(Integer aBoolean) {
                         getMvpView().addedToBag(aBoolean);
                     }
 

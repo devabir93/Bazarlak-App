@@ -18,42 +18,53 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
+import uk.co.ribot.androidboilerplate.data.model.Current;
+import uk.co.ribot.androidboilerplate.data.model.Order;
 import uk.co.ribot.androidboilerplate.data.model.Product;
+import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
 
 public class YourOrdersAdapter extends RecyclerView.Adapter<YourOrdersAdapter.CategoryViewHolder> {
 
 
 
-    private List<ProductOrder> productOrders;
+    private List<Current> productOrders;
     private Context mcontext;
-
+    private boolean isArabic;
     @Inject
     public YourOrdersAdapter() {
         productOrders = new ArrayList<>();
     }
 
-    public void setProducts(Context context, List<ProductOrder> products) {
+    public void setProducts(Context context, List<Current> products) {
+        Timber.d("setProducts %s",products);
         productOrders = products;
         mcontext = context;
     }
-
+    public void setIsArabic(boolean arabic) {
+        this.isArabic = arabic;
+    }
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.order_item, parent, false);
+        Timber.d("onCreateViewHolder");
         return new CategoryViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final CategoryViewHolder holder, int position) {
-        Product product = productOrders.get(position).getProduct();
-        holder.brandName.setText(product.getName());
-        holder.priceTextView.setText(String.format("%s", product.getPrice()));
-        holder.itemType.setText(product.getDescription());
-        holder.itemSize.setText(productOrders.get(position).getSize());
-        holder.qytTextView.setText(productOrders.get(position).getQuantity());
+    public void onBindViewHolder(CategoryViewHolder holder, int position) {
+        Timber.d("onBindViewHolder");
+        Current order = productOrders.get(position);
+        Order product = order.getOrders().get(0);
+        holder.brandName.setText(isArabic?product.getNameAr():product.getNameEn());
+        holder.priceTextView.setText(String.format("%s", product.getPrice()+" "+mcontext.getString(R.string.currency)));
+        holder.itemType.setText(product.getDetails());
+        holder.itemSize.setText(mcontext.getString(R.string.item_size,product.getSize()));
+        holder.orderStatusTextview.setText(mcontext.getString(R.string.order_status, order.getStatus()));
+        holder.orderNoTextview.setText(mcontext.getString(R.string.order_no,String.valueOf(order.getId())));
+        holder.qytTextView.setText(mcontext.getString(R.string.quntitye_label,order.getQuantity()));
 
         if (product.getImage() != null && !product.getImage().isEmpty())
             Picasso.with(mcontext).load(product.getImage()).into(holder.bagImageView);
@@ -91,9 +102,5 @@ public class YourOrdersAdapter extends RecyclerView.Adapter<YourOrdersAdapter.Ca
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-    }
-
-    interface UpdateDataClickListener {
-        void oncheckOrder(List<ProductOrder> products);
     }
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import com.google.common.collect.Lists;
 import com.orm.SugarDb;
 
+import org.json.JSONObject;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,11 +19,11 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
-import okhttp3.ResponseBody;
 import timber.log.Timber;
-import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.data.model.AddToCartBody;
 import uk.co.ribot.androidboilerplate.data.model.AddressBody;
+import uk.co.ribot.androidboilerplate.data.model.CartBody;
 import uk.co.ribot.androidboilerplate.data.model.Category;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.Extracategory;
@@ -31,10 +33,13 @@ import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageData;
 import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
+import uk.co.ribot.androidboilerplate.data.model.MyOrders;
+import uk.co.ribot.androidboilerplate.data.model.MyorderResponse;
+import uk.co.ribot.androidboilerplate.data.model.PaymentANDAddressResponse;
+import uk.co.ribot.androidboilerplate.data.model.PaymentData;
 import uk.co.ribot.androidboilerplate.data.model.PaymentDataBody;
 import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
-import uk.co.ribot.androidboilerplate.data.model.OrderData;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.Products;
 import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
@@ -44,7 +49,6 @@ import uk.co.ribot.androidboilerplate.data.model.Subcategory;
 import uk.co.ribot.androidboilerplate.data.model.UpdateProfileResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
-import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 import uk.co.ribot.androidboilerplate.injection.ApplicationContext;
 
@@ -52,7 +56,6 @@ import uk.co.ribot.androidboilerplate.injection.ApplicationContext;
 public class DataManager {
 
     private final BazarlakService mBazarlakService;
-    private final DatabaseHelper mDatabaseHelper;
     private final PreferencesHelper mPreferencesHelper;
     protected SugarDb sugarDb;
     Context mContext;
@@ -60,10 +63,9 @@ public class DataManager {
 
     @Inject
     public DataManager(BazarlakService bazarlakService, PreferencesHelper preferencesHelper,
-                       DatabaseHelper databaseHelper, @ApplicationContext Context context) {
+                       @ApplicationContext Context context) {
         mBazarlakService = bazarlakService;
         mPreferencesHelper = preferencesHelper;
-        mDatabaseHelper = databaseHelper;
         mContext = context;
     }
 
@@ -72,29 +74,27 @@ public class DataManager {
     }
 
     public String getToken() {
-        if (getPreferencesHelper().getCurrentUser().getAccessToken() != null &&
+        if (getPreferencesHelper().getCurrentUser() != null &&
+                getPreferencesHelper().getCurrentUser().getAccessToken() != null &&
                 !getPreferencesHelper().getCurrentUser().getAccessToken().isEmpty()) {
             token = "Bearer " + getPreferencesHelper().getCurrentUser().getAccessToken();
         }
         Timber.d("token %s", token);
         return token;
     }
-
-    public Observable<Ribot> syncRibots() {
-        return mBazarlakService.getRibots()
-                .concatMap(new Function<List<Ribot>, ObservableSource<? extends Ribot>>() {
-                    @Override
-                    public ObservableSource<? extends Ribot> apply(@NonNull List<Ribot> ribots)
-                            throws Exception {
-                        return mDatabaseHelper.setRibots(ribots);
-                    }
-                });
+    public UserData getUserSession() {
+        return getPreferencesHelper().getCurrentUser();
     }
 
-    public Observable<List<Ribot>> getRibots() {
-        return mDatabaseHelper.getRibots().distinct();
+    private UserData getAuthnticate() {
+        UserData postBody = new UserData();
+        Timber.d("usersession %s", getUserSession());
+        if (getUserSession() != null) {
+            postBody.setId(getUserSession().getId());
+            postBody.setAccessToken(getUserSession().getAccessToken());
+        }
+        return postBody;
     }
-
     @android.support.annotation.NonNull
     public Observable<RegisterResponse> makeLogin(UserData userData) {
 
@@ -165,6 +165,7 @@ public class DataManager {
                             @Override
                             public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
                                 try {
+                                    Timber.d("restResponse %s", restResponse);
                                     e.onNext(restResponse);
                                     e.onComplete();
                                 } catch (Exception e1) {
@@ -259,6 +260,33 @@ public class DataManager {
                     }
                 });
     }
+
+    public Observable<PaymentData> getPaymentAndAddressData() {
+        return mBazarlakService.getPaymentAndAddressData(getToken())
+                .concatMap(new Function<PaymentANDAddressResponse, ObservableSource<? extends PaymentData>>() {
+                    @Override
+                    public ObservableSource<? extends PaymentData> apply(final PaymentANDAddressResponse addressResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<PaymentData>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<PaymentData> e) throws Exception {
+
+                                try {
+                                    Timber.d("addressResponse %s", addressResponse.toString());
+                                    if (addressResponse.getStatus())
+                                        e.onNext(addressResponse.getPaymentData());
+                                    else
+                                        e.onNext(null);
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+
+                            }
+                        });
+                    }
+                });
+    }
+
 
     public Observable<CategoryResponse> syncCategories() {
         return mBazarlakService.getAllCategories()
@@ -360,7 +388,8 @@ public class DataManager {
         });
     }
 
-    public Observable<ProductResponse> getProducts(String categoryId, String subCategoryId, String extracategoryId, String page) {
+    public Observable<ProductResponse> getProducts(String categoryId, String
+            subCategoryId, String extracategoryId, String page) {
         Timber.d("categoryId %s subCategoryId%s ExtracategoryId%s", categoryId, subCategoryId, extracategoryId);
         if (extracategoryId == null || extracategoryId.equals("null"))
             extracategoryId = "";
@@ -424,7 +453,8 @@ public class DataManager {
                 });
     }
 
-    public Observable<FilterDataResponse> getFiltersData(String subcategory, String extracategory) {
+    public Observable<FilterDataResponse> getFiltersData(String subcategory, String
+            extracategory) {
         return mBazarlakService.getFiltersData(subcategory, extracategory)
                 .concatMap(new Function<FilterDataResponse, ObservableSource<? extends FilterDataResponse>>() {
                     @Override
@@ -490,7 +520,8 @@ public class DataManager {
                 });
     }
 
-    public Observable<RestResponse> saveOrders(OrderData orderData) {
+    public Observable<RestResponse> saveOrders(CartBody orderData) {
+        //  Timber.d("%s",orderData);
         return mBazarlakService.saveOrders(getToken(), orderData)
                 .concatMap(new Function<RestResponse, ObservableSource<? extends RestResponse>>() {
                     @Override
@@ -500,10 +531,16 @@ public class DataManager {
                             public void subscribe(ObservableEmitter<RestResponse> e) throws Exception {
                                 try {
                                     Timber.d("restResponse %s", restResponse);
+                                    if (restResponse.getStatus()) {
+                                        openDatabase();
+                                        clearCartWithoutrx();
+                                    }
                                     e.onNext(restResponse);
                                     e.onComplete();
                                 } catch (Exception e1) {
                                     e.onError(e1);
+                                } finally {
+                                    closeDatabase();
                                 }
                             }
                         });
@@ -511,19 +548,19 @@ public class DataManager {
                 });
     }
 
-    public Observable<Boolean> addTobag(final ProductOrder productOrder) {
+    public Observable<Integer> addTobag(final ProductOrder productOrder) {
         Timber.d("productOrder %s", productOrder);
-        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+        return Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
-            public void subscribe(ObservableEmitter<Boolean> subscriber) throws Exception {
+            public void subscribe(ObservableEmitter<Integer> subscriber) throws Exception {
                 try {
-                    boolean isSavedInDatabase = saveOrderWithoutRX(productOrder);
+                    int isSavedInDatabase = saveOrderWithoutRX(productOrder);
                     Timber.d("isSavedInDatabase %s", isSavedInDatabase);
 
                     subscriber.onNext(isSavedInDatabase);
                     subscriber.onComplete();
                 } catch (Exception e) {
-                    subscriber.onNext(false);
+                    subscriber.onNext(-1);
                     subscriber.onError(e);
                 }
             }
@@ -531,39 +568,43 @@ public class DataManager {
 
     }
 
-    public Boolean saveOrderWithoutRX(ProductOrder productOrder) {
-        boolean isSavedInDatabase = false;
+    public int saveOrderWithoutRX(ProductOrder productOrder) {
+        int isSavedInDatabase;
         Timber.d("saveOrderWithoutRX");
 
         List<ProductOrder> productOrderList;
 
-        productOrderList = ProductOrder.find(ProductOrder.class, "product_id=? and product_feature=?", new String[]{String.valueOf(productOrder.getProductId()), String.valueOf(productOrder.getProductFeature())});
+        productOrderList = ProductOrder.find(ProductOrder.class, "user_id=? andproduct_id=? and product_feature=?",
+                new String[]{String.valueOf(getUserId()),String.valueOf(productOrder.getProductId()), String.valueOf(productOrder.getProductFeature())});
         if (productOrderList.size() > 0) {
-            Timber.d("saved productOrder");
-            productOrderList.get(0).setQuantity(productOrder.getQuantity());
-            productOrderList.get(0).setProductFeature(productOrder.getProductFeature());
-            productOrderList.get(0).setProductId(productOrder.getProductId());
-            productOrderList.get(0).setProduct(productOrder.getProduct());
-            productOrderList.get(0).save();
-            if (productOrderList.get(0).save() > 0)
-                isSavedInDatabase = true;
-        } else {
-            productOrder.setProductId(productOrder.getProductId());
-            productOrder.setId(Long.valueOf(productOrder.getProductId()));
-            productOrder.setProductFeature(productOrder.getProductFeature());
-            productOrder.setProduct(productOrder.getProduct());
-            Product product = productOrder.getProduct();
-            product.setId(Long.valueOf(productOrder.getProduct().getProductId()));
-            product.save();
-            productOrder.save();
-            if (productOrder.save() > 0) {
-                isSavedInDatabase = true;
-                Timber.d("save productOrder %s", productOrder.getProductId());
+            if (productOrder.getProduct() != null) {
+                Timber.d("saved productOrder");
+                productOrderList.get(0).setQuantity(productOrder.getQuantity());
+                productOrderList.get(0).setProductFeature(productOrder.getProductFeature());
+                // productOrderList.get(0).setProductId(productOrder.getProductId());
+                // productOrderList.get(0).setProduct(productOrder.getProduct());
+                productOrderList.get(0).save();
             }
-
+        } else {
+            if (productOrder.getProduct() != null) {
+                productOrder.setProductId(productOrder.getProductId());
+                productOrder.setId(Long.valueOf(productOrder.getProductId()));
+                productOrder.setProductFeature(productOrder.getProductFeature());
+                productOrder.setProduct(productOrder.getProduct());
+                Product product = productOrder.getProduct();
+                product.setId(Long.valueOf(productOrder.getProduct().getProductId()));
+                product.save();
+                productOrder.save();
+                if (productOrder.save() > 0) {
+                    //isSavedInDatabase = productOrderList.size()+1;
+                    Timber.d("save productOrder %s", productOrder.getProductId());
+                }
+            }
         }
+        Iterator<ProductOrder> productOrderIterator = ProductOrder.findAll(ProductOrder.class);
+        productOrderList = Lists.newArrayList(productOrderIterator);
+        isSavedInDatabase = productOrderList.size();
         return isSavedInDatabase;
-
     }
 
     public Observable<List<ProductOrder>> getSavedOrders() {
@@ -572,8 +613,8 @@ public class DataManager {
             @Override
             public void subscribe(ObservableEmitter<List<ProductOrder>> e) throws Exception {
                 openDatabase();
-                Iterator<ProductOrder> productOrderIterator = ProductOrder.findAll(ProductOrder.class);
-                List<ProductOrder> productOrderList = Lists.newArrayList(productOrderIterator);
+                List<ProductOrder> productOrderList = ProductOrder.find(ProductOrder.class,"user_id=?", String.valueOf(getUserId()));
+               // List<ProductOrder> productOrderList = Lists.newArrayList(productOrderIterator);
                 closeDatabase();
                 Timber.d("productOrderList %s", productOrderList);
                 try {
@@ -630,6 +671,45 @@ public class DataManager {
                 });
     }
 
+    public Observable<MyOrders> getMyOrders() {
+        return mBazarlakService.getMyOrder(getToken())
+                .concatMap(new Function<MyorderResponse, ObservableSource<? extends MyOrders>>() {
+                    @Override
+                    public ObservableSource<? extends MyOrders> apply(final MyorderResponse myorderResponse) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<MyOrders>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<MyOrders> e) throws Exception {
+                                try {
+                                    Timber.d("myorderResponse %s", myorderResponse);
+                                    e.onNext(myorderResponse.getMyOrders());
+                                    e.onComplete();
+                                } catch (Exception e1) {
+                                    e.onError(e1);
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
+    public Observable<Integer> getCartCount() {
+        return Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> e) throws Exception {
+                openDatabase();
+                List<ProductOrder> productOrderList = ProductOrder.find(ProductOrder.class,"user_id=?", String.valueOf(getUserId()));
+                closeDatabase();
+                Timber.d("productOrderList %s", productOrderList);
+                try {
+                    e.onNext(productOrderList.size());
+                    e.onComplete();
+                } catch (Exception ex) {
+                    e.onError(ex);
+                }
+            }
+        });
+    }
+
     private void closeDatabase() {
         sugarDb.close();
     }
@@ -638,5 +718,98 @@ public class DataManager {
         sugarDb = new SugarDb(mContext);
         if (!sugarDb.getDB().isOpen())
             sugarDb.getReadableDatabase();
+    }
+
+    public Observable<List<ProductOrder>> deleteOrder(
+            final List<ProductOrder> checkedProductOrders) {
+        return Observable.create(new ObservableOnSubscribe<List<ProductOrder>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<ProductOrder>> e) throws Exception {
+                openDatabase();
+                for (ProductOrder productOrder :
+                        checkedProductOrders) {
+                    int row = ProductOrder.deleteAll(ProductOrder.class,
+                            "user_id=? and product_id=? and product_feature=?",
+                            new String[]{String.valueOf(getUserId()),String.valueOf(productOrder.getProductId()), String.valueOf(productOrder.getProductFeature())});
+//                    String query = "DELETE FROM PRODUCT_ORDER WHERE product_id = '" + productOrder.getProduct()
+//                            + "' and product_feature= '" + productOrder.getProductFeature() + "'";
+//                    ProductOrder.executeQuery(query);
+                    if (row > 0)
+                        Timber.d("selete %s", row);
+                }
+                List<ProductOrder> productOrderList = ProductOrder.find(ProductOrder.class,"user_id=?", String.valueOf(getUserId()));
+                closeDatabase();
+                Timber.d("productOrderList %s", productOrderList);
+                try {
+                    e.onNext(productOrderList);
+                    e.onComplete();
+                } catch (Exception ex) {
+                    e.onError(ex);
+                }
+            }
+        });
+    }
+
+    /////////////////////////////////////////
+
+
+    private boolean deleteOrders(final List<ProductOrder> productOrders) {
+        boolean idDeleted = false;
+        try {
+
+            openDatabase();
+            Timber.d("productOrder %s", productOrders);
+            for (ProductOrder serviceOrderBody :
+                    productOrders) {
+                int row = ProductOrder.deleteAll(ProductOrder.class,
+                        "product_id = ? and user_id = ?",
+                        String.valueOf(serviceOrderBody.getProductId()), String.valueOf(getUserId()));
+                if (row > 0) {
+                    idDeleted = true;
+                    Timber.d("delete %s", row);
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeDatabase();
+        }
+        return idDeleted;
+    }
+
+    public Observable<Boolean> clearCart() {
+
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) {
+                try {
+                    openDatabase();
+                    clearCartWithoutrx();
+                    e.onNext(true);
+                    e.onComplete();
+                } catch (Exception e1) {
+                    e.onError(e1);
+                } finally {
+                    closeDatabase();
+                }
+
+
+            }
+        });
+
+    }
+
+    private void clearCartWithoutrx() {
+        List<ProductOrder> productOrderList = ProductOrder.find(ProductOrder.class,
+                "user_id=?", String.valueOf(getUserId()));
+        Timber.d("productOrderBodyList %s", productOrderList);
+        if (productOrderList != null && productOrderList.size() > 0) {
+            deleteOrders(productOrderList);
+        }
+
+    }
+    private int getUserId() {
+        return getUserSession() != null ? getAuthnticate().getId() : 0;
     }
 }

@@ -16,6 +16,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import uk.co.ribot.androidboilerplate.R;
 
 public final class ViewUtil {
@@ -136,5 +139,9 @@ public final class ViewUtil {
         a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
-
+    public static String convertobjToJson(Object objectList, Class<?> aClass) {
+        SuperclassExclusionStrategy ex = new SuperclassExclusionStrategy();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().addDeserializationExclusionStrategy(ex).addSerializationExclusionStrategy(ex).create();
+        return gson.toJson(objectList);
+    }
 }

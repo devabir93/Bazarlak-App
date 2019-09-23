@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,7 +35,6 @@ import uk.co.ribot.androidboilerplate.data.model.Product;
 import uk.co.ribot.androidboilerplate.data.model.ProductBody;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
-import uk.co.ribot.androidboilerplate.ui.category.subcategory.SubCategoryFragment;
 import uk.co.ribot.androidboilerplate.ui.category.subcategory.filter.FilterActivity;
 import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.RecyclerItemClickListener;
@@ -264,7 +262,7 @@ public class ProductsFragment extends BaseFragment implements ProductsMvpView {
     }
 
     @Override
-    public void addedToBag(boolean b) {
+    public void addedToBag(Integer b) {
 
     }
 

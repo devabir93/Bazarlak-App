@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ import uk.co.ribot.androidboilerplate.data.model.ProductFeature;
 import uk.co.ribot.androidboilerplate.ui.bag.BagFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
+import uk.co.ribot.androidboilerplate.util.CartBadge;
+import uk.co.ribot.androidboilerplate.util.LoadFragment;
 
 public class ProductsDetailsFragment extends BaseFragment implements ProductsMvpView, MaterialSpinner.OnItemSelectedListener {
     @Inject
@@ -85,13 +88,13 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((BaseActivity) getActivity()).activityComponent().inject(this);
-            //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-       // ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        // ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
     }
 
@@ -173,8 +176,12 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
     }
 
     @Override
-    public void addedToBag(boolean b) {
-        if (b) showAlertDialog();
+    public void addedToBag(Integer count) {
+
+        if (count != -1) {
+            EventBus.getDefault().postSticky(new CartBadge(count));
+            showAlertDialog();
+        }
     }
 
     @OnClick({R.id.relative_close, R.id.add_to_bag_layout})
@@ -230,6 +237,9 @@ public class ProductsDetailsFragment extends BaseFragment implements ProductsMvp
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.product_details_fragment, nextFrag, BagFragment.class.getName())
                         .commit();
+
+//                Fragment fragment = new BagFragment();
+//                EventBus.getDefault().post(new LoadFragment(fragment));
                 alertDialogObject.dismiss();
 
             }

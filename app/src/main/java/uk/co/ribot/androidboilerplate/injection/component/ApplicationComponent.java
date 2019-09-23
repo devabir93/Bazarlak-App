@@ -8,12 +8,13 @@ import javax.inject.Singleton;
 import dagger.Component;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.SyncService;
-import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.data.local.UserSession;
 import uk.co.ribot.androidboilerplate.data.remote.BazarlakService;
 import uk.co.ribot.androidboilerplate.injection.ApplicationContext;
 import uk.co.ribot.androidboilerplate.injection.module.ApplicationModule;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
+import uk.co.ribot.androidboilerplate.util.LanguageUtils;
 import uk.co.ribot.androidboilerplate.util.RxEventBus;
 
 @Singleton
@@ -28,8 +29,9 @@ public interface ApplicationComponent {
     Application application();
     BazarlakService ribotsService();
     PreferencesHelper preferencesHelper();
-    DatabaseHelper databaseHelper();
     DataManager dataManager();
     RxEventBus eventBus();
+    LanguageUtils language_utils();
+    UserSession USER_SESSION();
 
 }

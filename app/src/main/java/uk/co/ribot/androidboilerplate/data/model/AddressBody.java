@@ -7,6 +7,7 @@ import android.os.Parcelable.Creator;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -16,7 +17,7 @@ public class AddressBody implements Parcelable {
 
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Integer addressId;
     @SerializedName("user_id")
     @Expose
     private String userId;
@@ -61,7 +62,7 @@ public class AddressBody implements Parcelable {
     };
 
     protected AddressBody(Parcel in) {
-        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.addressId = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.userId = ((String) in.readValue((String.class.getClassLoader())));
         this.fullname = ((String) in.readValue((String.class.getClassLoader())));
         this.mobile = ((String) in.readValue((String.class.getClassLoader())));
@@ -93,7 +94,7 @@ public class AddressBody implements Parcelable {
      */
     public AddressBody(Integer id, String userId, String fullname, String mobile, String country, String city, String state, String address1, String address2, String postcode) {
         super();
-        this.id = id;
+        this.addressId = id;
         this.userId = userId;
         this.fullname = fullname;
         this.mobile = mobile;
@@ -116,12 +117,12 @@ public class AddressBody implements Parcelable {
         this.postcode = postCode;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getAddressId() {
+        return addressId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setAddressId(Integer id) {
+        this.addressId = id;
     }
 
     public String getUserId() {
@@ -198,12 +199,21 @@ public class AddressBody implements Parcelable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", id).append("userId", userId).append("fullname", fullname).append("mobile", mobile).append("country", country).append("city", city).append("state", state).append("address1", address1).append("address2", address2).append("postcode", postcode).toString();
+        return
+                fullname + "\n" +
+                        mobile + "\n" +
+                        country + "\n" +
+                        city + "\n" +
+                        state + "\n" +
+                        address1 + "\n" +
+                        address2 + "\n" +
+                        postcode + "\n"
+                ;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).append(userId).append(state).append(address1).append(address2).append(postcode).append(fullname).append(city).append(country).append(mobile).toHashCode();
+        return new HashCodeBuilder().append(addressId).append(userId).append(state).append(address1).append(address2).append(postcode).append(fullname).append(city).append(country).append(mobile).toHashCode();
     }
 
     @Override
@@ -215,11 +225,11 @@ public class AddressBody implements Parcelable {
             return false;
         }
         AddressBody rhs = ((AddressBody) other);
-        return new EqualsBuilder().append(id, rhs.id).append(userId, rhs.userId).append(state, rhs.state).append(address1, rhs.address1).append(address2, rhs.address2).append(postcode, rhs.postcode).append(fullname, rhs.fullname).append(city, rhs.city).append(country, rhs.country).append(mobile, rhs.mobile).isEquals();
+        return new EqualsBuilder().append(addressId, rhs.addressId).append(userId, rhs.userId).append(state, rhs.state).append(address1, rhs.address1).append(address2, rhs.address2).append(postcode, rhs.postcode).append(fullname, rhs.fullname).append(city, rhs.city).append(country, rhs.country).append(mobile, rhs.mobile).isEquals();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(id);
+        dest.writeValue(addressId);
         dest.writeValue(userId);
         dest.writeValue(fullname);
         dest.writeValue(mobile);

@@ -23,7 +23,7 @@ public class PaymentDataBody implements Parcelable {
     @SerializedName("card_number")
     @Expose
     private String cardNumber;
-    @SerializedName("expiration_date")
+    @SerializedName("expiration")
     @Expose
     private String expiration;
     @SerializedName("isdefault")
@@ -35,30 +35,113 @@ public class PaymentDataBody implements Parcelable {
     @SerializedName("id")
     @Expose
     private Integer id;
-    public final static Creator<PaymentDataBody> CREATOR = new Creator<PaymentDataBody>() {
+    @SerializedName("type")
+    @Expose
+    private String type;
 
+    protected PaymentDataBody(Parcel in) {
+        if (in.readByte() == 0) {
+            userId = null;
+        } else {
+            userId = in.readInt();
+        }
+        name = in.readString();
+        cardNumber = in.readString();
+        expiration = in.readString();
+        isdefault = in.readString();
+        cvc = in.readString();
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        type = in.readString();
+    }
 
-        @SuppressWarnings({
-                "unchecked"
-        })
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (userId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(userId);
+        }
+        dest.writeString(name);
+        dest.writeString(cardNumber);
+        dest.writeString(expiration);
+        dest.writeString(isdefault);
+        dest.writeString(cvc);
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(type);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<PaymentDataBody> CREATOR = new Creator<PaymentDataBody>() {
+        @Override
         public PaymentDataBody createFromParcel(Parcel in) {
             return new PaymentDataBody(in);
         }
 
+        @Override
         public PaymentDataBody[] newArray(int size) {
-            return (new PaymentDataBody[size]);
+            return new PaymentDataBody[size];
         }
-
     };
 
-    protected PaymentDataBody(Parcel in) {
-        this.userId = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.name = ((String) in.readValue((String.class.getClassLoader())));
-        this.cardNumber = ((String) in.readValue((String.class.getClassLoader())));
-        this.expiration = ((String) in.readValue((String.class.getClassLoader())));
-        this.isdefault = ((String) in.readValue((String.class.getClassLoader())));
-        this.cvc = ((String) in.readValue((String.class.getClassLoader())));
-        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
+    @Override
+    public String toString() {
+        return "PaymentDataBody{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", expiration='" + expiration + '\'' +
+                ", isdefault='" + isdefault + '\'' +
+                ", cvc='" + cvc + '\'' +
+                ", id=" + id +
+                ", type=" + type +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PaymentDataBody that = (PaymentDataBody) o;
+
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (cardNumber != null ? !cardNumber.equals(that.cardNumber) : that.cardNumber != null)
+            return false;
+        if (expiration != null ? !expiration.equals(that.expiration) : that.expiration != null)
+            return false;
+        if (isdefault != null ? !isdefault.equals(that.isdefault) : that.isdefault != null)
+            return false;
+        if (cvc != null ? !cvc.equals(that.cvc) : that.cvc != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return type != null ? type.equals(that.type) : that.type == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId != null ? userId.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (cardNumber != null ? cardNumber.hashCode() : 0);
+        result = 31 * result + (expiration != null ? expiration.hashCode() : 0);
+        result = 31 * result + (isdefault != null ? isdefault.hashCode() : 0);
+        result = 31 * result + (cvc != null ? cvc.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
     }
 
     /**
@@ -143,40 +226,11 @@ public class PaymentDataBody implements Parcelable {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("userId", userId).append("name", name).append("cardNumber", cardNumber).append("expiration", expiration).append("isdefault", isdefault).append("cvc", cvc).append("id", id).toString();
+    public void setType(String type) {
+        this.type = type;
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(id).append(isdefault).append(expiration).append(name).append(userId).append(cvc).append(cardNumber).toHashCode();
+    public String getType() {
+        return type;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof PaymentDataBody) == false) {
-            return false;
-        }
-        PaymentDataBody rhs = ((PaymentDataBody) other);
-        return new EqualsBuilder().append(id, rhs.id).append(isdefault, rhs.isdefault).append(expiration, rhs.expiration).append(name, rhs.name).append(userId, rhs.userId).append(cvc, rhs.cvc).append(cardNumber, rhs.cardNumber).isEquals();
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(userId);
-        dest.writeValue(name);
-        dest.writeValue(cardNumber);
-        dest.writeValue(expiration);
-        dest.writeValue(isdefault);
-        dest.writeValue(cvc);
-        dest.writeValue(id);
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
 }

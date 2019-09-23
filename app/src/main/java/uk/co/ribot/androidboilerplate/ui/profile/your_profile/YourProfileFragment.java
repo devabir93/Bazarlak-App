@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.ui.bag.billing.payment.PaymentFragment;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.ProfileMvpView;
@@ -27,8 +29,6 @@ import uk.co.ribot.androidboilerplate.util.Message;
 
 public class YourProfileFragment extends BaseActivity implements ProfileMvpView {
 
-    @BindView(R.id.second_toolbar)
-    Toolbar toolbar;
     @BindView(R.id.edit_info_layout)
     RelativeLayout editInfoLayout;
     @BindView(R.id.password_layout)
@@ -41,7 +41,11 @@ public class YourProfileFragment extends BaseActivity implements ProfileMvpView 
     RelativeLayout shippingAddressLayout;
     @BindView(R.id.signout_button)
     Button signoutButton;
+    @BindView(R.id.activity_name_textView)
+    TextView title;
 
+    @BindView(R.id.toolbar1)
+    Toolbar toolbar;
     @Inject
     PreferencesHelper preferencesHelper;
 
@@ -51,18 +55,46 @@ public class YourProfileFragment extends BaseActivity implements ProfileMvpView 
         activityComponent().inject(this);
         setContentView(R.layout.your_profile_fragment);
         ButterKnife.bind(this);
-
-        TextView textView = toolbar.findViewById(R.id.activity_name_textView_secondary);
-        textView.setText(getString(R.string.your_profile));
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.postDelayed(new Runnable()
+        {
             @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
+            public void run ()
+            {
+                int maxWidth = toolbar.getWidth();
+                int titleWidth = title.getWidth();
+                int iconWidth = maxWidth - titleWidth;
 
+                if (iconWidth > 0)
+                {
+                    //icons (drawer, menu) are on left and right side
+                    int width = maxWidth - iconWidth * 2;
+                    title.setMinimumWidth(width);
+                    title.getLayoutParams().width = width;
+                }
+            }
+        }, 0);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -94,7 +126,7 @@ public class YourProfileFragment extends BaseActivity implements ProfileMvpView 
                 break;
             case R.id.payment_details_layout:
                 intent = new Intent(this, PaymentDetailsActivity.class);
-                intent.putExtra("frag", PaymentDetailsActivityFragment.class.getName());
+                intent.putExtra("frag", PaymentFragment.class.getName());
                 startActivity(intent);
                 break;
             case R.id.shipping_address_layout:

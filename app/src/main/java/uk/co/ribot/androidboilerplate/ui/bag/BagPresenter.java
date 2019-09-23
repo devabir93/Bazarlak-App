@@ -1,5 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.bag;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
@@ -18,6 +20,7 @@ import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
+import uk.co.ribot.androidboilerplate.util.CartBadge;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 @ConfigPersistent
@@ -90,4 +93,52 @@ public class BagPresenter extends BasePresenter<BagMvpView> {
                 });
     }
 
+    public void deleteOrder(List<ProductOrder> checkedProductOrders) {
+        checkViewAttached();
+        RxUtil.dispose(mDisposable);
+        mDataManager.deleteOrder(checkedProductOrders)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<List<ProductOrder>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull List<ProductOrder> productOrderList) {
+                        Timber.d("productOrderList %s", productOrderList);
+                        if (productOrderList != null && productOrderList.size() > 0) {
+                            getMvpView().showSavedOrders(productOrderList);
+                            EventBus.getDefault().postSticky(new CartBadge(productOrderList.size()));
+                        } else {
+                            EventBus.getDefault().postSticky(new CartBadge(0));
+                            getMvpView().showEmpty();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        if (e instanceof HttpException) {
+                            ResponseBody responseBody = ((HttpException) e).response().errorBody();
+                            // view.onUnknownError(getErrorMessage(responseBody));
+                        } else if (e instanceof SocketTimeoutException) {
+                            getMvpView().onTimeout();
+                        } else if (e instanceof IOException) {
+                            getMvpView().onNetworkError();
+                        } else {
+                            //  getMvpView().showError();
+                            getMvpView().onUnknownError(e.getMessage());
+                        }
+                        Timber.e(e, "There was an error while getSearchResult");
+                        //getMvpView().showError();
+                        getMvpView().showProgresBar(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        getMvpView().showProgresBar(false);
+                    }
+                });
+    }
 }

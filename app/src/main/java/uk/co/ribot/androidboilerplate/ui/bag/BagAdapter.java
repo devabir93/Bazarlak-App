@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +23,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.refactor.library.SmoothCheckBox;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
 import uk.co.ribot.androidboilerplate.data.model.Product;
@@ -33,7 +34,6 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
     private List<ProductOrder> savedProductOrders;
     private Context mcontext;
     UpdateDataClickListener updateDataClickListener;
-
     @Inject
     public BagAdapter() {
         mProducts = new ArrayList<>();
@@ -75,9 +75,10 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
                     return false;
                 }
             });
-            holder.checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
+
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
+                public void onCheckedChanged(CompoundButton checkBox, boolean isChecked) {
                     if (isChecked) {
                         if (!savedProductOrders.contains(mProducts.get(holder.getAdapterPosition())))
                             savedProductOrders.add(mProducts.get(holder.getAdapterPosition()));
@@ -101,7 +102,7 @@ public class BagAdapter extends RecyclerView.Adapter<BagAdapter.CategoryViewHold
     class CategoryViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.checkBox)
-        SmoothCheckBox checkBox;
+        CheckBox checkBox;
         @BindView(R.id.bag_imageView)
         ImageView bagImageView;
         @BindView(R.id.brand_name)

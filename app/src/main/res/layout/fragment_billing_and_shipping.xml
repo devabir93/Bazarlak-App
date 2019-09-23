@@ -36,8 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:background="@color/white"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:background="@color/white">
 
                 <TextView
                     android:id="@+id/choose_payment_textView"
@@ -45,16 +44,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/payment_imageView"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_toStartOf="@+id/visa_imageView"
                     android:text="@string/choose_payment_label"
                     android:textSize="15sp" />
 
                 <ImageView
-                    android:id="@+id/payment_imageView"
+                    android:id="@+id/plus_imageView"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp"
                     android:src="@drawable/ic_plus" />
+
+                <ImageView
+                    android:id="@+id/visa_imageView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/visamastercard"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -89,7 +106,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/choose_shipping_textView"
                     android:layout_marginTop="16dp"
-                    android:text="customer name..." />
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -101,20 +118,36 @@
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <TextView
-                    android:id="@+id/subTotal_textView"
+                    android:id="@+id/subTotalLable_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:text="@string/subTotal_price_label" />
 
                 <TextView
-                    android:id="@+id/shipping_textView"
+                    android:id="@+id/subTotal_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="100 SAR" />
+
+                <TextView
+                    android:id="@+id/shippingLabel_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/subTotal_textView"
                     android:layout_marginTop="12dp"
-                    android:text="@string/total_price_label" />
+                    android:text="@string/shipping_label" />
+
+                <TextView
+                    android:id="@+id/shipping_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/subTotal_textView"
+                    android:layout_marginTop="12dp"
+                    android:text="30 SAR" />
 
                 <View
                     android:id="@+id/line"
@@ -126,77 +159,35 @@
                     android:background="@color/gray" />
 
                 <TextView
-                    android:id="@+id/total_textView"
+                    android:id="@+id/totalLabel_textView"
                     style="@style/normalBlackText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/line"
-                    android:text="@string/shipping_label"
+                    android:text="@string/total_price_label"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/total_textView"
+                    style="@style/normalBlackText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/line"
+                    android:text="130 SAR"
                     android:textStyle="bold" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/items_layout"
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/white"
-                android:padding="@dimen/activity_horizontal_margin">
-
-                <ImageView
-                    android:id="@+id/bag_imageView"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_alignParentStart="true"
-                    android:src="@color/app_menu_grey" />
-
-                <TextView
-                    android:id="@+id/brand_name"
-                    style="@style/normalBlackText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@+id/bag_imageView"
-                    android:text="Brand Name" />
-
-                <TextView
-                    android:id="@+id/item_type"
-                    style="@style/normalBlackText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/brand_name"
-                    android:layout_below="@+id/brand_name"
-                    android:layout_marginTop="8dp"
-                    android:layout_toEndOf="@+id/bag_imageView"
-                    android:text="Item Type"
-                    android:textColor="@color/textColor" />
-
-                <TextView
-                    android:id="@+id/item_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/bag_imageView"
-                    android:layout_alignStart="@+id/brand_name"
-                    android:layout_marginTop="8dp"
-                    android:text="Red, medium"
-                    android:textSize="14sp" />
-
-
-                <TextView
-                    android:id="@+id/price_textView"
-                    style="@style/noramSubText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/bag_imageView"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="4dp"
-                    android:text="33$"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@color/white" />
         </LinearLayout>
 
     </ScrollView>
@@ -204,7 +195,6 @@
     <Button
         android:id="@+id/buy_button"
         style="@style/redButton"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

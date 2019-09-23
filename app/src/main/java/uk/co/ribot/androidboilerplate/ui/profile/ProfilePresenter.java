@@ -77,8 +77,8 @@ public class ProfilePresenter extends BasePresenter<ProfileMvpView> {
                         if (!updateProfileResponse.getStatus()) {
                             getMvpView().showMessage(updateProfileResponse.getMessage());
                         } else {
-                            getMvpView().showMessage(updateProfileResponse.getMessage());
-                            getMvpView().finishActivity(true);
+                            getMvpView().showSnackBar(updateProfileResponse.getMessage());
+                            //getMvpView().finishActivity(true);
                         }
                     }
 
@@ -126,7 +126,7 @@ public class ProfilePresenter extends BasePresenter<ProfileMvpView> {
                             getMvpView().showMessage(updateProfileResponse.getMessage());
                         } else {
                             getMvpView().showSnackBar(updateProfileResponse.getMessage());
-                            getMvpView().finishActivity(true);
+                            //getMvpView().finishActivity(true);
                         }
                     }
 
@@ -173,8 +173,8 @@ public class ProfilePresenter extends BasePresenter<ProfileMvpView> {
                         if (!updateProfileResponse.getStatus()) {
                             getMvpView().showMessage(updateProfileResponse.getMessage());
                         } else {
-                            getMvpView().showMessage(updateProfileResponse.getMessage());
-                            getMvpView().finishActivity(true);
+                            getMvpView().showSnackBar(updateProfileResponse.getMessage());
+                           // getMvpView().finishActivity(true);
                         }
                     }
 
@@ -225,8 +225,8 @@ public class ProfilePresenter extends BasePresenter<ProfileMvpView> {
                         if (!updateProfileResponse.getStatus()) {
                             getMvpView().showMessage(updateProfileResponse.getMessage());
                         } else {
-                            getMvpView().showMessage(updateProfileResponse.getMessage());
-                            getMvpView().finishActivity(true);
+                            getMvpView().showSnackBar(updateProfileResponse.getMessage());
+                            //getMvpView().finishActivity(true);
                         }
                     }
 

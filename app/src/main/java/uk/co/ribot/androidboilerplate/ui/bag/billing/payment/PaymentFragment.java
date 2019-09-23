@@ -108,7 +108,7 @@ public class PaymentFragment extends BaseFragment implements PaymentMvpView, Pay
         if (filter != null)
             filter.setVisible(false); // Display clear filters
         if (bag != null)
-            bag.setVisible(true); // Display clear filters
+            bag.setVisible(false); // Display clear filters
         MenuItem backAction = menu.findItem(android.R.id.home);
         if (backAction != null)
             backAction.setVisible(false); // Display clear filters
@@ -172,10 +172,10 @@ public class PaymentFragment extends BaseFragment implements PaymentMvpView, Pay
     @Override
     public void onSaveClick(PaymentDataBody paymentDataBody) {
 
+        Timber.d("paymentDataBody %s",paymentDataBody);
         if (paymentDataBody != null) {
             mPaymentDataBody = paymentDataBody;
             paymentPresenter.savePaymentData(mPaymentDataBody);
-
         }
     }
 

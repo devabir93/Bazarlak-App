@@ -24,7 +24,7 @@
         </receiver>
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.main_activity.SplashActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,6 +60,7 @@
             android:name=".ui.profile.your_order.YourOrderActivity"
             android:label="@string/title_activity_your_order"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.bag.billing.OrderDoneActivity"></activity>
     </application>
 
 </manifest>

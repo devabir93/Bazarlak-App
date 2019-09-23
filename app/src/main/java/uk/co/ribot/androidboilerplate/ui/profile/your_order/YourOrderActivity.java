@@ -1,62 +1,58 @@
 package uk.co.ribot.androidboilerplate.ui.profile.your_order;
 
 import android.os.Bundle;
-import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.llollox.androidtoggleswitch.widgets.ToggleSwitch;
+
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.Current;
+import uk.co.ribot.androidboilerplate.data.model.ProductOrder;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 
 
-public class YourOrderActivity extends BaseActivity {
+public class YourOrderActivity extends BaseActivity implements YourOrdersMvpView {
     @BindView(R.id.activity_name_textView)
     TextView activityNameTextView;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar1)
     Toolbar toolbar;
-//    @BindView(R.id.tabCurrent)
-//    TabItem tabCurrent;
-//    @BindView(R.id.tabPrev)
-//    TabItem tabPrev;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
-    @BindView(R.id.viewpager)
-    ViewPager viewpager;
+
     @BindView(R.id.signout_button)
     Button signoutButton;
-
+    @BindView(R.id.toggle_switch)
+    ToggleSwitch toggleSwitch;
     public static int CURRENT_ORDERS = 1;
     public static int PREV_ORDERS = 2;
-    /**
-     * The {@link PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link FragmentStatePagerAdapter}.
-     */
+    @Inject
+    YourOrdersPresenter yourOrdersPresenter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    @Inject
+    YourOrdersAdapter yourOrdersAdapter;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
+    @BindView(R.id.main_content)
+    LinearLayout mainContent;
+
+    private List<Current> Current, pervious;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,61 +60,80 @@ public class YourOrderActivity extends BaseActivity {
         activityComponent().inject(this);
         setContentView(R.layout.activity_your_order);
         ButterKnife.bind(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.postDelayed(new Runnable()
+        {
+            @Override
+            public void run ()
+            {
+                int maxWidth = toolbar.getWidth();
+                int titleWidth = activityNameTextView.getWidth();
+                int iconWidth = maxWidth - titleWidth;
 
-        setupViewPager(viewpager);
-        tabLayout.setupWithViewPager(viewpager);
+                if (iconWidth > 0)
+                {
+                    //icons (drawer, menu) are on left and right side
+                    int width = maxWidth - iconWidth * 2;
+                    activityNameTextView.setMinimumWidth(width);
+                    activityNameTextView.getLayoutParams().width = width;
+                }
+            }
+        }, 0);
+        yourOrdersPresenter.attachView(this);
+        yourOrdersPresenter.checkConnection(this);
+        yourOrdersAdapter.setIsArabic(isArabic());
+        recyclerview.setLayoutManager(new LinearLayoutManager(this));
+        recyclerview.addItemDecoration(new DividerItemDecoration(this,LinearLayout.VERTICAL));
+        recyclerview.setAdapter(yourOrdersAdapter);
+        toggleSwitch.setCheckedPosition(0);
+        toggleSwitch.setOnChangeListener(new ToggleSwitch.OnChangeListener() {
+            @Override
+            public void onToggleSwitchChanged(int i) {
+                if (i == 0) {
+                    if (Current != null && Current.size() > 0) {
+                        yourOrdersAdapter.setProducts(YourOrderActivity.this, Current);
+                        yourOrdersAdapter.notifyDataSetChanged();
+                        emptyView.setVisibility(View.GONE);
+                        recyclerview.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyView.setVisibility(View.VISIBLE);
+                        recyclerview.setVisibility(View.GONE);
+                    }
+                } else {
+
+                    if (pervious != null && pervious.size() > 0) {
+                        emptyView.setVisibility(View.GONE);
+                        recyclerview.setVisibility(View.VISIBLE);
+                        yourOrdersAdapter.setProducts(YourOrderActivity.this, pervious);
+                        yourOrdersAdapter.notifyDataSetChanged();
+                    } else {
+                        emptyView.setVisibility(View.VISIBLE);
+                        recyclerview.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        Fragment currentOrders = YourOrdersFragment.newInstance(CURRENT_ORDERS);
-        Fragment prevOrders = YourOrdersFragment.newInstance(PREV_ORDERS);
-        adapter.addFragment(currentOrders, getResources().getString(R.string.current_label));
-        adapter.addFragment(prevOrders, getResources().getString(R.string.prev_label));
-        viewPager.setAdapter(adapter);
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+    @Override
+    public void hasActiveInternetConnection(boolean b) {
+        super.hasActiveInternetConnection(b);
+        if (b) {
+            yourOrdersPresenter.getOrders(this);
         }
     }
-
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_your_order, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -128,13 +143,40 @@ public class YourOrderActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            onBackPressed();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void showOrders(List<ProductOrder> productOrderList) {
+
+    }
+
+    @Override
+    public void showCurrentOrders(List<Current> current) {
+        Timber.d("showCurrentOrders %s",current);
+        this.Current = current;
+        emptyView.setVisibility(View.GONE);
+        recyclerview.setVisibility(View.VISIBLE);
+        yourOrdersAdapter.setProducts(this, current);
+        yourOrdersAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showPreviousOrders(List<Current> pervious) {
+        Timber.d("showPreviousOrders %s",pervious);
+        this.pervious = pervious;
+
+    }
 
     @OnClick(R.id.signout_button)
     public void onViewClicked() {

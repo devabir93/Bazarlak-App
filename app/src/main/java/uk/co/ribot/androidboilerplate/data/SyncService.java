@@ -16,7 +16,6 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BazarlakeApplication;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
-import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.util.AndroidComponentUtil;
 import uk.co.ribot.androidboilerplate.util.NetworkUtil;
 import uk.co.ribot.androidboilerplate.util.RxUtil;

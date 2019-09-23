@@ -12,5 +12,5 @@ public interface ProductsMvpView extends MvpView {
 
     void showEmpty();
 
-    void addedToBag(boolean b);
+    void addedToBag(Integer b);
 }

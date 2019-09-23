@@ -49,7 +49,7 @@ public class PaymentPresenter extends BasePresenter<PaymentMvpView> {
                 .subscribe(new Observer<RestResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        mDisposable = d;
                     }
 
                     @Override

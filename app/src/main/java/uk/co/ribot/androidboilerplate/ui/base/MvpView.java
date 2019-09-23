@@ -1,6 +1,8 @@
 package uk.co.ribot.androidboilerplate.ui.base;
 
 
+import com.rey.material.widget.ProgressView;
+
 import java.util.List;
 
 import uk.co.ribot.androidboilerplate.data.model.ProductOrder; /**
@@ -20,6 +22,11 @@ public interface MvpView {
 
     void showProgresBar(boolean b);
 
+    void showProgresBar(boolean b, ProgressView progressView);
+
     void showSnackBar(String message);
 
+    void showEmpty();
+
+    void showMessageDialog(String s);
 }

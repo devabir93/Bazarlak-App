@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.PaymentDataBody;
 import uk.co.ribot.androidboilerplate.util.CheckValidity;
@@ -129,6 +130,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 cardCvv = inputCvv.getText().toString();
             if (inputExpire.isValid())
                 cardExpire = inputExpire.getText().toString();
+            Timber.d("cardExpire %s",cardExpire);
 
             boolean b = checkboxRegister.isChecked();
             if (b)

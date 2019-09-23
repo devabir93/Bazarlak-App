@@ -3,6 +3,7 @@ package uk.co.ribot.androidboilerplate.data.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,7 +40,13 @@ public class PreferencesHelper {
         String jsonUser = mPref.getString(currentUserKey, null);
         return gson.fromJson(jsonUser, UserData.class);
     }
-
+    public void addWithKey(String key, String value) {
+        mPref.edit().putString(key, value).commit();
+    }
+    @Nullable
+    public String getWithKey(String key) {
+        return mPref.getString(key, "");
+    }
     public void removeUserSession() {
         mPref.edit().putString(currentUserKey, "").apply();
     }

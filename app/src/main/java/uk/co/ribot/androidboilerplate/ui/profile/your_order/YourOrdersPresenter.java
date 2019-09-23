@@ -17,6 +17,7 @@ import retrofit2.HttpException;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.MyOrders;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
 import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.data.model.RestResponse;
@@ -53,45 +54,44 @@ public class YourOrdersPresenter extends BasePresenter<YourOrdersMvpView> {
         getMvpView().showProgresBar(true);
         checkViewAttached();
         RxUtil.dispose(mDisposable);
-        getMvpView().showProgresBar(false);
+        mDataManager.getMyOrders()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<MyOrders>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
 
-//        mDataManager.getOrders()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Observer<RegisterResponse>() {
-//                    @Override
-//                    public void onSubscribe(@NonNull Disposable d) {
-//                        mDisposable = d;
-//                    }
-//
-//                    @Override
-//                    public void onNext(@NonNull RegisterResponse loginResponse) {
-//                        getMvpView().showProgresBar(false);
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//                        getMvpView().showProgresBar(false);
-//                        if (e instanceof HttpException) {
-//                            ResponseBody responseBody = ((HttpException) e).response().errorBody();
-//                           // view.onUnknownError(getErrorMessage(responseBody));
-//                        } else if (e instanceof SocketTimeoutException) {
-//                            getMvpView().onTimeout();
-//                        } else if (e instanceof IOException) {
-//                            getMvpView().onNetworkError();
-//                        } else {
-//                            //getMvpView().showError();
-//                            getMvpView().onUnknownError(e.getMessage());
-//                        }
-//                        Timber.e(e, "There was an error while login");
-//                       // getMvpView().showError();
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        getMvpView().showProgresBar(false);
-//                    }
-//                });
+                    @Override
+                    public void onNext(@NonNull MyOrders myOrders) {
+                        getMvpView().showCurrentOrders(myOrders.getCurrent());
+                        getMvpView().showPreviousOrders(myOrders.getPervious());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        getMvpView().showProgresBar(false);
+                        if (e instanceof HttpException) {
+                            ResponseBody responseBody = ((HttpException) e).response().errorBody();
+                           // view.onUnknownError(getErrorMessage(responseBody));
+                        } else if (e instanceof SocketTimeoutException) {
+                            getMvpView().onTimeout();
+                        } else if (e instanceof IOException) {
+                            getMvpView().onNetworkError();
+                        } else {
+                            //getMvpView().showError();
+                            getMvpView().onUnknownError(e.getMessage());
+                        }
+                        Timber.e(e, "There was an error while login");
+                       // getMvpView().showError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        getMvpView().showProgresBar(false);
+                    }
+                });
     }
 
 }

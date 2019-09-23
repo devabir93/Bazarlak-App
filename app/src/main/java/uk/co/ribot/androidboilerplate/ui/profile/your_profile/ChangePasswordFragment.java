@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,7 +32,10 @@ public class ChangePasswordFragment extends BaseActivity implements ProfileMvpVi
 
     @BindView(R.id.btn_save)
     Button btnSave;
-    @BindView(R.id.second_toolbar)
+    @BindView(R.id.activity_name_textView)
+    TextView activityNameTextView;
+
+    @BindView(R.id.toolbar1)
     Toolbar toolbar;
     @BindView(R.id.old_password_editText)
     EditText oldPasswordEditText;
@@ -50,18 +54,43 @@ public class ChangePasswordFragment extends BaseActivity implements ProfileMvpVi
         ButterKnife.bind(this);
         profilePresenter.attachView(this);
         profilePresenter.setContext(this);
-
-        TextView textView = toolbar.findViewById(R.id.activity_name_textView_secondary);
-        textView.setText(getString(R.string.change_password_label));
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.postDelayed(new Runnable() {
             @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
+            public void run() {
+                int maxWidth = toolbar.getWidth();
+                int titleWidth = activityNameTextView.getWidth();
+                int iconWidth = maxWidth - titleWidth;
 
+                if (iconWidth > 0) {
+                    //icons (drawer, menu) are on left and right side
+                    int width = maxWidth - iconWidth * 2;
+                    activityNameTextView.setMinimumWidth(width);
+                    activityNameTextView.getLayoutParams().width = width;
+                }
+            }
+        }, 0);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
     @OnClick(R.id.btn_save)
     public void onViewClicked() {
         profilePresenter.checkConnection(this);

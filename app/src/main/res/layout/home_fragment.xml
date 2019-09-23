@@ -6,25 +6,24 @@
     android:layout_height="match_parent">
 
     <com.afollestad.easyvideoplayer.EasyVideoPlayer
-    android:id="@+id/video_view"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    app:layout_constraintHeight_percent="0.4"
-    app:evp_autoPlay="true"
-    app:evp_customLabelText="Custom label text if rightAction is customLabel"
-    app:evp_disableControls="false"
-    app:evp_hideControlsOnPlay="true"
-    app:evp_leftAction="restart"
-    app:evp_pauseDrawable="@drawable/evp_action_pause"
-    app:evp_playDrawable="@drawable/evp_action_play"
-    app:evp_restartDrawable="@drawable/evp_action_restart"
-    app:evp_retryText="@string/evp_retry"
-    app:evp_rightAction="none"
-    app:evp_submitText="@string/evp_submit"
-    app:evp_themeColor="@color/colorPrimary"
-    app:evp_autoFullscreen="false"
-    app:evp_loop="false"
-    />
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:evp_autoFullscreen="false"
+        app:evp_autoPlay="true"
+        app:evp_customLabelText="Custom label text if rightAction is customLabel"
+        app:evp_disableControls="false"
+        app:evp_hideControlsOnPlay="true"
+        app:evp_leftAction="restart"
+        app:evp_loop="false"
+        app:evp_pauseDrawable="@drawable/evp_action_pause"
+        app:evp_playDrawable="@drawable/evp_action_play"
+        app:evp_restartDrawable="@drawable/evp_action_restart"
+        app:evp_retryText="@string/evp_retry"
+        app:evp_rightAction="none"
+        app:evp_submitText="@string/evp_submit"
+        app:evp_themeColor="@color/colorPrimary"
+        app:layout_constraintHeight_percent="0.4" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -36,8 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/photosGrid"

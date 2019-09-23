@@ -3,7 +3,7 @@ package uk.co.ribot.androidboilerplate.ui.profile.your_profile;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +18,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.AddressBody;
-import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.profile.ProfileMvpView;
 import uk.co.ribot.androidboilerplate.ui.profile.ProfilePresenter;
-import uk.co.ribot.androidboilerplate.util.DialogFactory;
 import uk.co.ribot.androidboilerplate.util.Message;
 import uk.co.ribot.androidboilerplate.util.ViewUtil;
 
@@ -53,7 +51,6 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
     EditText inputAddress2;
     @BindView(R.id.input_post_code)
     EditText inputPostCode;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +66,12 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
         ButterKnife.bind(this, view);
         profilePresenter.attachView(this);
         profilePresenter.setContext(getContext());
-
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         return view;
     }
 
@@ -82,7 +84,7 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
     @Override
     public void showMessage(String s) {
         if (s != null && !s.isEmpty())
-            DialogFactory.createSimpleOkDialog(getContext(), s);
+            showSnackBar(s);
 
     }
 
@@ -91,10 +93,6 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
 
     }
 
-//    @Override
-//    public void showProgresBar(boolean b) {
-//        DialogFactory.createNormailProgressBar(getContext(), b);
-//    }
 
     @Override
     public void finishActivity(boolean b) {
@@ -122,11 +120,8 @@ public class ShippingAddressActivityFragment extends BaseFragment implements Pro
             profilePresenter.updateAddress(addressBody);
         }
     }
-    @Override
-    public void showSnackBar(String message) {
-        ViewUtil.createSnackbar(getView(),message);
 
-    }
+
     @Override
     public void onTimeout() {
 

@@ -6,14 +6,12 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -21,31 +19,28 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import timber.log.Timber;
-import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.data.model.AddToCartBody;
 import uk.co.ribot.androidboilerplate.data.model.AddressBody;
+import uk.co.ribot.androidboilerplate.data.model.CartBody;
 import uk.co.ribot.androidboilerplate.data.model.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.FilterProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.GetProductByIdResponseBody;
 import uk.co.ribot.androidboilerplate.data.model.HomePageResponse;
-import uk.co.ribot.androidboilerplate.data.model.OrderData;
+import uk.co.ribot.androidboilerplate.data.model.MyorderResponse;
+import uk.co.ribot.androidboilerplate.data.model.PaymentANDAddressResponse;
 import uk.co.ribot.androidboilerplate.data.model.PaymentDataBody;
 import uk.co.ribot.androidboilerplate.data.model.ProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.RestEmailBody;
 import uk.co.ribot.androidboilerplate.data.model.RestPasswordBody;
 import uk.co.ribot.androidboilerplate.data.model.RestResponse;
-import uk.co.ribot.androidboilerplate.data.model.SaveOrdersResponse;
 import uk.co.ribot.androidboilerplate.data.model.UpdateProfileResponse;
 import uk.co.ribot.androidboilerplate.data.model.UserData;
-import uk.co.ribot.androidboilerplate.data.model.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.RegisterResponse;
-import uk.co.ribot.androidboilerplate.data.model.Ribot;
-import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
+import uk.co.ribot.androidboilerplate.util.MyAdapterFactory;
 
 public interface BazarlakService {
 
@@ -65,8 +60,6 @@ public interface BazarlakService {
     @GET("get_filter")
     Observable<FilterDataResponse> getFiltersData(@Query("subcategory") String subcategory, @Query("extracategory") String extracategory);
 
-    @GET("ribots")
-    Observable<List<Ribot>> getRibots();
 
     @GET("get_products")
     Observable<ProductResponse> getProduct(@Query("category") String categoryId, @Query("subcategory") String subCategoryId,
@@ -85,13 +78,10 @@ public interface BazarlakService {
     Observable<HomePageResponse> getHomePage();
 
     @POST("add_cart")
-    Observable<RestResponse> saveOrders(@Header("Authorization") String token, @Body OrderData orderData);
+    Observable<RestResponse> saveOrders(@Header("Authorization") String token, @Body CartBody orderData);
 
-    //    @Headers({"Accept: application/json"
-//            , "Accept-Language:en"
-//            , ""})
     @POST("forget_password")
-    Observable<RestResponse> forgotPassword(RestEmailBody restEmailBody);
+    Observable<RestResponse> forgotPassword(@Body RestEmailBody restEmailBody);
 
     @POST("reset_password")
     Observable<RestResponse> resetPassword(@Header("Authorization") String token, @Body RestPasswordBody restPasswordBody);
@@ -105,11 +95,17 @@ public interface BazarlakService {
     @POST("GetPayAddress")
     Observable<RestResponse> updateAddress(@Header("Authorization") String token, @Body AddressBody addressBody);
 
+    @GET("GetAllPaymentAddress")
+    Observable<PaymentANDAddressResponse> getPaymentAndAddressData(@Header("Authorization") String token);
+
     @GET("search")
     Observable<ProductResponse> getSearchResult(@Query("key") String key, @Query("page") String page);
 
     @POST("SetPayData")
     Observable<RestResponse> setPaymentData(@Header("Authorization") String token, @Body PaymentDataBody paymentDataBody);
+
+    @GET("my_order")
+    Observable<MyorderResponse> getMyOrder(@Header("Authorization") String token);
 
     /******** Helper class that sets up a new services *******/
     class Creator {
@@ -120,13 +116,11 @@ public interface BazarlakService {
             gsonBuilder.excludeFieldsWithoutExposeAnnotation();
             gsonBuilder.setDateFormat("M/d/yy hh:mm a");
             gsonBuilder.setLenient();
-            gsonBuilder.registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create());
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+          //  gsonBuilder.registerTypeAdapterFactory(MyAdapterFactory.create());
             Gson gson = gsonBuilder.create();
-//            Gson gson = new GsonBuilder()
-//                    .registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create())
-//                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//                    .create();
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request newRequest = chain.request().newBuilder()

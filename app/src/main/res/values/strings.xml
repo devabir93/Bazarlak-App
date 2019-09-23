@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">BAZARLAK</string>
 
     <string name="action_settings">Settings</string>
@@ -61,7 +61,7 @@
     <string name="continue_shopping_label">Continue Shopping</string>
     <string name="thank_label">Thank you!</string>
     <string name="text3_label">Delivery expected time is within x-y working days.</string>
-    <string name="text2_label">Order ID: BA12345678 was placed.</string>
+    <string name="text2_label">Order ID: <b> BA12345678 </b> was placed.</string>
     <string name="text1_label">Order Successfully Placed.</string>
 
 
@@ -95,7 +95,7 @@
     <string name="hint_post_code">POSTCODE</string>
     <string name="address_details_label">ADDRESS DETAILS</string>
     <string name="checkout_label">Checkout</string>
-    <string name="item_size">Size:</string>
+    <string name="item_size" formatted="false">Size: %1$s</string>
     <string name="item_price">item_price</string>
     <string name="subTotal_price_label">Subtotal</string>
     <string name="total_price_label">Total</string>
@@ -138,5 +138,21 @@
     <string name="save_card_label">save this as default payment method</string>
     <string name="empty_inputs">Please check non valid inputs</string>
     <string name="empty_label">This field is required</string>
+    <string name="empty_orders">You don\'t have any orders</string>
+    <string name="quntitye_label">QYT: %1$s</string>
+    <string name="currency">$</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string-array name="gender" tools:ignore="ExtraTranslation">
+        <item>@string/male</item>
+        <item>@string/female</item>
+    </string-array>
 
+    <string name="arabic" tools:ignore="ExtraTranslation">العربية</string>
+    <string name="english" tools:ignore="ExtraTranslation">English</string>
+
+    <string name="i_recommend">Let me recommend you this application %1$s</string>
+    <string name="action_share_app">share app via</string>
+    <string name="signout_confrimation">Are you sure you want to signout?</string>
+    <string name="signout">Signout</string>
 </resources>

@@ -10,6 +10,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import uk.co.ribot.androidboilerplate.R;
 
 

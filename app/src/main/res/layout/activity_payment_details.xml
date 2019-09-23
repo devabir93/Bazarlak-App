@@ -12,18 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
-    <include
-        android:id="@+id/second_toolbar"
-        layout="@layout/secendary_toolbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_" />
+
 
     <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_container"
-        android:layout_below="@+id/second_toolbar"
-        />
+        android:layout_below="@+id/toolbar_" />
 
 </RelativeLayout>

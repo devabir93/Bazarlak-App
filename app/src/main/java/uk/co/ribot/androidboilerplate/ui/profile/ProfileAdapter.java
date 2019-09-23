@@ -24,6 +24,7 @@ import uk.co.ribot.androidboilerplate.data.model.CustomCategory;
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
 
     private List<CustomCategory> mCategories;
+    private boolean isLogged;
 
     @Inject
     public ProfileAdapter() {
@@ -44,20 +45,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     @Override
     public void onBindViewHolder(final ProfileAdapter.ProfileViewHolder holder, int position) {
         CustomCategory category = mCategories.get(position);
-        if (category.getIcon() == -1) {
+        if (category.getIcon() == -1 && isLogged) {
             holder.imageView.setVisibility(View.INVISIBLE);
             holder.imageView_go.setVisibility(View.VISIBLE);
-//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//            params.gravity = Gravity.CENTER_HORIZONTAL;
-//
-//            holder.linearLayout.setLayoutParams(params);
-//            holder.linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
             RelativeLayout.LayoutParams layoutParams =
-                    (RelativeLayout.LayoutParams)holder.textView.getLayoutParams();
+                    (RelativeLayout.LayoutParams) holder.textView.getLayoutParams();
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
             holder.textView.setLayoutParams(layoutParams);
-
-        } else{
+        } else if (category.getIcon() != -1) {
             holder.imageView.setVisibility(View.VISIBLE);
             holder.imageView_go.setVisibility(View.INVISIBLE);
             holder.imageView.setImageResource(category.getIcon());
@@ -70,13 +65,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
         return mCategories.size();
     }
 
+    public void isLogged(boolean b) {
+        this.isLogged = b;
+    }
+
     class ProfileViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.icon_profile)
         ImageView imageView;
         @BindView(R.id.icon_go)
         ImageView imageView_go;
-        @BindView(R.id.text_name) TextView textView;
+        @BindView(R.id.text_name)
+        TextView textView;
         @BindView(R.id.items_layout)
         LinearLayout linearLayout;
 

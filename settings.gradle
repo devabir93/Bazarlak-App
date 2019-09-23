@@ -1,1 +1,1 @@
-include ':app', ':library',':SmoothCheckBox'
+include ':app'
